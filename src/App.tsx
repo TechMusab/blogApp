@@ -8,12 +8,14 @@ import SinglePostPage from './pages/single-post'
 import CreatePostPage from './pages/create-post'
 import SavedPostsPage from './pages/saved-posts'
 import Loader from './shared/components/Loader'
+import IntroPage from './pages/intro'
 
 const App = () => {
   return (
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
         <Routes>
+          <Route path="/" element={<IntroPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route element={<MainLayout />}>

@@ -1,0 +1,43 @@
+.intro-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 28px clamp(24px, 6vw, 96px) 48px;
+  background: var(--bg-color);
+  color: var(--text-primary);
+
+  &__grid { position: absolute; inset: 0; z-index: 0; opacity: .45; pointer-events: none; background-image: linear-gradient(var(--border-subtle) 1px, transparent 1px), linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(to bottom, #000, transparent 78%); }
+  &__header, &__hero, &__values { position: relative; z-index: 1; }
+  &__header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  &__brand { display: inline-flex; align-items: center; gap: 10px; font: 500 18px "Playfair Display", Georgia, serif; letter-spacing: .03em; }
+  &__mark { color: var(--accent-color); font: 20px/1 Inter, sans-serif; }
+  &__actions { display: flex; align-items: center; gap: 18px; }
+  &__login { color: var(--text-secondary); font: 600 14px Inter, sans-serif; &:hover { color: var(--text-primary); } }
+
+  &__hero { max-width: 800px; margin: clamp(88px, 16vh, 170px) auto 0; text-align: center; }
+  &__eyebrow { margin: 0 0 18px; color: var(--accent-color); font: 600 11px Inter, sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+  h1 { margin: 0; font: 700 clamp(52px, 8vw, 96px)/.98 "Playfair Display", Georgia, serif; letter-spacing: -.045em; }
+  h1 em { color: var(--accent-color); font-weight: 400; }
+  &__description { max-width: 550px; margin: 28px auto 0; color: var(--text-secondary); font: 400 17px/1.7 Inter, sans-serif; }
+  &__cta-group { display: flex; justify-content: center; gap: 12px; margin-top: 34px; }
+  &__cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; padding: 0 20px; border-radius: 6px; font: 600 14px Inter, sans-serif; }
+  &__cta--primary { background: var(--accent-color); color: #111; &:hover { filter: brightness(1.08); } }
+  &__cta--secondary { border: 1px solid var(--border-color); color: var(--text-primary); background: var(--surface-color); &:hover { background: var(--surface-hover); } }
+
+  &__values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1080px; margin: clamp(80px, 14vh, 150px) auto 0; }
+  &__values article { padding: 22px 0 0; border-top: 1px solid var(--border-color); }
+  &__values span { color: var(--accent-color); font: 600 11px Inter, sans-serif; letter-spacing: .1em; }
+  &__values h2 { margin: 14px 0 8px; font: 600 21px "Playfair Display", Georgia, serif; }
+  &__values p { max-width: 270px; margin: 0; color: var(--text-secondary); font: 400 14px/1.6 Inter, sans-serif; }
+}
+
+@media (max-width: 640px) {
+  .intro-page {
+    padding: 20px 20px 40px;
+    &__hero { margin-top: 88px; text-align: left; }
+    &__description { margin-left: 0; }
+    &__cta-group { justify-content: flex-start; flex-direction: column; }
+    &__cta { width: 100%; }
+    &__values { grid-template-columns: 1fr; margin-top: 72px; gap: 22px; }
+  }
+}
