@@ -1,6 +1,6 @@
-# Folio Journal
+# Folio
 
-Folio Journal is a responsive React blog application for discovering, saving, creating, and discussing posts.
+Folio is a responsive React blog application for discovering, saving, creating, and discussing posts.
 
 ## Features
 
