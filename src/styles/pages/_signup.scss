@@ -1,0 +1,14 @@
+// Signup-specific additions to the shared auth component styles.
+.signup {
+  &__brand {
+    letter-spacing: 2px;
+  }
+
+  &__toggle {
+    font-size: 12px;
+  }
+
+  &__footer-text {
+    color: #8c8c8c;
+  }
+}

@@ -1,0 +1,17 @@
+.search { position: relative; width: min(720px, 100%); z-index: 5; }
+.search__field { height: 48px; display: flex; align-items: center; padding: 0 18px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-color); transition: border-color 160ms ease, box-shadow 160ms ease; }
+.search__field:focus-within { border-color: #e8ac3a; box-shadow: 0 0 0 3px rgba(232, 172, 58, .1); }
+.search__icon { margin-right: 12px; color: #8d8985; font-size: 25px; line-height: 1; transform: rotate(-20deg); }
+.search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--text-primary); font: 400 16px Inter, sans-serif; }
+.search input::placeholder { color: var(--text-secondary); }
+.search__clear { border: 0; padding: 4px; background: transparent; color: #918d87; font-size: 23px; line-height: 1; cursor: pointer; }
+.search__clear:hover { color: var(--text-primary); }
+.search-dropdown { position: absolute; top: calc(100% + 8px); left: 0; width: 100%; max-height: 320px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 12px; background: var(--surface-color); box-shadow: 0 24px 42px rgba(0, 0, 0, .42); overflow: hidden auto; }
+.search-dropdown__empty { display: grid; min-height: 116px; place-items: center; margin: 0; color: var(--text-secondary); font: 400 14px Inter, sans-serif; }
+.search-item { width: 100%; height: 70px; display: flex; align-items: center; gap: 14px; padding: 0 16px; border: 0; background: transparent; color: var(--text-primary); text-align: left; cursor: pointer; }
+.search-item:hover, .search-item--active { background: var(--surface-hover); }
+.search-item__icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 5px; background: #1a2b47; color: #4ba0ff; font-size: 19px; }
+.search-item__copy { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 5px; }
+.search-item__title { overflow: hidden; color: var(--text-primary); font: 600 16px Inter, sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+.search-item__author { color: var(--text-secondary); font: 400 14px Inter, sans-serif; }
+.search-item__badge { padding: 5px 8px; border-radius: 4px; background: #182b49; color: #55a2ff; font: 600 10px Inter, sans-serif; letter-spacing: .06em; }

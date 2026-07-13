@@ -1,0 +1,16 @@
+// Global design tokens. Page-specific modules only consume these values.
+$color-page-bg: var(--bg-color);
+$color-auth-bg: var(--bg-color);
+$color-text: var(--text-primary);
+$color-white: var(--text-primary);
+$color-auth-text: var(--text-primary);
+$color-muted: var(--text-secondary);
+$color-secondary: var(--text-secondary);
+$color-body: var(--text-primary);
+$color-accent: #e8ac3a;
+$color-auth-accent: #e4a63a;
+$color-light-accent: #f1d08a;
+$color-hover: #f0b84a;
+$color-quote: #bfa06a;
+$color-border: var(--border-subtle);
+$color-border-light: var(--border-color);

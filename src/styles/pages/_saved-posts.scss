@@ -1,0 +1,9 @@
+.saved-posts__header { margin-top: 10px; }
+.saved-posts__header > span { color: var(--text-secondary); font: 600 10px Inter, sans-serif; letter-spacing: 2px; }
+.saved-posts__header h1 { margin: 14px 0 8px; color: var(--text-primary); font: 400 42px "Playfair Display", Georgia, serif; }
+.saved-posts__header p { margin: 0; color: var(--text-secondary); font: 400 15px Inter, sans-serif; }
+.saved-posts__empty { display: flex; min-height: 340px; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.saved-posts__empty-icon { width: 68px; height: 68px; fill: none; stroke: var(--accent-color); stroke-width: 1.2; }
+.saved-posts__empty h2 { margin: 20px 0 8px; color: var(--text-primary); font: 700 26px "Playfair Display", Georgia, serif; }
+.saved-posts__empty p { margin: 0; color: var(--text-secondary); font: 400 15px Inter, sans-serif; }
+.saved-posts__empty button { margin-top: 26px; padding: 11px 18px; border: 0; border-radius: 7px; background: var(--accent-color); color: #111; cursor: pointer; font: 600 14px Inter, sans-serif; }

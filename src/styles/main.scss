@@ -1,0 +1,23 @@
+// 7-1 Sass entry point: abstracts, base, components, layout, pages, themes, vendors.
+@use "abstracts/variables";
+
+@use "base/reset";
+@use "base/global";
+
+@use "components/navbar";
+@use "components/loader";
+@use "components/auth";
+@use "components/search";
+@use "components/dropdown";
+@use "components/filter-chip";
+@use "components/bookmark";
+@use "components/theme-toggle";
+
+@use "layout/app-shell";
+
+@use "pages/login";
+@use "pages/signup";
+@use "pages/dashboard";
+@use "pages/create-post";
+@use "pages/single-post";
+@use "pages/saved-posts";

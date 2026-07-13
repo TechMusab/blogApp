@@ -1,0 +1,16 @@
+[
+  {
+    "id": "user-1",
+    "name": "Ava Chen",
+    "email": "ava@example.com",
+    "avatar": "AC",
+    "bio": "Design systems writer and product storyteller."
+  },
+  {
+    "id": "user-2",
+    "name": "Noah Brooks",
+    "email": "noah@example.com",
+    "avatar": "NB",
+    "bio": "Editorial designer exploring digital publishing."
+  }
+]

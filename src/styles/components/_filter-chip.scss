@@ -1,0 +1,5 @@
+.filter-chips { display: flex; flex-wrap: wrap; gap: 12px; }
+.filter-chip { height: 36px; padding: 0 18px; border: 1px solid #2c2b31; border-radius: 999px; background: transparent; color: #b4b0a7; cursor: pointer; font: 500 14px Inter, sans-serif; transition: border-color 160ms ease, background 160ms ease; }
+.filter-chip:hover { border-color: #e8ac3a; }
+.filter-chip--active { border-color: #e8ac3a; background: #e8ac3a; color: #111; }
+.filter-chip__count { margin-left: 3px; font-size: 12px; opacity: .75; }
