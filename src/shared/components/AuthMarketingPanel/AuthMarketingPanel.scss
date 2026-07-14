@@ -1,0 +1,181 @@
+@use "../../../styles/abstracts/variables" as *;
+
+$color-accent: $color-auth-accent;
+
+.login,
+.signup {
+  &__left {
+    position: relative;
+    background: $color-auth-bg;
+    padding: 12px 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid $color-border;
+  }
+
+  &__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 96px 96px;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  &__logo,
+  &__hero,
+  &__authors {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: $color-auth-text;
+  }
+
+  &__icon {
+    color: $color-auth-accent;
+    font-size: 18px;
+  }
+
+  &__hero {
+    max-width: 360px;
+  }
+
+  &__heading {
+    margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: -0.25px;
+    font-weight: 700;
+    color: $color-auth-text;
+
+    span {
+      color: $color-auth-accent;
+    }
+  }
+
+  &__description {
+    margin-top: 12px;
+    max-width: 280px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-secondary);
+  }
+
+  &__authors {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3a311e;
+    border: 1px solid $color-accent;
+    display: grid;
+    place-items: center;
+    color: $color-accent;
+    font-size: 8px;
+    font-weight: 600;
+  }
+
+  &__author-name {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  &__author-bio {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+}
+
+@media (max-width: 900px) {
+  .login,
+  .signup {
+    &__left {
+      padding: 24px;
+    }
+
+    &__heading {
+      font-size: 32px;
+      line-height: 1.2;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .login,
+  .signup {
+    &__left {
+      min-height: 0;
+      padding: 24px 20px;
+      gap: 28px;
+      justify-content: flex-start;
+      border-right: 0;
+      border-bottom: 1px solid $color-border;
+    }
+
+    &__hero {
+      max-width: none;
+    }
+
+    &__heading {
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    &__description {
+      max-width: 34rem;
+    }
+
+    &__authors {
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 420px) {
+  .login,
+  .signup {
+    &__left {
+      padding: 20px;
+      gap: 20px;
+    }
+
+    &__heading {
+      font-size: 28px;
+    }
+
+    &__description {
+      font-size: 13px;
+    }
+
+    &__authors {
+      display: none;
+    }
+  }
+}

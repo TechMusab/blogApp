@@ -1,0 +1,22 @@
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--surface-color);
+  box-shadow: 0 24px 42px rgba(0, 0, 0, .42);
+  overflow: hidden auto;
+
+  &__empty {
+    display: grid;
+    min-height: 116px;
+    place-items: center;
+    margin: 0;
+    color: var(--text-secondary);
+    font: 400 14px Inter, sans-serif;
+  }
+}

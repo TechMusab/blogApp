@@ -1,0 +1,120 @@
+@use "../../../../styles/abstracts/variables" as *;
+
+$color-text: $color-white;
+
+.article {
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: $color-secondary;
+    cursor: pointer;
+    transition: color 200ms ease;
+
+    &:hover {
+      color: $color-text;
+    }
+  }
+
+  &__category {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 24px;
+    padding: 6px 12px;
+    height: 30px;
+    background: rgba(232, 172, 58, 0.1);
+    border: 1px solid rgba(232, 172, 58, 0.4);
+    border-radius: 4px;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: $color-accent;
+  }
+
+  &__title {
+    margin: 5px 0 0;
+    max-width: 760px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 64px;
+    letter-spacing: -1px;
+    color: $color-text;
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 5px;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #3a311e;
+    border: 1px solid $color-accent;
+    color: $color-accent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__author-name {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: $color-text;
+  }
+
+  &__meta {
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    color: $color-secondary;
+  }
+
+  &__divider {
+    margin: 8px 0 0;
+    border: none;
+    border-top: 1px solid $color-border;
+  }
+}
+
+@media (max-width: 1024px) {
+  .article {
+    &__title {
+      font-size: 28px;
+      line-height: 1.3;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .article {
+    &__title {
+      font-size: 24px;
+      line-height: 1.3;
+    }
+  }
+}

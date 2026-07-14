@@ -1,0 +1,17 @@
+@use "../../styles/abstracts/variables" as *;
+
+.create-post-page {
+  min-height: 100vh;
+  background: $color-page-bg;
+  color: $color-white;
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: $color-page-bg;
+    z-index: -1;
+  }
+}

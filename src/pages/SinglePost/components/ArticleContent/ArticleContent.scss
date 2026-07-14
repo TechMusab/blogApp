@@ -1,0 +1,74 @@
+@use "../../../../styles/abstracts/variables" as *;
+
+.article {
+  &__image {
+    width: 100%;
+    height: 250px;
+    margin-top: 24px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  &__quote {
+    margin: 32px 0 0;
+    padding-left: 18px;
+    max-width: 780px;
+    border-left: 3px solid $color-accent;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 42px;
+    color: $color-quote;
+  }
+
+  &__content {
+    margin-top: 32px;
+    max-width: 760px;
+  }
+
+  &__paragraph {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 34px;
+    color: $color-body;
+    text-align: left;
+
+    & + & {
+      margin-top: 28px;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .article {
+    &__image {
+      height: 300px;
+    }
+
+    &__quote {
+      font-size: 24px;
+      line-height: 36px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .article {
+    &__image {
+      height: 240px;
+    }
+
+    &__quote {
+      font-size: 24px;
+      line-height: 36px;
+    }
+
+    &__paragraph {
+      font-size: 17px;
+      line-height: 30px;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@use "../../styles/abstracts/variables" as *;
+
+.article-page {
+  min-height: 100vh;
+  background: $color-page-bg;
+  color: $color-white;
+}
+
+.article {
+  &__container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 32px 48px;
+  }
+
+  &__not-found {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    color: $color-secondary;
+  }
+}
+
+@media (max-width: 768px) {
+  .article {
+    &__container {
+      padding: 20px 20px 64px;
+    }
+  }
+}

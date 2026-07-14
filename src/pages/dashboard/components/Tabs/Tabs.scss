@@ -1,0 +1,29 @@
+@use "../../../../styles/abstracts/variables" as *;
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  &__item {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    border-radius: 6px;
+    padding: 0;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    transition: all 200ms ease;
+    display: flex;
+    align-items: center;
+
+    &--active {
+      background: var(--surface-hover);
+      color: $color-text;
+      padding: 12px 18px;
+      border-radius: 6px;
+    }
+  }
+}

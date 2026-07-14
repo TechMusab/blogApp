@@ -1,0 +1,76 @@
+@use "../../../../styles/abstracts/variables" as *;
+
+.dashboard {
+  &__greeting {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  &__feed-label {
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  &__heading {
+    margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 32px;
+    color: $color-text;
+  }
+
+  &__heading-accent {
+    color: $color-accent;
+  }
+
+  &__subtitle {
+    margin-top: 14px;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  &__new-post-btn {
+    width: 80px;
+    height: 30px;
+    background: $color-accent;
+    border: none;
+    border-radius: 6px;
+    color: #111;
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-shrink: 0;
+    transition: background 200ms ease;
+
+    &:hover {
+      background: #f0b84a;
+    }
+  }
+
+  &__new-post-icon {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    &__greeting {
+      flex-direction: column;
+    }
+  }
+}

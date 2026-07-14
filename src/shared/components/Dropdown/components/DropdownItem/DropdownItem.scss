@@ -1,0 +1,30 @@
+.dropdown-item {
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  border: 0;
+  background: transparent;
+  color: #f5f3ef;
+  cursor: pointer;
+  text-align: left;
+  font: 600 16px Inter, sans-serif;
+
+  &:hover {
+    background: #26252c;
+  }
+
+  &__icon {
+    width: 18px;
+    color: #928e88;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  &--danger,
+  &--danger &__icon {
+    color: #ff6b6b;
+  }
+}

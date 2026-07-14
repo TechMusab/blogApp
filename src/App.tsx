@@ -1,14 +1,15 @@
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
-import LoginPage from './pages/login'
-import SignupPage from './pages/signup'
-import DashboardPage from './pages/dashboard'
-import SinglePostPage from './pages/single-post'
-import CreatePostPage from './pages/create-post'
-import SavedPostsPage from './pages/saved-posts'
 import Loader from './shared/components/Loader'
-import IntroPage from './pages/intro'
+
+const IntroPage = lazy(() => import('./pages/intro'))
+const LoginPage = lazy(() => import('./pages/login'))
+const SignupPage = lazy(() => import('./pages/signup'))
+const DashboardPage = lazy(() => import('./pages/dashboard'))
+const SinglePostPage = lazy(() => import('./pages/SinglePost'))
+const CreatePostPage = lazy(() => import('./pages/CreatePost'))
+const SavedPostsPage = lazy(() => import('./pages/SavedPosts'))
 
 const App = () => {
   return (
