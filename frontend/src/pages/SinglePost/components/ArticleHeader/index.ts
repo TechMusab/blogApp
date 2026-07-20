@@ -1,3 +1,1 @@
-import './ArticleHeader.scss'
-
-export { default } from './ArticleHeader'
+export * from './ArticleHeader'

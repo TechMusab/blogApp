@@ -1,9 +1,11 @@
+import './ThemeToggle.scss'
+
 import { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../../../redux/store'
 import { toggleTheme } from '../../../redux/slices/theme/themeSlice'
 
-const ThemeToggle = memo(function ThemeToggle() {
+export const ThemeToggle = memo(function ThemeToggle() {
   const theme = useSelector((state: RootState) => state.theme.theme)
   const dispatch = useDispatch()
   const toggle = useCallback(() => dispatch(toggleTheme()), [dispatch])
@@ -13,4 +15,3 @@ const ThemeToggle = memo(function ThemeToggle() {
     <span className="theme-toggle__thumb" />
   </button>
 })
-export default ThemeToggle

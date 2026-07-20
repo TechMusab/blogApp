@@ -3,8 +3,8 @@ import './SavedPosts.scss'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import DashboardNavbar from '../../shared/components/DashboardNavbar'
-import PostCard from '../dashboard/components/PostCard'
+import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
+import { PostCard } from '../dashboard/components/PostCard'
 import { selectSavedPosts } from '../../redux/selectors/savedPostsSelectors'
 
 const EmptySavedState = memo(function EmptySavedState() {
@@ -16,7 +16,7 @@ const EmptySavedState = memo(function EmptySavedState() {
   </section>
 })
 
-const SavedPostsPage = memo(function SavedPostsPage() {
+export const SavedPostsPage = memo(function SavedPostsPage() {
   const posts = useSelector(selectSavedPosts)
   return <div className="dashboard saved-posts"><DashboardNavbar /><main className="dashboard__content">
     <header className="saved-posts__header"><span>YOUR LIBRARY</span><h1>Saved Posts</h1><p>Posts you've bookmarked for later.</p></header>
@@ -24,4 +24,3 @@ const SavedPostsPage = memo(function SavedPostsPage() {
     {posts.length ? <div className="dashboard__grid">{posts.map((post) => <PostCard key={post.id} post={post} />)}</div> : <EmptySavedState />}
   </main></div>
 })
-export default SavedPostsPage

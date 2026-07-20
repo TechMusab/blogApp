@@ -3,15 +3,15 @@ import './SinglePost.scss'
 import { memo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import DashboardNavbar from '../../shared/components/DashboardNavbar'
-import ArticleHeader from './components/ArticleHeader'
-import ArticleContent from './components/ArticleContent'
-import ArticleDiscussion from './components/ArticleDiscussion'
+import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
+import { ArticleHeader } from './components/ArticleHeader'
+import { ArticleContent } from './components/ArticleContent'
+import { ArticleDiscussion } from './components/ArticleDiscussion'
 import type { RootState } from '../../redux/store'
 import { toggleLike, addComment } from '../../redux/slices/posts/postsSlice'
 import { PostsService } from '../../services/PostsService'
 
-const SinglePostPage = memo(function SinglePostPage() {
+export const SinglePostPage = memo(function SinglePostPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -89,4 +89,3 @@ const SinglePostPage = memo(function SinglePostPage() {
   )
 })
 
-export default SinglePostPage

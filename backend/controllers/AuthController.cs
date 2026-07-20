@@ -53,27 +53,19 @@ public class AuthController : ControllerBase
         var expiresAt = DateTime.UtcNow.AddMinutes(otpLifetimeMinutes);
         var otpHash = HashOtp(otp);
 
-        var pendingRegistration = await _context.PendingRegistrations.SingleOrDefaultAsync(entry => entry.Email == email);
-        if (pendingRegistration is not null)
-        {
-            _context.PendingRegistrations.Remove(pendingRegistration);
-        }
-
-        var passwordUser = new User
-        {
-            Name = name,
-            Email = email
-        };
-
-        _context.PendingRegistrations.Add(new PendingRegistration
+        var user = new User
         {
             Name = name,
             Email = email,
-            PasswordHash = _passwordHasher.HashPassword(passwordUser, request.Password),
+            PasswordHash = _passwordHasher.HashPassword(new User(), request.Password),
+            IsVerified = false,
             OtpHash = otpHash.Hash,
             OtpSalt = otpHash.Salt,
-            ExpiresAt = expiresAt
-        });
+            OtpExpiresAt = expiresAt,
+            OtpAttemptCount = 0
+        };
+
+        _context.Users.Add(user);
 
         await _emailSender.SendRegistrationOtpAsync(email, name, otp, expiresAt);
         await _context.SaveChangesAsync();
@@ -91,52 +83,46 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> VerifyRegistration(VerifyRegistrationRequest request)
     {
         var email = request.Email.Trim().ToLowerInvariant();
-        var pendingRegistration = await _context.PendingRegistrations.SingleOrDefaultAsync(entry => entry.Email == email);
+        var user = await _context.Users.SingleOrDefaultAsync(entry => entry.Email == email);
 
-        if (pendingRegistration is null)
+        if (user is null)
         {
-            return NotFound(new { message = "No pending registration found for this email." });
+            return NotFound(new { message = "No registration found for this email." });
         }
 
-        if (pendingRegistration.ExpiresAt <= DateTime.UtcNow)
+        if (user.IsVerified)
         {
-            _context.PendingRegistrations.Remove(pendingRegistration);
+            return BadRequest(new { message = "This account is already verified." });
+        }
+
+        if (user.OtpExpiresAt <= DateTime.UtcNow)
+        {
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return BadRequest(new { message = "Verification code expired. Please sign up again." });
         }
 
         var maxAttempts = _configuration.GetValue("RegistrationOtp:MaxAttempts", 5);
-        if (pendingRegistration.AttemptCount >= maxAttempts)
+        if (user.OtpAttemptCount >= maxAttempts)
         {
-            _context.PendingRegistrations.Remove(pendingRegistration);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return BadRequest(new { message = "Too many incorrect attempts. Please sign up again." });
         }
 
-        if (!VerifyOtp(request.Otp, pendingRegistration.OtpSalt, pendingRegistration.OtpHash))
+        if (!VerifyOtp(request.Otp, user.OtpSalt, user.OtpHash))
         {
-            pendingRegistration.AttemptCount++;
+            user.OtpAttemptCount++;
             await _context.SaveChangesAsync();
             return BadRequest(new { message = "Invalid verification code." });
         }
 
-        var emailExists = await _context.Users.AnyAsync(user => user.Email == email);
-        if (emailExists)
-        {
-            _context.PendingRegistrations.Remove(pendingRegistration);
-            await _context.SaveChangesAsync();
-            return Conflict(new { message = "An account with this email already exists." });
-        }
+        user.IsVerified = true;
+        user.OtpHash = string.Empty;
+        user.OtpSalt = string.Empty;
+        user.OtpExpiresAt = DateTime.MinValue;
+        user.OtpAttemptCount = 0;
 
-        var user = new User
-        {
-            Name = pendingRegistration.Name,
-            Email = pendingRegistration.Email,
-            PasswordHash = pendingRegistration.PasswordHash
-        };
-
-        _context.Users.Add(user);
-        _context.PendingRegistrations.Remove(pendingRegistration);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(Me), BuildAuthResponse(user));
@@ -151,6 +137,11 @@ public class AuthController : ControllerBase
         if (user is null)
         {
             return Unauthorized(new { message = "Invalid email or password." });
+        }
+
+        if (!user.IsVerified)
+        {
+            return Unauthorized(new { message = "Please verify your email before logging in." });
         }
 
         var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);

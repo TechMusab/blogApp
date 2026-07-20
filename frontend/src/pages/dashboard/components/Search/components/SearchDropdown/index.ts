@@ -1,3 +1,1 @@
-import './SearchDropdown.scss'
-
-export { default } from './SearchDropdown'
+export * from './SearchDropdown'

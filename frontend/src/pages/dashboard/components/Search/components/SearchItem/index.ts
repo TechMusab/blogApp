@@ -1,3 +1,1 @@
-import './SearchItem.scss'
-
-export { default } from './SearchItem'
+export * from './SearchItem'

@@ -3,13 +3,13 @@ import './CreatePost.scss'
 import { memo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import DashboardNavbar from '../../shared/components/DashboardNavbar'
-import CreatePostEditor from './components/CreatePostEditor'
+import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
+import { CreatePostEditor } from './components/CreatePostEditor'
 import type { RootState } from '../../redux/store'
 import { addPost } from '../../redux/slices/posts/postsSlice'
 import { PostsService } from '../../services/PostsService'
 
-const CreatePostPage = memo(function CreatePostPage() {
+export const CreatePostPage = memo(function CreatePostPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state: RootState) => state.auth.user)
@@ -81,4 +81,3 @@ const CreatePostPage = memo(function CreatePostPage() {
   )
 })
 
-export default CreatePostPage

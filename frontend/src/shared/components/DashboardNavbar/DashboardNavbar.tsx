@@ -1,12 +1,14 @@
+import './DashboardNavbar.scss'
+
 import { memo, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import Dropdown from '../Dropdown'
-import ThemeToggle from '../ThemeToggle'
+import { Dropdown } from '../Dropdown'
+import { ThemeToggle } from '../ThemeToggle'
 import type { RootState } from '../../../redux/store'
 import { logout } from '../../../redux/slices/auth/authSlice'
 
-const DashboardNavbar = memo(function DashboardNavbar() {
+export const DashboardNavbar = memo(function DashboardNavbar() {
   const user = useSelector((state: RootState) => state.auth.user)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -36,4 +38,3 @@ const DashboardNavbar = memo(function DashboardNavbar() {
   </nav>
 })
 
-export default DashboardNavbar

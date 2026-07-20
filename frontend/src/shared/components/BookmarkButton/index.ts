@@ -1,3 +1,1 @@
-import './BookmarkButton.scss'
-
-export { default } from './BookmarkButton'
+export * from './BookmarkButton'

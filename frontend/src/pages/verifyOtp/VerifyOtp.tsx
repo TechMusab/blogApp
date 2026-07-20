@@ -5,11 +5,11 @@ import { useDispatch } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { login } from '../../redux/slices/auth/authSlice'
 import { AuthService } from '../../services/AuthService'
-import AuthMarketingPanel from '../../shared/components/AuthMarketingPanel'
-import ThemeToggle from '../../shared/components/ThemeToggle'
+import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel'
+import { ThemeToggle } from '../../shared/components/ThemeToggle'
 import type { OtpChallenge } from '../../types'
 
-const VerifyOtpPage = memo(function VerifyOtpPage() {
+export const VerifyOtpPage = memo(function VerifyOtpPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
@@ -111,4 +111,3 @@ const VerifyOtpPage = memo(function VerifyOtpPage() {
   )
 })
 
-export default VerifyOtpPage

@@ -1,10 +1,12 @@
+import './AuthMarketingPanel.scss'
+
 import { memo } from 'react'
 
 type AuthMarketingPanelProps = {
   variant: 'login' | 'signup'
 }
 
-const AuthMarketingPanel = memo(function AuthMarketingPanel({ variant }: AuthMarketingPanelProps) {
+export const AuthMarketingPanel = memo(function AuthMarketingPanel({ variant }: AuthMarketingPanelProps) {
   const prefix = variant
 
   return (
@@ -46,4 +48,3 @@ const AuthMarketingPanel = memo(function AuthMarketingPanel({ variant }: AuthMar
   )
 })
 
-export default AuthMarketingPanel

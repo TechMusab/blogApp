@@ -1,3 +1,1 @@
-import './ArticleDiscussion.scss'
-
-export { default } from './ArticleDiscussion'
+export * from './ArticleDiscussion'

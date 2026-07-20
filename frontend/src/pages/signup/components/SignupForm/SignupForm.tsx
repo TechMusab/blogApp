@@ -1,3 +1,5 @@
+import './SignupForm.scss'
+
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -15,7 +17,7 @@ type SignupFormProps = {
   isSubmitting: boolean
 }
 
-const SignupForm = memo(function SignupForm({
+export const SignupForm = memo(function SignupForm({
   name,
   email,
   password,
@@ -97,4 +99,3 @@ const SignupForm = memo(function SignupForm({
   )
 })
 
-export default SignupForm

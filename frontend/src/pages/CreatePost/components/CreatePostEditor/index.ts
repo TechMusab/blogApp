@@ -1,3 +1,1 @@
-import './CreatePostEditor.scss'
-
-export { default } from './CreatePostEditor'
+export * from './CreatePostEditor'

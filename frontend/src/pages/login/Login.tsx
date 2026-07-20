@@ -3,13 +3,13 @@ import './Login.scss'
 import { memo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import AuthMarketingPanel from '../../shared/components/AuthMarketingPanel'
-import ThemeToggle from '../../shared/components/ThemeToggle'
-import LoginForm from './components/LoginForm'
+import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel'
+import { ThemeToggle } from '../../shared/components/ThemeToggle'
+import { LoginForm } from './components/LoginForm'
 import { login } from '../../redux/slices/auth/authSlice'
 import { AuthService } from '../../services/AuthService'
 
-const LoginPage = memo(function LoginPage() {
+export const LoginPage = memo(function LoginPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
@@ -56,4 +56,3 @@ const LoginPage = memo(function LoginPage() {
   )
 })
 
-export default LoginPage

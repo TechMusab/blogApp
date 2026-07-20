@@ -1,3 +1,5 @@
+import './Tabs.scss'
+
 import { memo } from 'react'
 
 type TabsProps = {
@@ -6,7 +8,7 @@ type TabsProps = {
   onChange: (id: string) => void
 }
 
-const Tabs = memo(function Tabs({ tabs, activeTab, onChange }: TabsProps) {
+export const Tabs = memo(function Tabs({ tabs, activeTab, onChange }: TabsProps) {
   return (
     <div className="tabs">
       {tabs.map((tab) => (
@@ -22,4 +24,3 @@ const Tabs = memo(function Tabs({ tabs, activeTab, onChange }: TabsProps) {
   )
 })
 
-export default Tabs

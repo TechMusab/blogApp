@@ -1,7 +1,9 @@
+import './Search.scss'
+
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import type { Post } from '../../../../types'
-import SearchDropdown from './components/SearchDropdown'
+import { SearchDropdown } from './components/SearchDropdown'
 
 type SearchInputProps = {
   query: string
@@ -10,7 +12,7 @@ type SearchInputProps = {
   onSelect: (post: Post) => void
 }
 
-const SearchInput = memo(function SearchInput({ query, results, onQueryChange, onSelect }: SearchInputProps) {
+export const SearchInput = memo(function SearchInput({ query, results, onQueryChange, onSelect }: SearchInputProps) {
   const [value, setValue] = useState(query)
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
@@ -53,4 +55,3 @@ const SearchInput = memo(function SearchInput({ query, results, onQueryChange, o
   )
 })
 
-export default SearchInput

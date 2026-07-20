@@ -2,12 +2,12 @@ import './Signup.scss'
 
 import { memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import AuthMarketingPanel from '../../shared/components/AuthMarketingPanel'
-import ThemeToggle from '../../shared/components/ThemeToggle'
-import SignupForm from './components/SignupForm'
+import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel'
+import { ThemeToggle } from '../../shared/components/ThemeToggle'
+import { SignupForm } from './components/SignupForm'
 import { AuthService } from '../../services/AuthService'
 
-const SignupPage = memo(function SignupPage() {
+export const SignupPage = memo(function SignupPage() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -55,4 +55,3 @@ const SignupPage = memo(function SignupPage() {
   )
 })
 
-export default SignupPage

@@ -1,3 +1,5 @@
+import './ArticleHeader.scss'
+
 import { memo } from 'react'
 import type { Post } from '../../../../types'
 
@@ -6,7 +8,7 @@ type ArticleHeaderProps = {
   onBack: () => void
 }
 
-const ArticleHeader = memo(function ArticleHeader({ post, onBack }: ArticleHeaderProps) {
+export const ArticleHeader = memo(function ArticleHeader({ post, onBack }: ArticleHeaderProps) {
   return (
     <>
       <button type="button" className="article__back" onClick={onBack}>
@@ -31,4 +33,3 @@ const ArticleHeader = memo(function ArticleHeader({ post, onBack }: ArticleHeade
   )
 })
 
-export default ArticleHeader

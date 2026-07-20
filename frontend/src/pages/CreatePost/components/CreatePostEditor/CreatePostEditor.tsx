@@ -1,3 +1,5 @@
+import './CreatePostEditor.scss'
+
 import { memo } from 'react'
 
 type CreatePostEditorProps = {
@@ -15,7 +17,7 @@ type CreatePostEditorProps = {
   onClose: () => void
 }
 
-const CreatePostEditor = memo(function CreatePostEditor({
+export const CreatePostEditor = memo(function CreatePostEditor({
   title,
   excerpt,
   content,
@@ -105,4 +107,3 @@ const CreatePostEditor = memo(function CreatePostEditor({
   )
 })
 
-export default CreatePostEditor

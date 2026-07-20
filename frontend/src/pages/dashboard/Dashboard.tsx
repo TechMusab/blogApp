@@ -3,17 +3,17 @@ import './Dashboard.scss'
 import { memo, useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import DashboardNavbar from '../../shared/components/DashboardNavbar'
-import SearchInput from './components/Search'
-import FilterChip from './components/FilterChip'
-import DashboardGreeting from './components/DashboardGreeting'
-import PostCard from './components/PostCard'
-import Tabs from './components/Tabs'
+import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
+import { SearchInput } from './components/Search'
+import { FilterChip } from './components/FilterChip'
+import { DashboardGreeting } from './components/DashboardGreeting'
+import { PostCard } from './components/PostCard'
+import { Tabs } from './components/Tabs'
 import type { RootState } from '../../redux/store'
 import { selectCategories, selectFilteredPosts, selectSearchResults } from '../../redux/selectors/postsSelectors'
 import { setActiveCategory, setActiveTab, setSearchQuery } from '../../redux/slices/ui/uiSlice'
 
-const DashboardPage = memo(function DashboardPage() {
+export const DashboardPage = memo(function DashboardPage() {
   const posts = useSelector(selectFilteredPosts)
   const searchResults = useSelector(selectSearchResults)
   const categories = useSelector(selectCategories)
@@ -44,4 +44,3 @@ const DashboardPage = memo(function DashboardPage() {
   </div>
 })
 
-export default DashboardPage

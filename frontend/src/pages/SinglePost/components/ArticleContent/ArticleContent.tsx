@@ -1,3 +1,5 @@
+import './ArticleContent.scss'
+
 import { memo } from 'react'
 import type { Post } from '../../../../types'
 
@@ -6,7 +8,7 @@ type ArticleContentProps = {
   paragraphs: string[]
 }
 
-const ArticleContent = memo(function ArticleContent({ post, paragraphs }: ArticleContentProps) {
+export const ArticleContent = memo(function ArticleContent({ post, paragraphs }: ArticleContentProps) {
   return (
     <>
       <img className="article__image" src={post.coverImage} alt={post.title} />
@@ -26,4 +28,3 @@ const ArticleContent = memo(function ArticleContent({ post, paragraphs }: Articl
   )
 })
 
-export default ArticleContent

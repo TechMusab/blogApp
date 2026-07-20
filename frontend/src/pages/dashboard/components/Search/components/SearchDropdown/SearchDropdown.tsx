@@ -1,6 +1,8 @@
+import './SearchDropdown.scss'
+
 import { memo } from 'react'
 import type { Post } from '../../../../../../types'
-import SearchItem from '../SearchItem'
+import { SearchItem } from '../SearchItem'
 
 type SearchDropdownProps = {
   results: Post[]
@@ -8,7 +10,7 @@ type SearchDropdownProps = {
   onSelect: (post: Post) => void
 }
 
-const SearchDropdown = memo(function SearchDropdown({ results, activeIndex, onSelect }: SearchDropdownProps) {
+export const SearchDropdown = memo(function SearchDropdown({ results, activeIndex, onSelect }: SearchDropdownProps) {
   return (
     <div className="search-dropdown" role="listbox" aria-label="Search results">
       {results.length ? results.map((post, index) => (
@@ -18,4 +20,3 @@ const SearchDropdown = memo(function SearchDropdown({ results, activeIndex, onSe
   )
 })
 
-export default SearchDropdown

@@ -1,3 +1,1 @@
-import './ArticleContent.scss'
-
-export { default } from './ArticleContent'
+export * from './ArticleContent'

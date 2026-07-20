@@ -3,8 +3,8 @@ import '../SavedPosts/SavedPosts.scss'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import DashboardNavbar from '../../shared/components/DashboardNavbar'
-import PostCard from '../dashboard/components/PostCard'
+import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
+import { PostCard } from '../dashboard/components/PostCard'
 import type { RootState } from '../../redux/store'
 
 const EmptyYourPostsState = memo(function EmptyYourPostsState() {
@@ -16,7 +16,7 @@ const EmptyYourPostsState = memo(function EmptyYourPostsState() {
   </section>
 })
 
-const YourPostsPage = memo(function YourPostsPage() {
+export const YourPostsPage = memo(function YourPostsPage() {
   const user = useSelector((state: RootState) => state.auth.user)
   const posts = useSelector((state: RootState) => state.posts.filter((post) => post.authorId === user?.id))
 
@@ -27,4 +27,3 @@ const YourPostsPage = memo(function YourPostsPage() {
   </main></div>
 })
 
-export default YourPostsPage

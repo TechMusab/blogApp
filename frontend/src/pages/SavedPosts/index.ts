@@ -1,1 +1,1 @@
-export { default } from './SavedPosts'
+export * from './SavedPosts'

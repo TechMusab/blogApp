@@ -6,17 +6,17 @@ import type { RootState } from './redux/store'
 import { setPosts } from './redux/slices/posts/postsSlice'
 import { restoreSaved } from './redux/slices/savedPosts/savedPostsSlice'
 import { PostsService } from './services/PostsService'
-import Loader from './shared/components/Loader'
+import { Loader } from './shared/components/Loader'
 
-const IntroPage = lazy(() => import('./pages/intro'))
-const LoginPage = lazy(() => import('./pages/login'))
-const SignupPage = lazy(() => import('./pages/signup'))
-const VerifyOtpPage = lazy(() => import('./pages/verifyOtp'))
-const DashboardPage = lazy(() => import('./pages/dashboard'))
-const SinglePostPage = lazy(() => import('./pages/SinglePost'))
-const CreatePostPage = lazy(() => import('./pages/CreatePost'))
-const SavedPostsPage = lazy(() => import('./pages/SavedPosts'))
-const YourPostsPage = lazy(() => import('./pages/YourPosts'))
+const IntroPage = lazy(() => import('./pages/intro').then((module) => ({ default: module.IntroPage })))
+const LoginPage = lazy(() => import('./pages/login').then((module) => ({ default: module.LoginPage })))
+const SignupPage = lazy(() => import('./pages/signup').then((module) => ({ default: module.SignupPage })))
+const VerifyOtpPage = lazy(() => import('./pages/verifyOtp').then((module) => ({ default: module.VerifyOtpPage })))
+const DashboardPage = lazy(() => import('./pages/dashboard').then((module) => ({ default: module.DashboardPage })))
+const SinglePostPage = lazy(() => import('./pages/SinglePost').then((module) => ({ default: module.SinglePostPage })))
+const CreatePostPage = lazy(() => import('./pages/CreatePost').then((module) => ({ default: module.CreatePostPage })))
+const SavedPostsPage = lazy(() => import('./pages/SavedPosts').then((module) => ({ default: module.SavedPostsPage })))
+const YourPostsPage = lazy(() => import('./pages/YourPosts').then((module) => ({ default: module.YourPostsPage })))
 
 const App = () => {
   const dispatch = useDispatch()

@@ -1,10 +1,12 @@
+import './Dropdown.scss'
+
 import { memo, useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
-import DropdownItem, { type DropdownMenuItem } from './components/DropdownItem'
+import { DropdownItem, type DropdownMenuItem } from './components/DropdownItem'
 
 type DropdownProps = { open: boolean; onClose: () => void; header: ReactNode; items: DropdownMenuItem[]; footerItem?: DropdownMenuItem }
 
-const Dropdown = memo(function Dropdown({ open, onClose, header, items, footerItem }: DropdownProps) {
+export const Dropdown = memo(function Dropdown({ open, onClose, header, items, footerItem }: DropdownProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (!open) return
@@ -18,4 +20,3 @@ const Dropdown = memo(function Dropdown({ open, onClose, header, items, footerIt
   return <div ref={menuRef} className="dropdown" role="menu">{header}<div className="dropdown__divider" />{items.map((item) => <DropdownItem key={item.label} {...item} />)}{footerItem && <><div className="dropdown__divider" /><DropdownItem {...footerItem} /></>}</div>
 })
 
-export default Dropdown

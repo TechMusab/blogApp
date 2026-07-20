@@ -1,9 +1,11 @@
+import './PostCard.scss'
+
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import type { Post } from '../../../../types'
-import BookmarkButton from '../../../../shared/components/BookmarkButton'
+import { BookmarkButton } from '../../../../shared/components/BookmarkButton'
 
-const PostCard = memo(function PostCard({ post }: { post: Post }) {
+export const PostCard = memo(function PostCard({ post }: { post: Post }) {
   return (
     <article className="post-card">
       <BookmarkButton postId={post.id} className="post-card__bookmark" />
@@ -41,4 +43,3 @@ const PostCard = memo(function PostCard({ post }: { post: Post }) {
   )
 })
 
-export default PostCard

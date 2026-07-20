@@ -1,3 +1,5 @@
+import './DashboardGreeting.scss'
+
 import { memo } from 'react'
 
 type DashboardGreetingProps = {
@@ -6,7 +8,7 @@ type DashboardGreetingProps = {
   onNewPost: () => void
 }
 
-const DashboardGreeting = memo(function DashboardGreeting({
+export const DashboardGreeting = memo(function DashboardGreeting({
   userName,
   postCount,
   onNewPost,
@@ -30,4 +32,3 @@ const DashboardGreeting = memo(function DashboardGreeting({
   )
 })
 
-export default DashboardGreeting

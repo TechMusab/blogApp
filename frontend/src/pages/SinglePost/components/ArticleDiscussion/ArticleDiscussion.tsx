@@ -1,6 +1,8 @@
+import './ArticleDiscussion.scss'
+
 import { memo } from 'react'
 import type { Comment } from '../../../../types'
-import BookmarkButton from '../../../../shared/components/BookmarkButton'
+import { BookmarkButton } from '../../../../shared/components/BookmarkButton'
 
 type ArticleDiscussionProps = {
   likes: number
@@ -15,7 +17,7 @@ type ArticleDiscussionProps = {
   postId: string
 }
 
-const ArticleDiscussion = memo(function ArticleDiscussion({
+export const ArticleDiscussion = memo(function ArticleDiscussion({
   likes,
   hasLiked,
   totalComments,
@@ -109,4 +111,3 @@ const ArticleDiscussion = memo(function ArticleDiscussion({
   )
 })
 
-export default ArticleDiscussion

@@ -1,3 +1,1 @@
-import './FilterChip.scss'
-
-export { default } from './FilterChip'
+export * from './FilterChip'

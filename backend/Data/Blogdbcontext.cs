@@ -13,7 +13,6 @@ public class BlogDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Comment> Comments => Set<Comment>();
-    public DbSet<PendingRegistration> PendingRegistrations => Set<PendingRegistration>();
     public DbSet<PostLike> PostLikes => Set<PostLike>();
     public DbSet<SavedPost> SavedPosts => Set<SavedPost>();
 
@@ -24,15 +23,6 @@ public class BlogDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
-
-        modelBuilder.Entity<PendingRegistration>(entity =>
-        {
-            entity.HasIndex(p => p.Email).IsUnique();
-            entity.Property(p => p.Name).HasMaxLength(200);
-            entity.Property(p => p.Email).HasMaxLength(320);
-            entity.Property(p => p.OtpHash).HasMaxLength(128);
-            entity.Property(p => p.OtpSalt).HasMaxLength(64);
-        });
 
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.User)

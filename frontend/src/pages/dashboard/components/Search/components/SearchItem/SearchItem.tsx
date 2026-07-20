@@ -1,3 +1,5 @@
+import './SearchItem.scss'
+
 import { memo } from 'react'
 import type { Post } from '../../../../../../types'
 
@@ -7,7 +9,7 @@ type SearchItemProps = {
   onSelect: (post: Post) => void
 }
 
-const SearchItem = memo(function SearchItem({ post, isActive, onSelect }: SearchItemProps) {
+export const SearchItem = memo(function SearchItem({ post, isActive, onSelect }: SearchItemProps) {
   return (
     <button
       type="button"
@@ -27,4 +29,3 @@ const SearchItem = memo(function SearchItem({ post, isActive, onSelect }: Search
   )
 })
 
-export default SearchItem

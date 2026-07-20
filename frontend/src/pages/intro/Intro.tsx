@@ -2,9 +2,9 @@ import './Intro.scss'
 
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import ThemeToggle from '../../shared/components/ThemeToggle'
+import { ThemeToggle } from '../../shared/components/ThemeToggle'
 
-const IntroPage = memo(function IntroPage() {
+export const IntroPage = memo(function IntroPage() {
   return (
     <main className="intro-page">
       <div className="intro-page__grid" aria-hidden="true" />
@@ -41,4 +41,3 @@ const IntroPage = memo(function IntroPage() {
   )
 })
 
-export default IntroPage
