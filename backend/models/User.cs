@@ -22,6 +22,38 @@ public class User
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    // Information Expert: Domain logic behavior
+    public bool CanVerifyOtp() => !IsVerified && OtpExpiresAt > DateTime.UtcNow && OtpAttemptCount < 5;
+
+    public bool IsOtpExpired() => OtpExpiresAt <= DateTime.UtcNow;
+
+    public bool HasExceededOtpAttempts(int maxAttempts = 5) => OtpAttemptCount >= maxAttempts;
+
+    public void IncrementOtpAttempt()
+    {
+        OtpAttemptCount++;
+    }
+
+    public void MarkAsVerified()
+    {
+        IsVerified = true;
+        OtpHash = string.Empty;
+        OtpSalt = string.Empty;
+        OtpExpiresAt = DateTime.MinValue;
+        OtpAttemptCount = 0;
+    }
+
+    public string GenerateAvatar()
+    {
+        var parts = Name
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Take(2)
+            .Select(part => part[0].ToString().ToUpperInvariant());
+
+        var avatar = string.Concat(parts);
+        return string.IsNullOrWhiteSpace(avatar) ? "U" : avatar;
+    }
+
     // Navigation Properties
     public ICollection<Post> Posts { get; set; } = new List<Post>();
 

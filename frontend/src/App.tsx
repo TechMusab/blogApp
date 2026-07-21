@@ -7,6 +7,7 @@ import { setPosts } from './redux/slices/posts/postsSlice'
 import { restoreSaved } from './redux/slices/savedPosts/savedPostsSlice'
 import { PostsService } from './services/PostsService'
 import { Loader } from './shared/components/Loader'
+import ProtectedRoute from './shared/components/ProtectedRoute/ProtectedRoute'
 
 const IntroPage = lazy(() => import('./pages/intro').then((module) => ({ default: module.IntroPage })))
 const LoginPage = lazy(() => import('./pages/login').then((module) => ({ default: module.LoginPage })))
@@ -48,11 +49,13 @@ const App = () => {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/verify-otp" element={<VerifyOtpPage />} />
           <Route element={<MainLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/posts/:id" element={<SinglePostPage />} />
-            <Route path="/create" element={<CreatePostPage />} />
-            <Route path="/saved-posts" element={<SavedPostsPage />} />
-            <Route path="/your-posts" element={<YourPostsPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/posts/:id" element={<SinglePostPage />} />
+              <Route path="/create" element={<CreatePostPage />} />
+              <Route path="/saved-posts" element={<SavedPostsPage />} />
+              <Route path="/your-posts" element={<YourPostsPage />} />
+            </Route>
           </Route>
         </Routes>
       </Suspense>

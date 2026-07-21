@@ -1,21 +1,62 @@
+using BlogApi.Configuration;
 using BlogApi.Data;
-using BlogApi.Services;
+using BlogApi.Factories;
+using BlogApi.Interfaces.Auth;
+using BlogApi.Interfaces.Core;
+using BlogApi.Interfaces.Email;
+using BlogApi.Interfaces.PostInteractions;
+using BlogApi.Interfaces.Posts;
+using BlogApi.Interfaces.Users;
+using BlogApi.Middleware;
+using BlogApi.Repositories;
+using BlogApi.Services.Auth;
+using BlogApi.Services.Core;
+using BlogApi.Services.Email;
+using BlogApi.Services.PostInteractions;
+using BlogApi.Services.Posts;
+using BlogApi.Services.Sanitization;
+using BlogApi.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-LoadDotEnv(Path.Combine(AppContext.BaseDirectory, ".env"));
 LoadDotEnv(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add configuration from environment variables
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+builder.Services.AddSingleton<IAppConfiguration, AppConfiguration>();
+builder.Services.AddScoped<ISanitizationService, SanitizationService>();
+builder.Services.AddScoped<IEmailSender>(sp => 
+{
+    var appConfig = sp.GetRequiredService<IAppConfiguration>();
+    var config = sp.GetRequiredService<IConfiguration>();
+    var environment = sp.GetRequiredService<IWebHostEnvironment>();
+    return EmailProviderFactory.CreateEmailSender(appConfig, config, environment);
+});
+builder.Services.AddScoped<IOtpService, OtpService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IViewAllPostsService, ViewAllPostsService>();
+builder.Services.AddScoped<ISavedPostsService, SavedPostsService>();
+builder.Services.AddScoped<IYourPostsService, YourPostsService>();
+builder.Services.AddScoped<ICreatePostService, CreatePostService>();
+builder.Services.AddScoped<IViewPostService, ViewPostService>();
+builder.Services.AddScoped<ICommentPostService, CommentPostService>();
+builder.Services.AddScoped<ILikePostService, LikePostService>();
+builder.Services.AddScoped<ISearchPostService, SearchPostService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactApp", policy =>
@@ -60,6 +101,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<LoggingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
      app.UseSwagger();
@@ -73,25 +117,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
 app.Run();
 
 static void LoadDotEnv(string path)
@@ -101,7 +126,9 @@ static void LoadDotEnv(string path)
         return;
     }
 
-    foreach (var rawLine in File.ReadAllLines(path))
+    var lines = File.ReadAllLines(path);
+
+    foreach (var rawLine in lines)
     {
         var line = rawLine.Trim();
         if (string.IsNullOrWhiteSpace(line) || line.StartsWith('#'))
@@ -118,14 +145,6 @@ static void LoadDotEnv(string path)
         var key = line[..separatorIndex].Trim();
         var value = line[(separatorIndex + 1)..].Trim().Trim('"');
 
-        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(key)))
-        {
-            Environment.SetEnvironmentVariable(key, value);
-        }
+        Environment.SetEnvironmentVariable(key, value);
     }
-}
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }

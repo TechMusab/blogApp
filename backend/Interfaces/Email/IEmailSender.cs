@@ -1,4 +1,4 @@
-namespace BlogApi.Services;
+namespace BlogApi.Interfaces.Email;
 
 public interface IEmailSender
 {
