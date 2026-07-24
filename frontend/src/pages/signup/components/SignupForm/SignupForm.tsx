@@ -15,6 +15,8 @@ type SignupFormProps = {
   onSubmit: (event: React.FormEvent) => void
   error: string
   isSubmitting: boolean
+  avatarPreview: string
+  onAvatarChange: (file: File | null) => void
 }
 
 export const SignupForm = memo(function SignupForm({
@@ -22,10 +24,12 @@ export const SignupForm = memo(function SignupForm({
   email,
   password,
   showPassword,
+  avatarPreview,
   onNameChange,
   onEmailChange,
   onPasswordChange,
   onTogglePassword,
+  onAvatarChange,
   onSubmit,
   error,
   isSubmitting,
@@ -37,6 +41,38 @@ export const SignupForm = memo(function SignupForm({
         <p className="signup__form-subtitle">Join the reading room and publish your ideas.</p>
 
         <form className="signup__form-fields" onSubmit={onSubmit}>
+          <label className="signup__field">
+            <span className="signup__label">Profile Picture</span>
+            <div className="signup__avatar-upload">
+              {avatarPreview ? (
+                <img src={avatarPreview} alt="Avatar preview" className="signup__avatar-preview" />
+              ) : (
+                <div className="signup__avatar-placeholder">
+                  <span className="signup__avatar-initials">
+                    {name?.split(' ').map((part) => part[0]).join('').slice(0, 2) || 'U'}
+                  </span>
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null
+                  onAvatarChange(file)
+                }}
+                className="signup__avatar-input"
+              />
+              <button
+                type="button"
+                className="signup__remove-avatar"
+                onClick={() => onAvatarChange(null)}
+                disabled={!avatarPreview}
+              >
+                Remove
+              </button>
+            </div>
+          </label>
+
           <label className="signup__field">
             <span className="signup__label">Name</span>
             <input

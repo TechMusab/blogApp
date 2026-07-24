@@ -1,4 +1,4 @@
-import type { Comment, Post } from '../types'
+import type { Comment, Post, PagedResult } from '../types'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5191/api'
 
@@ -67,7 +67,8 @@ async function getErrorMessage(response: Response): Promise<string> {
 }
 
 export const PostsService = {
-  getPosts: () => request<Post[]>('/posts'),
+  getPosts: (pageNumber = 1, pageSize = 10) => 
+    request<PagedResult<Post>>(`/posts?pageNumber=${pageNumber}&pageSize=${pageSize}`),
   createPost: (body: CreatePostRequest, token: string) =>
     request<Post>('/posts', { method: 'POST', body: JSON.stringify(body) }, token),
   toggleLike: (postId: string, token: string) =>

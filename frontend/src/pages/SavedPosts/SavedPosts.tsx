@@ -17,9 +17,16 @@ const EmptySavedState = memo(function EmptySavedState() {
 })
 
 export const SavedPostsPage = memo(function SavedPostsPage() {
+  const navigate = useNavigate()
   const posts = useSelector(selectSavedPosts)
   return <div className="dashboard saved-posts"><DashboardNavbar /><main className="dashboard__content">
-    <header className="saved-posts__header"><span>YOUR LIBRARY</span><h1>Saved Posts</h1><p>Posts you've bookmarked for later.</p></header>
+    <header className="saved-posts__header">
+      <button type="button" className="article__back" onClick={() => navigate('/dashboard')}>
+        ← Back to feed
+      </button>
+      <h1>Saved Posts</h1>
+      <p>Posts you've bookmarked for later.</p>
+    </header>
     <div className="dashboard__divider" />
     {posts.length ? <div className="dashboard__grid">{posts.map((post) => <PostCard key={post.id} post={post} />)}</div> : <EmptySavedState />}
   </main></div>

@@ -1,6 +1,5 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Posts;
-using BlogApi.Services.Posts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Posts;
@@ -17,9 +16,9 @@ public class ViewAllPostsController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PostDto>>> GetAllPosts()
+    public async Task<ActionResult<PagedResult<PostDto>>> GetAllPosts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var posts = await _viewAllPostsService.GetAllPostsAsync();
+        var posts = await _viewAllPostsService.GetAllPostsPagedAsync(pageNumber, pageSize);
         return Ok(posts);
     }
 }

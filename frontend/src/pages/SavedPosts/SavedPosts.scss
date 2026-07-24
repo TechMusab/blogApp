@@ -1,6 +1,33 @@
+@use "../../styles/abstracts/variables" as *;
+
+.article {
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 200ms ease;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+}
+
 .saved-posts__header { margin-top: 10px; }
+.saved-posts__header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .saved-posts__header > span { color: var(--text-secondary); font: 600 10px Inter, sans-serif; letter-spacing: 2px; }
-.saved-posts__header h1 { margin: 14px 0 8px; color: var(--text-primary); font: 400 42px "Playfair Display", Georgia, serif; }
+.saved-posts__back-btn { padding: 8px 16px; border: 1px solid var(--border-color); border-radius: 6px; background: transparent; color: var(--text-secondary); cursor: pointer; font: 600 13px Inter, sans-serif; transition: all 0.15s; }
+.saved-posts__back-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+.saved-posts__header h1 { margin: 0 0 8px; color: var(--text-primary); font: 400 42px "Playfair Display", Georgia, serif; }
 .saved-posts__header p { margin: 0; color: var(--text-secondary); font: 400 15px Inter, sans-serif; }
 .saved-posts__empty { display: flex; min-height: 340px; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .saved-posts__empty-icon { width: 68px; height: 68px; fill: none; stroke: var(--accent-color); stroke-width: 1.2; }

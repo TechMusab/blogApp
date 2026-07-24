@@ -1,11 +1,13 @@
 using BlogApi.Configuration;
 using BlogApi.Data;
+using BlogApi.DB;
 using BlogApi.Factories;
 using BlogApi.Interfaces.Auth;
 using BlogApi.Interfaces.Core;
 using BlogApi.Interfaces.Email;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Interfaces.Posts;
+using BlogApi.Interfaces.Storage;
 using BlogApi.Interfaces.Users;
 using BlogApi.Middleware;
 using BlogApi.Repositories;
@@ -13,8 +15,8 @@ using BlogApi.Services.Auth;
 using BlogApi.Services.Core;
 using BlogApi.Services.Email;
 using BlogApi.Services.PostInteractions;
-using BlogApi.Services.Posts;
 using BlogApi.Services.Sanitization;
+using BlogApi.Services.Storage;
 using BlogApi.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +36,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IAppConfiguration, AppConfiguration>();
+builder.Services.AddSingleton<IDbConfiguration, DbConfiguration>();
+builder.Services.AddSingleton<IImageStorageConfiguration, ImageStorageConfiguration>();
+builder.Services.AddSingleton<IImageStorage, LocalImageStorage>();
 builder.Services.AddScoped<ISanitizationService, SanitizationService>();
 builder.Services.AddScoped<IEmailSender>(sp => 
 {
@@ -57,6 +62,9 @@ builder.Services.AddScoped<ISearchPostService, SearchPostService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ISavedPostRepository, SavedPostRepository>();
+builder.Services.AddScoped<IPostLikeRepository, PostLikeRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactApp", policy =>
@@ -71,9 +79,11 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
-builder.Services.AddDbContext<BlogDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<BlogDbContext>((serviceProvider, options) =>
+{
+    var dbConfig = serviceProvider.GetRequiredService<IDbConfiguration>();
+    options.UseSqlServer(dbConfig.GetConnectionString());
+});
 
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("Jwt:Key is not configured.");
@@ -111,6 +121,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // Serve static files from wwwroot
 app.UseCors("ReactApp");
 app.UseAuthentication();
 app.UseAuthorization();

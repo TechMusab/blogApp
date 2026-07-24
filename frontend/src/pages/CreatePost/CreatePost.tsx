@@ -8,6 +8,7 @@ import { CreatePostEditor } from './components/CreatePostEditor'
 import type { RootState } from '../../redux/store'
 import { addPost } from '../../redux/slices/posts/postsSlice'
 import { PostsService } from '../../services/PostsService'
+import { ImageService } from '../../services/ImageService'
 
 export const CreatePostPage = memo(function CreatePostPage() {
   const navigate = useNavigate()
@@ -20,10 +21,38 @@ export const CreatePostPage = memo(function CreatePostPage() {
   const [content, setContent] = useState('')
   const [category, setCategory] = useState('Essays')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [coverImage, setCoverImage] = useState('')
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [imageError, setImageError] = useState('')
 
   const categories = ['Science', 'Photography', 'Urbanism', 'Technology', 'Culture', 'Travel', 'Essays', 'Design']
 
   const wordCount = content.trim() === '' ? 0 : content.trim().split(/\s+/).filter(Boolean).length
+
+  const handleImageUpload = async (file: File) => {
+    setImageError('')
+    
+    const validation = ImageService.validateImageFile(file)
+    if (!validation.valid) {
+      setImageError(validation.error || 'Invalid image file')
+      return
+    }
+
+    setIsUploadingImage(true)
+    try {
+      const result = await ImageService.uploadImage(file, token, 'posts')
+      setCoverImage(result.url)
+    } catch (error) {
+      setImageError(error instanceof Error ? error.message : 'Failed to upload image')
+    } finally {
+      setIsUploadingImage(false)
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setCoverImage('')
+    setImageError('')
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -40,7 +69,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
           title: title.trim(),
           excerpt: excerpt.trim() || undefined,
           content: content.trim(),
-          coverImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80',
+          coverImage: coverImage || 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80',
           category,
           featured: false,
           paragraphs,
@@ -70,10 +99,15 @@ export const CreatePostPage = memo(function CreatePostPage() {
         category={category}
         categories={categories}
         wordCount={wordCount}
+        coverImage={coverImage}
+        isUploadingImage={isUploadingImage}
+        imageError={imageError}
         onTitleChange={setTitle}
         onExcerptChange={setExcerpt}
         onContentChange={setContent}
         onCategoryChange={setCategory}
+        onImageUpload={handleImageUpload}
+        onRemoveImage={handleRemoveImage}
         onSubmit={isSubmitting ? (event) => event.preventDefault() : handleSubmit}
         onClose={handleClose}
       />

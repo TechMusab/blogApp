@@ -15,7 +15,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const post = useSelector((state: RootState) => state.posts.find((entry) => entry.id === id))
+  const post = useSelector((state: RootState) => state.posts?.posts?.find((entry) => entry.id === id))
   const user = useSelector((state: RootState) => state.auth.user)
   const token = useSelector((state: RootState) => state.auth.token)
   const hasLiked = !!user && (post?.likedBy ?? []).includes(user.id)

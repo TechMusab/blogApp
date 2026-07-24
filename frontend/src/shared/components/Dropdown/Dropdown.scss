@@ -29,6 +29,14 @@
     background: #243b63;
     color: #dceaff;
     font: 500 14px Inter, sans-serif;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
   }
 
   &__name {

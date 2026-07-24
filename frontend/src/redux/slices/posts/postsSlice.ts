@@ -1,16 +1,53 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { Post, Comment } from '../../../types'
+import type { Post, Comment, PagedResult } from '../../../types'
 
-const initialState: Post[] = []
+interface PostsState {
+  posts: Post[]
+  pagination: {
+    totalCount: number
+    pageNumber: number
+    pageSize: number
+    totalPages: number
+    hasPrevious: boolean
+    hasNext: boolean
+  }
+}
+
+const initialState: PostsState = {
+  posts: [],
+  pagination: {
+    totalCount: 0,
+    pageNumber: 1,
+    pageSize: 10,
+    totalPages: 0,
+    hasPrevious: false,
+    hasNext: false
+  }
+}
 
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    setPosts: (_, action: PayloadAction<Post[]>) => action.payload,
+    setPosts: (_, action: PayloadAction<Post[]>) => ({
+      posts: action.payload,
+      pagination: initialState.pagination
+    }),
+
+    setPagedPosts: (_, action: PayloadAction<PagedResult<Post>>) => ({
+      posts: action.payload.items,
+      pagination: {
+        totalCount: action.payload.totalCount,
+        pageNumber: action.payload.pageNumber,
+        pageSize: action.payload.pageSize,
+        totalPages: action.payload.totalPages,
+        hasPrevious: action.payload.hasPrevious,
+        hasNext: action.payload.hasNext
+      }
+    }),
 
     addPost: (state, action: PayloadAction<Post>) => {
-      state.unshift(action.payload)
+      state.posts.unshift(action.payload)
     },
 
     toggleLike: (
@@ -21,7 +58,7 @@ const postsSlice = createSlice({
       }>,
     ) => {
       const { postId, userId } = action.payload
-      const post = state.find((p) => p.id === postId)
+      const post = state.posts.find((p) => p.id === postId)
 
       if (!post) return
 
@@ -43,7 +80,7 @@ const postsSlice = createSlice({
         comment: Comment
       }>,
     ) => {
-      const post = state.find((p) => p.id === action.payload.postId)
+      const post = state.posts.find((p) => p.id === action.payload.postId)
 
       if (post) {
         post.commentsList.push(action.payload.comment)
@@ -53,5 +90,5 @@ const postsSlice = createSlice({
   },
 })
 
-export const { setPosts, addPost, toggleLike, addComment } = postsSlice.actions
+export const { setPosts, setPagedPosts, addPost, toggleLike, addComment } = postsSlice.actions
 export default postsSlice.reducer

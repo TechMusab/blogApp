@@ -1,4 +1,5 @@
 using BlogApi.Data;
+using BlogApi.DTOs;
 using BlogApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,17 @@ public class PostRepository : IPostRepository
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
+    public async Task<Post?> GetByIdWithIncludesAsync(int id)
+    {
+        return await _context.Posts
+            .AsNoTracking()
+            .Include(p => p.User)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+                .ThenInclude(c => c.User)
+            .SingleOrDefaultAsync(p => p.Id == id);
+    }
+
     public async Task<IEnumerable<Post>> GetAllAsync()
     {
         return await _context.Posts
@@ -30,10 +42,75 @@ public class PostRepository : IPostRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<Post>> GetAllWithIncludesAsync()
+    {
+        return await _context.Posts
+            .AsNoTracking()
+            .Include(p => p.User)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+                .ThenInclude(c => c.User)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<PagedResult<Post>> GetAllWithIncludesPagedAsync(int pageNumber, int pageSize)
+    {
+        var query = _context.Posts
+            .AsNoTracking()
+            .Include(p => p.User)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+                .ThenInclude(c => c.User)
+            .OrderByDescending(p => p.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<Post>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+    }
+
     public async Task<IEnumerable<Post>> GetByAuthorIdAsync(int authorId)
     {
         return await _context.Posts
             .Where(p => p.UserId == authorId)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Post>> GetByAuthorIdWithIncludesAsync(int authorId)
+    {
+        return await _context.Posts
+            .AsNoTracking()
+            .Include(p => p.User)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+                .ThenInclude(c => c.User)
+            .Where(p => p.UserId == authorId)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Post>> SearchAsync(string query)
+    {
+        return await _context.Posts
+            .AsNoTracking()
+            .Include(p => p.User)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+                .ThenInclude(c => c.User)
+            .Where(p => p.Title.Contains(query) || 
+                          p.Content.Contains(query) || 
+                          p.Category.Contains(query))
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync();
     }

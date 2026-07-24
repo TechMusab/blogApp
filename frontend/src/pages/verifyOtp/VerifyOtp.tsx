@@ -3,8 +3,9 @@ import './VerifyOtp.scss'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { login } from '../../redux/slices/auth/authSlice'
+import { login, updateUser } from '../../redux/slices/auth/authSlice'
 import { AuthService } from '../../services/AuthService'
+import { UserService } from '../../services/UserService'
 import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel'
 import { ThemeToggle } from '../../shared/components/ThemeToggle'
 import type { OtpChallenge } from '../../types'
@@ -13,7 +14,7 @@ export const VerifyOtpPage = memo(function VerifyOtpPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const challenge = location.state as OtpChallenge | null
+  const challenge = location.state as OtpChallenge & { avatarFile?: File } | null
   const [email, setEmail] = useState(challenge?.email ?? '')
   const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
@@ -39,6 +40,22 @@ export const VerifyOtpPage = memo(function VerifyOtpPage() {
     try {
       const session = await AuthService.verifyRegistration({ email, otp })
       dispatch(login(session))
+      
+      // Upload avatar if provided
+      if (challenge?.avatarFile) {
+        try {
+          console.log('=== VERIFY OTP AVATAR UPLOAD ===')
+          console.log('Avatar file:', challenge.avatarFile.name, challenge.avatarFile.size, 'bytes')
+          const updatedUser = await UserService.updateAvatar(challenge.avatarFile, session.token)
+          console.log('Avatar upload successful:', updatedUser)
+          dispatch(updateUser({ avatar: updatedUser.avatar }))
+        } catch (avatarError) {
+          console.error('=== VERIFY OTP AVATAR UPLOAD FAILED ===')
+          console.error('Error:', avatarError)
+          // Don't block registration if avatar upload fails
+        }
+      }
+      
       navigate('/dashboard')
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unable to verify code.')

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import type { RootState } from './redux/store'
-import { setPosts } from './redux/slices/posts/postsSlice'
+import { setPagedPosts } from './redux/slices/posts/postsSlice'
 import { restoreSaved } from './redux/slices/savedPosts/savedPostsSlice'
 import { PostsService } from './services/PostsService'
 import { Loader } from './shared/components/Loader'
@@ -18,15 +18,16 @@ const SinglePostPage = lazy(() => import('./pages/SinglePost').then((module) => 
 const CreatePostPage = lazy(() => import('./pages/CreatePost').then((module) => ({ default: module.CreatePostPage })))
 const SavedPostsPage = lazy(() => import('./pages/SavedPosts').then((module) => ({ default: module.SavedPostsPage })))
 const YourPostsPage = lazy(() => import('./pages/YourPosts').then((module) => ({ default: module.YourPostsPage })))
+const SettingsPage = lazy(() => import('./pages/Settings/Settings').then((module) => ({ default: module.SettingsPage })))
 
 const App = () => {
   const dispatch = useDispatch()
   const token = useSelector((state: RootState) => state.auth.token)
 
   useEffect(() => {
-    PostsService.getPosts()
-      .then((posts) => dispatch(setPosts(posts)))
-      .catch(() => dispatch(setPosts([])))
+    PostsService.getPosts(1, 10)
+      .then((pagedResult) => dispatch(setPagedPosts(pagedResult)))
+      .catch(() => dispatch(setPagedPosts({ items: [], totalCount: 0, pageNumber: 1, pageSize: 10, totalPages: 0, hasPrevious: false, hasNext: false })))
   }, [dispatch])
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const App = () => {
               <Route path="/create" element={<CreatePostPage />} />
               <Route path="/saved-posts" element={<SavedPostsPage />} />
               <Route path="/your-posts" element={<YourPostsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
             </Route>
           </Route>
         </Routes>

@@ -13,7 +13,7 @@ public static class UserMapper
             Id = user.Id.ToString(),
             Name = user.Name,
             Email = user.Email,
-            Avatar = user.GenerateAvatar(),
+            Avatar = user.Avatar,
             Bio = "New member of Folio Journal."
         };
     }

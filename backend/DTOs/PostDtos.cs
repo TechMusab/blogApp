@@ -51,7 +51,7 @@ public class CreatePostRequest
     public string Content { get; set; } = string.Empty;
 
     [MaxLength(1000)]
-    [RegularExpression(@"^https?:\/\/[^\s""<>{};\\]*$", ErrorMessage = "CoverImage must be a valid URL.")]
+    [RegularExpression(@"^(https?:\/\/[^\s""<>{};\\]*|\/uploads\/[^\s""<>{};\\]*)$", ErrorMessage = "CoverImage must be a valid URL.")]
     public string? CoverImage { get; set; }
 
     [Required]

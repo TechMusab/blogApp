@@ -1,13 +1,14 @@
 import { createSelector } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 
-const selectPosts = (state: RootState) => state.posts
+const selectPosts = (state: RootState) => state.posts?.posts ?? []
 const selectQuery = (state: RootState) => state.ui.searchQuery
 const selectCategory = (state: RootState) => state.ui.activeCategory
+const selectPaginationState = (state: RootState) => state.posts?.pagination ?? { totalCount: 0, pageNumber: 1, pageSize: 10, totalPages: 0, hasPrevious: false, hasNext: false }
 
 const normalize = (value: string) => value.trim().toLocaleLowerCase()
 
-const postMatchesQuery = (post: RootState['posts'][number], query: string) => {
+const postMatchesQuery = (post: RootState['posts']['posts'][number], query: string) => {
   if (!query) return true
   return [post.title, post.author, post.category, ...(post.tags ?? [])]
     .some((value) => normalize(value).includes(query))
@@ -41,3 +42,5 @@ export const selectCategories = createSelector([selectPosts], (posts) => {
   })
   return [{ name: 'All', count: posts.length }, ...categories.map((name) => ({ name, count: counts.get(name) ?? 0 }))]
 })
+
+export const selectPagination = createSelector([selectPaginationState], (pagination) => pagination)

@@ -15,6 +15,19 @@ export const SignupPage = memo(function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState('')
+
+  const handleAvatarChange = (file: File | null) => {
+    setAvatarFile(file)
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => setAvatarPreview(reader.result as string)
+      reader.readAsDataURL(file)
+    } else {
+      setAvatarPreview('')
+    }
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -23,7 +36,7 @@ export const SignupPage = memo(function SignupPage() {
 
     try {
       const challenge = await AuthService.requestRegistrationOtp({ name, email, password })
-      navigate('/verify-otp', { state: challenge })
+      navigate('/verify-otp', { state: { ...challenge, avatarFile } })
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unable to create account.')
     } finally {
@@ -43,10 +56,12 @@ export const SignupPage = memo(function SignupPage() {
         email={email}
         password={password}
         showPassword={showPassword}
+        avatarPreview={avatarPreview}
         onNameChange={setName}
         onEmailChange={setEmail}
         onPasswordChange={setPassword}
         onTogglePassword={() => setShowPassword((value) => !value)}
+        onAvatarChange={handleAvatarChange}
         onSubmit={handleSubmit}
         error={error}
         isSubmitting={isSubmitting}

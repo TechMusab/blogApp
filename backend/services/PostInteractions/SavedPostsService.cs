@@ -1,32 +1,24 @@
-using BlogApi.Data;
 using BlogApi.DTOs;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Models;
 using BlogApi.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlogApi.Services.PostInteractions;
 
 public class SavedPostsService : ISavedPostsService
 {
     private readonly IPostRepository _postRepository;
-    private readonly BlogDbContext _context;
+    private readonly ISavedPostRepository _savedPostRepository;
 
-    public SavedPostsService(IPostRepository postRepository, BlogDbContext context)
+    public SavedPostsService(IPostRepository postRepository, ISavedPostRepository savedPostRepository)
     {
         _postRepository = postRepository;
-        _context = context;
+        _savedPostRepository = savedPostRepository;
     }
 
     public async Task<IEnumerable<string>> GetSavedPostIdsAsync(int userId)
     {
-        var savedIds = await _context.SavedPosts
-            .Where(saved => saved.UserId == userId)
-            .OrderByDescending(saved => saved.CreatedAt)
-            .Select(saved => saved.PostId.ToString())
-            .ToListAsync();
-
-        return savedIds;
+        return await _savedPostRepository.GetSavedPostIdsAsync(userId);
     }
 
     public async Task<ToggleResponse> ToggleSavedAsync(int userId, int postId)
@@ -37,29 +29,26 @@ public class SavedPostsService : ISavedPostsService
             throw new InvalidOperationException("Post not found.");
         }
 
-        var saved = await _context.SavedPosts.FindAsync(userId, postId);
+        var saved = await _savedPostRepository.FindAsync(userId, postId);
         var active = saved is null;
 
         if (saved is null)
         {
-            _context.SavedPosts.Add(new SavedPost { UserId = userId, PostId = postId });
+            await _savedPostRepository.AddAsync(new SavedPost { UserId = userId, PostId = postId });
         }
         else
         {
-            _context.SavedPosts.Remove(saved);
+            await _savedPostRepository.RemoveAsync(saved);
         }
 
-        await _context.SaveChangesAsync();
+        await _savedPostRepository.SaveChangesAsync();
         return new ToggleResponse { Active = active };
     }
 
     public async Task ClearSavedPostsAsync(int userId)
     {
-        var savedPosts = await _context.SavedPosts
-            .Where(saved => saved.UserId == userId)
-            .ToListAsync();
-
-        _context.SavedPosts.RemoveRange(savedPosts);
-        await _context.SaveChangesAsync();
+        var savedPosts = await _savedPostRepository.GetByUserIdAsync(userId);
+        await _savedPostRepository.RemoveRangeAsync(savedPosts);
+        await _savedPostRepository.SaveChangesAsync();
     }
 }

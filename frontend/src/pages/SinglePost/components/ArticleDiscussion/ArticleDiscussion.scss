@@ -135,8 +135,8 @@
   }
 
   &__comment-avatar {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     background: #3a311e;
     border: 1px solid $color-accent;
     border-radius: 50%;
@@ -146,8 +146,16 @@
     justify-content: center;
     flex-shrink: 0;
     font-family: "Inter", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 700;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
   }
 
   &__comment-input-container {

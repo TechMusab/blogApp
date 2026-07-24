@@ -1,6 +1,6 @@
 import './CreatePostEditor.scss'
 
-import { memo } from 'react'
+import { memo, useRef } from 'react'
 
 type CreatePostEditorProps = {
   title: string
@@ -9,10 +9,15 @@ type CreatePostEditorProps = {
   category: string
   categories: string[]
   wordCount: number
+  coverImage: string
+  isUploadingImage: boolean
+  imageError: string
   onTitleChange: (value: string) => void
   onExcerptChange: (value: string) => void
   onContentChange: (value: string) => void
   onCategoryChange: (value: string) => void
+  onImageUpload: (file: File) => void
+  onRemoveImage: () => void
   onSubmit: (event: React.FormEvent) => void
   onClose: () => void
 }
@@ -24,17 +29,37 @@ export const CreatePostEditor = memo(function CreatePostEditor({
   category,
   categories,
   wordCount,
+  coverImage,
+  isUploadingImage,
+  imageError,
   onTitleChange,
   onExcerptChange,
   onContentChange,
   onCategoryChange,
+  onImageUpload,
+  onRemoveImage,
   onSubmit,
   onClose,
 }: CreatePostEditorProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      onImageUpload(file)
+    }
+  }
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
   return (
     <main className="editor__main">
       <div className="editor__container">
         <div className="editor__header-row">
+          <button type="button" className="editor__back-btn" onClick={onClose}>
+            ← Back to feed
+          </button>
           <div className="editor__word-count">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
@@ -51,12 +76,6 @@ export const CreatePostEditor = memo(function CreatePostEditor({
               disabled={!title.trim() || !content.trim()}
             >
               Publish
-            </button>
-            <button type="button" className="editor__close-btn" onClick={onClose} aria-label="Close editor">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C8C8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
             </button>
           </div>
         </div>
@@ -78,6 +97,41 @@ export const CreatePostEditor = memo(function CreatePostEditor({
             onChange={(e) => onExcerptChange(e.target.value)}
             placeholder="A short description (optional)"
           />
+
+          <div className="editor__image-upload">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
+            />
+            
+            {coverImage ? (
+              <div className="editor__image-preview">
+                <img src={coverImage} alt="Cover preview" className="editor__preview-image" />
+                <button
+                  type="button"
+                  className="editor__remove-image-btn"
+                  onClick={onRemoveImage}
+                  disabled={isUploadingImage}
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="editor__upload-btn"
+                onClick={handleUploadClick}
+                disabled={isUploadingImage}
+              >
+                {isUploadingImage ? 'Uploading...' : 'Add Cover Image'}
+              </button>
+            )}
+            
+            {imageError && <div className="editor__image-error">{imageError}</div>}
+          </div>
 
           <hr className="editor__divider" />
 

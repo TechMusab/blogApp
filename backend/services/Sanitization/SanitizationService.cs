@@ -50,24 +50,12 @@ public class SanitizationService : ISanitizationService
         if (string.IsNullOrWhiteSpace(input))
             return input;
 
-        // Remove potentially dangerous SQL injection patterns
-        var sanitized = input
-            .Replace("--", string.Empty)
-            .Replace("/*", string.Empty)
-            .Replace("*/", string.Empty)
-            .Replace("xp_", string.Empty)
-            .Replace("sp_", string.Empty)
-            .Replace("exec", string.Empty, StringComparison.OrdinalIgnoreCase)
-            .Replace("execute", string.Empty, StringComparison.OrdinalIgnoreCase)
-            .Replace("drop", string.Empty, StringComparison.OrdinalIgnoreCase)
-            .Replace("delete", string.Empty, StringComparison.OrdinalIgnoreCase)
-            .Replace("truncate", string.Empty, StringComparison.OrdinalIgnoreCase)
-            .Replace("insert", string.Empty, StringComparison.OrdinalIgnoreCase)
-            .Replace("update", string.Empty, StringComparison.OrdinalIgnoreCase);
+        // Note: SQL injection is handled by Entity Framework's parameterized queries
+        // No need to filter SQL keywords - they're harmless in user content
 
-        // Remove script tags and event handlers
-        sanitized = System.Text.RegularExpressions.Regex.Replace(
-            sanitized,
+        // Remove script tags and event handlers for XSS prevention
+        var sanitized = System.Text.RegularExpressions.Regex.Replace(
+            input,
             @"<script\b[^>]*>(.*?)</script>",
             string.Empty,
             System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Singleline);

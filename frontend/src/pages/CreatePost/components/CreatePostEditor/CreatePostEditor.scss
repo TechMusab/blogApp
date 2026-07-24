@@ -19,6 +19,23 @@ $color-muted: $color-secondary;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
+    gap: 16px;
+  }
+
+  &__back-btn {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $color-muted;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $color-text;
+    }
   }
 
   &__word-count {
@@ -133,6 +150,75 @@ $color-muted: $color-secondary;
       opacity: .55;
       font-style: italic;
     }
+  }
+
+  &__image-upload {
+    margin-bottom: 28px;
+  }
+
+  &__upload-btn {
+    padding: 10px 16px;
+    border: 1px dashed $color-border;
+    border-radius: 6px;
+    background: transparent;
+    color: $color-muted;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover:not(:disabled) {
+      border-color: $color-accent;
+      color: $color-accent;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__image-preview {
+    position: relative;
+    display: inline-block;
+  }
+
+  &__preview-image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+
+  &__remove-image-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__image-error {
+    margin-top: 8px;
+    color: #ff6b6b;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
   }
 
   &__divider {

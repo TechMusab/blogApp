@@ -56,3 +56,14 @@ export type Comment = {
   text: string
   date: string
 }
+
+
+export type PagedResult<T> = {
+  items: T[]
+  totalCount: number
+  pageNumber: number
+  pageSize: number
+  totalPages: number
+  hasPrevious: boolean
+  hasNext: boolean
+}

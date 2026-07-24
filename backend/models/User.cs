@@ -22,6 +22,8 @@ public class User
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    public string? Avatar { get; set; }
+
     // Information Expert: Domain logic behavior
     public bool CanVerifyOtp() => !IsVerified && OtpExpiresAt > DateTime.UtcNow && OtpAttemptCount < 5;
 
