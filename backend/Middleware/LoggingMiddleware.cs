@@ -17,7 +17,7 @@ public class LoggingMiddleware
     {
         var stopwatch = Stopwatch.StartNew();
         var request = context.Request;
-        
+
         // Detailed CORS logging
         if (request.Method == "OPTIONS")
         {
@@ -41,7 +41,7 @@ public class LoggingMiddleware
         {
             stopwatch.Stop();
             var response = context.Response;
-            
+
             // Log CORS headers for OPTIONS requests
             if (request.Method == "OPTIONS")
             {

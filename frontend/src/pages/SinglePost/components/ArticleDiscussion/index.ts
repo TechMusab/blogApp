@@ -1,1 +1,1 @@
-export * from './ArticleDiscussion'
+export * from './ArticleDiscussion';

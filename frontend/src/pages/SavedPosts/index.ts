@@ -1,1 +1,1 @@
-export * from './SavedPosts'
+export * from './SavedPosts';

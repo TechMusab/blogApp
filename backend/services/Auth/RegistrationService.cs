@@ -103,7 +103,7 @@ public class RegistrationService : IRegistrationService
         }
 
         var isValid = _otpService.VerifyOtp(request.Otp, user.OtpSalt, user.OtpHash);
-        
+
         if (!isValid)
         {
             user.IncrementOtpAttempt();

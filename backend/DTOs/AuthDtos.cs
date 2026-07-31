@@ -19,7 +19,7 @@ public class RegisterRequest
     [Required]
     [MinLength(8)]
     [MaxLength(128)]
-    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
         ErrorMessage = "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character.")]
     public string Password { get; set; } = string.Empty;
 }

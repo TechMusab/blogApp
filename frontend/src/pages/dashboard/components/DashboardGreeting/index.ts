@@ -1,1 +1,1 @@
-export * from './DashboardGreeting'
+export * from './DashboardGreeting';

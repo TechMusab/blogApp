@@ -19,7 +19,7 @@ public class LocalImageStorage : IImageStorage
     {
         _basePath = configuration["ImageStorage:BasePath"] ?? "wwwroot/uploads";
         _baseUrl = configuration["ImageStorage:BaseUrl"] ?? "/uploads";
-        
+
         // Ensure base directory exists
         if (!Directory.Exists(_basePath))
         {
@@ -125,7 +125,7 @@ public class LocalImageStorage : IImageStorage
     private async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxSize)
     {
         using var image = Image.FromStream(imageStream);
-        
+
         // Calculate new dimensions maintaining aspect ratio
         int newWidth, newHeight;
         if (image.Width > image.Height)

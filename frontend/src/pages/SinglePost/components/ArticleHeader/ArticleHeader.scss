@@ -1,4 +1,4 @@
-@use "../../../../styles/abstracts/variables" as *;
+@use '../../../../styles/abstracts/variables' as *;
 
 $color-text: $color-white;
 
@@ -11,7 +11,7 @@ $color-text: $color-white;
     padding: 0;
     border: none;
     background: transparent;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 500;
     color: $color-secondary;
@@ -32,7 +32,7 @@ $color-text: $color-white;
     background: rgba(232, 172, 58, 0.1);
     border: 1px solid rgba(232, 172, 58, 0.4);
     border-radius: 4px;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 1px;
@@ -43,7 +43,7 @@ $color-text: $color-white;
   &__title {
     margin: 5px 0 0;
     max-width: 760px;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 30px;
     font-weight: 700;
     line-height: 64px;
@@ -78,14 +78,14 @@ $color-text: $color-white;
   }
 
   &__author-name {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 600;
     color: $color-text;
   }
 
   &__meta {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 9px;
     font-weight: 400;
     color: $color-secondary;

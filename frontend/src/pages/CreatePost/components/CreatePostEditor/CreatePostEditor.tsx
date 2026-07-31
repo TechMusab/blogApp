@@ -1,26 +1,26 @@
-import './CreatePostEditor.scss'
+import './CreatePostEditor.scss';
 
-import { memo, useRef } from 'react'
+import { memo, useRef } from 'react';
 
 type CreatePostEditorProps = {
-  title: string
-  excerpt: string
-  content: string
-  category: string
-  categories: string[]
-  wordCount: number
-  coverImage: string
-  isUploadingImage: boolean
-  imageError: string
-  onTitleChange: (value: string) => void
-  onExcerptChange: (value: string) => void
-  onContentChange: (value: string) => void
-  onCategoryChange: (value: string) => void
-  onImageUpload: (file: File) => void
-  onRemoveImage: () => void
-  onSubmit: (event: React.FormEvent) => void
-  onClose: () => void
-}
+  title: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  categories: string[];
+  wordCount: number;
+  coverImage: string;
+  isUploadingImage: boolean;
+  imageError: string;
+  onTitleChange: (value: string) => void;
+  onExcerptChange: (value: string) => void;
+  onContentChange: (value: string) => void;
+  onCategoryChange: (value: string) => void;
+  onImageUpload: (file: File) => void;
+  onRemoveImage: () => void;
+  onSubmit: (event: React.FormEvent) => void;
+  onClose: () => void;
+};
 
 export const CreatePostEditor = memo(function CreatePostEditor({
   title,
@@ -41,18 +41,18 @@ export const CreatePostEditor = memo(function CreatePostEditor({
   onSubmit,
   onClose,
 }: CreatePostEditorProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      onImageUpload(file)
+      onImageUpload(file);
     }
-  }
+  };
 
   const handleUploadClick = () => {
-    fileInputRef.current?.click()
-  }
+    fileInputRef.current?.click();
+  };
   return (
     <main className="editor__main">
       <div className="editor__container">
@@ -61,7 +61,16 @@ export const CreatePostEditor = memo(function CreatePostEditor({
             ← Back to feed
           </button>
           <div className="editor__word-count">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#8C8C8C"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
             </svg>
@@ -106,7 +115,7 @@ export const CreatePostEditor = memo(function CreatePostEditor({
               onChange={handleFileSelect}
               style={{ display: 'none' }}
             />
-            
+
             {coverImage ? (
               <div className="editor__image-preview">
                 <img src={coverImage} alt="Cover preview" className="editor__preview-image" />
@@ -129,7 +138,7 @@ export const CreatePostEditor = memo(function CreatePostEditor({
                 {isUploadingImage ? 'Uploading...' : 'Add Cover Image'}
               </button>
             )}
-            
+
             {imageError && <div className="editor__image-error">{imageError}</div>}
           </div>
 
@@ -158,6 +167,5 @@ export const CreatePostEditor = memo(function CreatePostEditor({
         </form>
       </div>
     </main>
-  )
-})
-
+  );
+});

@@ -1,4 +1,4 @@
-@use "../../../../styles/abstracts/variables" as *;
+@use '../../../../styles/abstracts/variables' as *;
 
 .login {
   &__right {
@@ -16,7 +16,7 @@
 
   &__form-title {
     margin: 0 0 4px;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 28px;
     font-weight: 700;
     color: $color-auth-text;
@@ -24,7 +24,7 @@
 
   &__form-subtitle {
     margin: 0 0 14px;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: var(--text-secondary);
@@ -43,7 +43,7 @@
   }
 
   &__label {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
@@ -57,7 +57,7 @@
     border-radius: 8px;
     background: var(--surface-color);
     color: var(--text-primary);
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     outline: none;
     transition: border-color 250ms ease;
@@ -93,7 +93,7 @@
     border-radius: 8px;
     background: $color-auth-accent;
     color: #111;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -112,7 +112,7 @@
   &__error {
     margin: 0;
     color: #ef6f6c;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
     line-height: 1.4;
   }

@@ -1,1 +1,1 @@
-export * from './YourPosts'
+export * from './YourPosts';

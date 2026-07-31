@@ -1,4 +1,4 @@
-@use "../../../../styles/abstracts/variables" as *;
+@use '../../../../styles/abstracts/variables' as *;
 
 .post-card {
   width: 100%;
@@ -35,7 +35,7 @@
     z-index: 2;
     top: 12px;
     right: 12px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, .25);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
   }
 
   &__image {
@@ -51,7 +51,7 @@
     background: rgba(232, 172, 58, 0.12);
     border: 1px solid rgba(232, 172, 58, 0.35);
     color: #e8ac3a;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -91,21 +91,21 @@
   }
 
   &__author-name {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 10px;
     font-weight: 600;
     color: var(--text-primary);
   }
 
   &__author-date {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 10px;
     color: var(--text-secondary);
   }
 
   &__title {
     margin: 0;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 15px;
     font-weight: 700;
     line-height: 48px;
@@ -119,7 +119,7 @@
 
   &__excerpt {
     margin: 0;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 10px;
     line-height: 28px;
     color: var(--text-secondary);
@@ -146,7 +146,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 10px;
     color: var(--text-secondary);
   }

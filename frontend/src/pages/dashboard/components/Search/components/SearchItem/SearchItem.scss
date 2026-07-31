@@ -38,14 +38,18 @@
   &__title {
     overflow: hidden;
     color: var(--text-primary);
-    font: 600 16px Inter, sans-serif;
+    font:
+      600 16px Inter,
+      sans-serif;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__author {
     color: var(--text-secondary);
-    font: 400 14px Inter, sans-serif;
+    font:
+      400 14px Inter,
+      sans-serif;
   }
 
   &__badge {
@@ -53,7 +57,9 @@
     border-radius: 4px;
     background: #182b49;
     color: #55a2ff;
-    font: 600 10px Inter, sans-serif;
-    letter-spacing: .06em;
+    font:
+      600 10px Inter,
+      sans-serif;
+    letter-spacing: 0.06em;
   }
 }

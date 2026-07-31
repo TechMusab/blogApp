@@ -1,23 +1,23 @@
-import './SignupForm.scss'
+import './SignupForm.scss';
 
-import { memo } from 'react'
-import { Link } from 'react-router-dom'
+import { memo } from 'react';
+import { Link } from 'react-router-dom';
 
 type SignupFormProps = {
-  name: string
-  email: string
-  password: string
-  showPassword: boolean
-  onNameChange: (value: string) => void
-  onEmailChange: (value: string) => void
-  onPasswordChange: (value: string) => void
-  onTogglePassword: () => void
-  onSubmit: (event: React.FormEvent) => void
-  error: string
-  isSubmitting: boolean
-  avatarPreview: string
-  onAvatarChange: (file: File | null) => void
-}
+  name: string;
+  email: string;
+  password: string;
+  showPassword: boolean;
+  onNameChange: (value: string) => void;
+  onEmailChange: (value: string) => void;
+  onPasswordChange: (value: string) => void;
+  onTogglePassword: () => void;
+  onSubmit: (event: React.FormEvent) => void;
+  error: string;
+  isSubmitting: boolean;
+  avatarPreview: string;
+  onAvatarChange: (file: File | null) => void;
+};
 
 export const SignupForm = memo(function SignupForm({
   name,
@@ -49,7 +49,11 @@ export const SignupForm = memo(function SignupForm({
               ) : (
                 <div className="signup__avatar-placeholder">
                   <span className="signup__avatar-initials">
-                    {name?.split(' ').map((part) => part[0]).join('').slice(0, 2) || 'U'}
+                    {name
+                      ?.split(' ')
+                      .map((part) => part[0])
+                      .join('')
+                      .slice(0, 2) || 'U'}
                   </span>
                 </div>
               )}
@@ -57,8 +61,8 @@ export const SignupForm = memo(function SignupForm({
                 type="file"
                 accept="image/jpeg,image/png,image/gif,image/webp"
                 onChange={(e) => {
-                  const file = e.target.files?.[0] || null
-                  onAvatarChange(file)
+                  const file = e.target.files?.[0] || null;
+                  onAvatarChange(file);
                 }}
                 className="signup__avatar-input"
               />
@@ -128,10 +132,11 @@ export const SignupForm = memo(function SignupForm({
 
         <div className="signup__footer">
           <span className="signup__footer-text">Already a member?</span>
-          <Link className="signup__link" to="/login">Sign in</Link>
+          <Link className="signup__link" to="/login">
+            Sign in
+          </Link>
         </div>
       </div>
     </section>
-  )
-})
-
+  );
+});

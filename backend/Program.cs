@@ -40,7 +40,7 @@ builder.Services.AddSingleton<IDbConfiguration, DbConfiguration>();
 builder.Services.AddSingleton<IImageStorageConfiguration, ImageStorageConfiguration>();
 builder.Services.AddSingleton<IImageStorage, LocalImageStorage>();
 builder.Services.AddScoped<ISanitizationService, SanitizationService>();
-builder.Services.AddScoped<IEmailSender>(sp => 
+builder.Services.AddScoped<IEmailSender>(sp =>
 {
     var appConfig = sp.GetRequiredService<IAppConfiguration>();
     var config = sp.GetRequiredService<IConfiguration>();
@@ -72,12 +72,12 @@ builder.Services.AddCors(options =>
         var allowedOrigins = builder.Configuration
             .GetSection("Cors:AllowedOrigins")
             .Get<string[]>();
-        
+
         if (allowedOrigins == null || allowedOrigins.Length == 0)
         {
             allowedOrigins = new[] { "http://localhost:5173", "https://localhost:5173" };
         }
-        
+
         policy.WithOrigins(allowedOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -112,7 +112,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
-        
+
         // Allow anonymous OPTIONS requests for CORS preflight
         options.Events = new JwtBearerEvents
         {
@@ -132,7 +132,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-     app.UseSwagger();
+    app.UseSwagger();
     app.UseSwaggerUI();
 }
 

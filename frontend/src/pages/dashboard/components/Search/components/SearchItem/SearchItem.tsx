@@ -1,13 +1,13 @@
-import './SearchItem.scss'
+import './SearchItem.scss';
 
-import { memo } from 'react'
-import type { Post } from '../../../../../../types'
+import { memo } from 'react';
+import type { Post } from '../../../../../../types';
 
 type SearchItemProps = {
-  post: Post
-  isActive: boolean
-  onSelect: (post: Post) => void
-}
+  post: Post;
+  isActive: boolean;
+  onSelect: (post: Post) => void;
+};
 
 export const SearchItem = memo(function SearchItem({ post, isActive, onSelect }: SearchItemProps) {
   return (
@@ -19,13 +19,14 @@ export const SearchItem = memo(function SearchItem({ post, isActive, onSelect }:
       onMouseDown={(event) => event.preventDefault()}
       onClick={() => onSelect(post)}
     >
-      <span className="search-item__icon" aria-hidden="true">▧</span>
+      <span className="search-item__icon" aria-hidden="true">
+        ▧
+      </span>
       <span className="search-item__copy">
         <span className="search-item__title">{post.title}</span>
         <span className="search-item__author">{post.author}</span>
       </span>
       <span className="search-item__badge">POST</span>
     </button>
-  )
-})
-
+  );
+});

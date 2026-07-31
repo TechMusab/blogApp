@@ -108,8 +108,8 @@ public class PostRepository : IPostRepository
             .Include(p => p.Likes)
             .Include(p => p.Comments)
                 .ThenInclude(c => c.User)
-            .Where(p => p.Title.Contains(query) || 
-                          p.Content.Contains(query) || 
+            .Where(p => p.Title.Contains(query) ||
+                          p.Content.Contains(query) ||
                           p.Category.Contains(query))
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync();

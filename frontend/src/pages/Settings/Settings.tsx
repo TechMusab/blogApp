@@ -1,72 +1,74 @@
-import './Settings.scss'
+import './Settings.scss';
 
-import { memo, useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
-import { Avatar } from '../../shared/components/Avatar'
-import type { RootState } from '../../redux/store'
-import { logout, updateUser } from '../../redux/slices/auth/authSlice'
-import { UserService } from '../../services/UserService'
+import { memo, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
+import { Avatar } from '../../shared/components/Avatar';
+import type { RootState } from '../../redux/store';
+import { logout, updateUser } from '../../redux/slices/auth/authSlice';
+import { UserService } from '../../services/UserService';
 
 export const SettingsPage = memo(function SettingsPage() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const user = useSelector((state: RootState) => state.auth.user)
-  const token = useSelector((state: RootState) => state.auth.token)
-  
-  const [name, setName] = useState(user?.name || '')
-  const [email] = useState(user?.email || '')
-  const [avatar, setAvatar] = useState(user?.avatar || '')
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
-  const [saveMessage, setSaveMessage] = useState('')
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  const [name, setName] = useState(user?.name || '');
+  const [email] = useState(user?.email || '');
+  const [avatar, setAvatar] = useState(user?.avatar || '');
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
 
   // Sync local state with Redux state
   useEffect(() => {
-    if (user?.name) setName(user.name)
-    if (user?.avatar !== undefined) setAvatar(user.avatar)
-  }, [user])
+    if (user?.name) setName(user.name);
+    if (user?.avatar !== undefined) setAvatar(user.avatar);
+  }, [user]);
 
   const handleAvatarUpload = async (file: File) => {
-    setIsUploadingAvatar(true)
+    setIsUploadingAvatar(true);
     try {
-      const updatedUser = await UserService.updateAvatar(file, token)
-      setAvatar(updatedUser.avatar || '')
-      dispatch(updateUser({ avatar: updatedUser.avatar }))
+      const updatedUser = await UserService.updateAvatar(file, token);
+      setAvatar(updatedUser.avatar || '');
+      dispatch(updateUser({ avatar: updatedUser.avatar }));
     } catch (error) {
-      setSaveMessage(error instanceof Error ? error.message : 'Failed to upload avatar')
-      setTimeout(() => setSaveMessage(''), 3000)
+      setSaveMessage(error instanceof Error ? error.message : 'Failed to upload avatar');
+      setTimeout(() => setSaveMessage(''), 3000);
     } finally {
-      setIsUploadingAvatar(false)
+      setIsUploadingAvatar(false);
     }
-  }
+  };
 
   const handleSaveProfile = async (event: React.FormEvent) => {
-    event.preventDefault()
-    setIsSaving(true)
-    setSaveMessage('')
-    
+    event.preventDefault();
+    setIsSaving(true);
+    setSaveMessage('');
+
     try {
-      const updatedUser = await UserService.updateProfile(name, token)
-      dispatch(updateUser({ 
-        name: updatedUser.name, 
-        avatar: updatedUser.avatar 
-      }))
-      setSaveMessage('Profile updated successfully')
-      setTimeout(() => setSaveMessage(''), 3000)
+      const updatedUser = await UserService.updateProfile(name, token);
+      dispatch(
+        updateUser({
+          name: updatedUser.name,
+          avatar: updatedUser.avatar,
+        })
+      );
+      setSaveMessage('Profile updated successfully');
+      setTimeout(() => setSaveMessage(''), 3000);
     } catch (error) {
-      setSaveMessage(error instanceof Error ? error.message : 'Failed to update profile')
-      setTimeout(() => setSaveMessage(''), 3000)
+      setSaveMessage(error instanceof Error ? error.message : 'Failed to update profile');
+      setTimeout(() => setSaveMessage(''), 3000);
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   const handleLogout = () => {
-    dispatch(logout())
-    navigate('/login')
-  }
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <div className="settings-page">
@@ -95,7 +97,7 @@ export const SettingsPage = memo(function SettingsPage() {
                   placeholder="Your full name"
                 />
               </div>
-              
+
               <div className="settings__form-group">
                 <label htmlFor="email">Email Address</label>
                 <input
@@ -112,10 +114,10 @@ export const SettingsPage = memo(function SettingsPage() {
                 <label>Profile Picture</label>
                 <div className="settings__avatar-upload">
                   <div className="settings__avatar-preview">
-                    <Avatar 
-                      avatar={avatar} 
-                      name={name} 
-                      size="large" 
+                    <Avatar
+                      avatar={avatar}
+                      name={name}
+                      size="large"
                       className="settings__avatar-image"
                     />
                     {avatar && (
@@ -133,21 +135,20 @@ export const SettingsPage = memo(function SettingsPage() {
                     type="file"
                     accept="image/jpeg,image/png,image/gif,image/webp"
                     onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) handleAvatarUpload(file)
+                      const file = e.target.files?.[0];
+                      if (file) handleAvatarUpload(file);
                     }}
                     disabled={isUploadingAvatar}
                     className="settings__avatar-input"
                   />
-                  <small className="settings__form-hint">Upload a profile picture (JPEG, PNG, GIF, WebP, max 5MB)</small>
+                  <small className="settings__form-hint">
+                    Upload a profile picture (JPEG, PNG, GIF, WebP, max 5MB)
+                  </small>
                 </div>
               </div>
 
-            
               {saveMessage && (
-                <div className="settings__message settings__message--success">
-                  {saveMessage}
-                </div>
+                <div className="settings__message settings__message--success">{saveMessage}</div>
               )}
 
               <button type="submit" className="settings__save-btn" disabled={isSaving}>
@@ -159,7 +160,11 @@ export const SettingsPage = memo(function SettingsPage() {
           <section className="settings__section">
             <h2 className="settings__section-title">Account Actions</h2>
             <div className="settings__actions">
-              <button type="button" className="settings__action-btn settings__action-btn--danger" onClick={handleLogout}>
+              <button
+                type="button"
+                className="settings__action-btn settings__action-btn--danger"
+                onClick={handleLogout}
+              >
                 Sign Out
               </button>
             </div>
@@ -167,5 +172,5 @@ export const SettingsPage = memo(function SettingsPage() {
         </div>
       </main>
     </div>
-  )
-})
+  );
+});

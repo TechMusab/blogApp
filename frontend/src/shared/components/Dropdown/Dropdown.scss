@@ -7,7 +7,7 @@
   border: 1px solid #2c2b31;
   border-radius: 16px;
   background: #1d1d23;
-  box-shadow: 0 22px 46px rgba(0, 0, 0, .42);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.42);
   animation: dropdown-enter 200ms ease both;
   z-index: 20;
 
@@ -21,14 +21,18 @@
   &__name {
     display: block;
     color: #f5f3ef;
-    font: 700 18px Inter, sans-serif;
+    font:
+      700 18px Inter,
+      sans-serif;
   }
 
   &__email {
     display: block;
     margin-top: 4px;
     color: #8f8b88;
-    font: 400 14px Inter, sans-serif;
+    font:
+      400 14px Inter,
+      sans-serif;
   }
 
   &__divider {

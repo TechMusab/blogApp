@@ -57,7 +57,7 @@ public class UserService : IUserService
         _logger.LogInformation("=== USER SERVICE AVATAR UPLOAD START ===");
         _logger.LogInformation("UserId: {UserId}", userId);
         _logger.LogInformation("File: {FileName}, Size: {FileSize} bytes", avatarFile.FileName, avatarFile.Length);
-        
+
         var user = await _userRepository.GetByIdAsync(userId);
         if (user == null)
         {
@@ -70,7 +70,7 @@ public class UserService : IUserService
             _logger.LogInformation("Starting image upload to storage...");
             var imageUrl = await _imageStorage.UploadAsync(avatarFile, "avatars");
             _logger.LogInformation("Image uploaded to storage, relative path: {ImageUrl}", imageUrl);
-            
+
             var fullUrl = _imageStorage.GetUrl(imageUrl);
             _logger.LogInformation("Full URL constructed: {FullUrl}", fullUrl);
 
@@ -79,7 +79,7 @@ public class UserService : IUserService
 
             _logger.LogInformation("=== USER SERVICE AVATAR UPLOAD SUCCESS ===");
             _logger.LogInformation("UserId: {UserId}, Avatar: {Avatar}", userId, user.Avatar);
-            
+
             return new UserDto
             {
                 Id = user.Id,

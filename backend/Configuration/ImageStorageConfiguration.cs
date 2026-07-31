@@ -20,6 +20,6 @@ public class ImageStorageConfiguration : IImageStorageConfiguration
     public string BasePath => _configuration["ImageStorage:BasePath"] ?? "wwwroot/uploads";
     public string BaseUrl => _configuration["ImageStorage:BaseUrl"] ?? "/uploads";
     public long MaxFileSize => _configuration.GetValue<long>("ImageStorage:MaxFileSize", 5 * 1024 * 1024); // 5MB default
-    public string[] AllowedExtensions => _configuration.GetSection("ImageStorage:AllowedExtensions").Get<string[]>() 
+    public string[] AllowedExtensions => _configuration.GetSection("ImageStorage:AllowedExtensions").Get<string[]>()
         ?? new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
 }

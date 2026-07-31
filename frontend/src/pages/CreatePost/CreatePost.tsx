@@ -1,67 +1,76 @@
-import './CreatePost.scss'
+import './CreatePost.scss';
 
-import { memo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
-import { CreatePostEditor } from './components/CreatePostEditor'
-import type { RootState } from '../../redux/store'
-import { addPost } from '../../redux/slices/posts/postsSlice'
-import { PostsService } from '../../services/PostsService'
-import { ImageService } from '../../services/ImageService'
+import { memo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
+import { CreatePostEditor } from './components/CreatePostEditor';
+import type { RootState } from '../../redux/store';
+import { addPost } from '../../redux/slices/posts/postsSlice';
+import { PostsService } from '../../services/PostsService';
+import { ImageService } from '../../services/ImageService';
 
 export const CreatePostPage = memo(function CreatePostPage() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const user = useSelector((state: RootState) => state.auth.user)
-  const token = useSelector((state: RootState) => state.auth.token)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
 
-  const [title, setTitle] = useState('')
-  const [excerpt, setExcerpt] = useState('')
-  const [content, setContent] = useState('')
-  const [category, setCategory] = useState('Essays')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [coverImage, setCoverImage] = useState('')
-  const [isUploadingImage, setIsUploadingImage] = useState(false)
-  const [imageError, setImageError] = useState('')
+  const [title, setTitle] = useState('');
+  const [excerpt, setExcerpt] = useState('');
+  const [content, setContent] = useState('');
+  const [category, setCategory] = useState('Essays');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [coverImage, setCoverImage] = useState('');
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageError, setImageError] = useState('');
 
-  const categories = ['Science', 'Photography', 'Urbanism', 'Technology', 'Culture', 'Travel', 'Essays', 'Design']
+  const categories = [
+    'Science',
+    'Photography',
+    'Urbanism',
+    'Technology',
+    'Culture',
+    'Travel',
+    'Essays',
+    'Design',
+  ];
 
-  const wordCount = content.trim() === '' ? 0 : content.trim().split(/\s+/).filter(Boolean).length
+  const wordCount = content.trim() === '' ? 0 : content.trim().split(/\s+/).filter(Boolean).length;
 
   const handleImageUpload = async (file: File) => {
-    setImageError('')
-    
-    const validation = ImageService.validateImageFile(file)
+    setImageError('');
+
+    const validation = ImageService.validateImageFile(file);
     if (!validation.valid) {
-      setImageError(validation.error || 'Invalid image file')
-      return
+      setImageError(validation.error || 'Invalid image file');
+      return;
     }
 
-    setIsUploadingImage(true)
+    setIsUploadingImage(true);
     try {
-      const result = await ImageService.uploadImage(file, token, 'posts')
-      setCoverImage(result.url)
+      const result = await ImageService.uploadImage(file, token, 'posts');
+      setCoverImage(result.url);
     } catch (error) {
-      setImageError(error instanceof Error ? error.message : 'Failed to upload image')
+      setImageError(error instanceof Error ? error.message : 'Failed to upload image');
     } finally {
-      setIsUploadingImage(false)
+      setIsUploadingImage(false);
     }
-  }
+  };
 
   const handleRemoveImage = () => {
-    setCoverImage('')
-    setImageError('')
-  }
+    setCoverImage('');
+    setImageError('');
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    if (!user || !token) return
-    if (!title.trim() || !content.trim()) return
+    if (!user || !token) return;
+    if (!title.trim() || !content.trim()) return;
 
-    setIsSubmitting(true)
-    const paragraphs = content.split(/\n\n+/).filter((p) => p.trim() !== '')
+    setIsSubmitting(true);
+    const paragraphs = content.split(/\n\n+/).filter((p) => p.trim() !== '');
 
     try {
       const post = await PostsService.createPost(
@@ -69,24 +78,26 @@ export const CreatePostPage = memo(function CreatePostPage() {
           title: title.trim(),
           excerpt: excerpt.trim() || undefined,
           content: content.trim(),
-          coverImage: coverImage || 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80',
+          coverImage:
+            coverImage ||
+            'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80',
           category,
           featured: false,
           paragraphs,
         },
-        token,
-      )
+        token
+      );
 
-      dispatch(addPost(post))
-      navigate('/dashboard')
+      dispatch(addPost(post));
+      navigate('/dashboard');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleClose = () => {
-    navigate('/dashboard')
-  }
+    navigate('/dashboard');
+  };
 
   return (
     <div className="create-post-page">
@@ -112,6 +123,5 @@ export const CreatePostPage = memo(function CreatePostPage() {
         onClose={handleClose}
       />
     </div>
-  )
-})
-
+  );
+});

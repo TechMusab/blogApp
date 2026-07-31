@@ -21,7 +21,7 @@ public class SmtpEmailSender : IEmailSender
     public async Task SendRegistrationOtpAsync(string email, string name, string otp, DateTime expiresAt)
     {
         var host = _configuration["Email:Smtp:Host"];
-        
+
         // Check for invalid or example host
         if (string.IsNullOrWhiteSpace(host) || host == "smtp.example.com")
         {
@@ -66,7 +66,7 @@ public class SmtpEmailSender : IEmailSender
             {
                 return;
             }
-            
+
             throw;
         }
     }

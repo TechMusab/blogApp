@@ -1,19 +1,19 @@
-import './LoginForm.scss'
+import './LoginForm.scss';
 
-import { memo } from 'react'
-import { Link } from 'react-router-dom'
+import { memo } from 'react';
+import { Link } from 'react-router-dom';
 
 type LoginFormProps = {
-  email: string
-  password: string
-  showPassword: boolean
-  onEmailChange: (value: string) => void
-  onPasswordChange: (value: string) => void
-  onTogglePassword: () => void
-  onSubmit: (event: React.FormEvent) => void
-  error: string
-  isSubmitting: boolean
-}
+  email: string;
+  password: string;
+  showPassword: boolean;
+  onEmailChange: (value: string) => void;
+  onPasswordChange: (value: string) => void;
+  onTogglePassword: () => void;
+  onSubmit: (event: React.FormEvent) => void;
+  error: string;
+  isSubmitting: boolean;
+};
 
 export const LoginForm = memo(function LoginForm({
   email,
@@ -76,10 +76,11 @@ export const LoginForm = memo(function LoginForm({
 
         <div className="login__footer">
           <span className="login__footer-text">No account yet?</span>
-          <Link className="login__link" to="/signup">Sign up</Link>
+          <Link className="login__link" to="/signup">
+            Sign up
+          </Link>
         </div>
       </div>
     </section>
-  )
-})
-
+  );
+});

@@ -19,7 +19,7 @@ public class SendGridEmailSender : IEmailSender
         // SendGrid implementation would go here
         // This is a placeholder to demonstrate Polymorphism pattern
         await Task.CompletedTask;
-        
+
         // In real implementation:
         // var client = new SendGridClient(_apiKey);
         // var message = new SendGridMessage

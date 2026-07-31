@@ -1,1 +1,1 @@
-export * from './AuthMarketingPanel'
+export * from './AuthMarketingPanel';

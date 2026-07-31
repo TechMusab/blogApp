@@ -1,4 +1,4 @@
-@use "../../../styles/abstracts/variables" as *;
+@use '../../../styles/abstracts/variables' as *;
 
 $color-accent: $color-auth-accent;
 
@@ -36,7 +36,7 @@ $color-accent: $color-auth-accent;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 16px;
     font-weight: 300;
     color: $color-auth-text;
@@ -53,7 +53,7 @@ $color-accent: $color-auth-accent;
 
   &__heading {
     margin: 0;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 36px;
     line-height: 44px;
     letter-spacing: -0.25px;
@@ -68,7 +68,7 @@ $color-accent: $color-auth-accent;
   &__description {
     margin-top: 12px;
     max-width: 280px;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     line-height: 20px;
     color: var(--text-secondary);
@@ -101,7 +101,7 @@ $color-accent: $color-auth-accent;
   }
 
   &__author-name {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);

@@ -1,4 +1,4 @@
-@use "../../../../styles/abstracts/variables" as *;
+@use '../../../../styles/abstracts/variables' as *;
 
 .signup {
   &__right {
@@ -16,7 +16,7 @@
 
   &__form-title {
     margin: 0 0 4px;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 28px;
     font-weight: 700;
     color: $color-auth-text;
@@ -24,7 +24,7 @@
 
   &__form-subtitle {
     margin: 0 0 14px;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: var(--text-secondary);
@@ -43,7 +43,7 @@
   }
 
   &__label {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
@@ -57,7 +57,7 @@
     border-radius: 8px;
     background: var(--surface-color);
     color: var(--text-primary);
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     outline: none;
     transition: border-color 250ms ease;
@@ -94,7 +94,7 @@
     border-radius: 8px;
     background: $color-auth-accent;
     color: #111;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -113,7 +113,7 @@
   &__error {
     margin: 0;
     color: #ef6f6c;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
     line-height: 1.4;
   }
@@ -181,7 +181,6 @@
   }
 }
 
-
 .signup {
   &__avatar-upload {
     display: flex;
@@ -219,7 +218,9 @@
 
   &__avatar-initials {
     color: $color-accent;
-    font: 600 24px Inter, sans-serif;
+    font:
+      600 24px Inter,
+      sans-serif;
   }
 
   &__avatar-input {
@@ -228,7 +229,9 @@
     border-radius: 6px;
     background: transparent;
     color: var(--text-secondary);
-    font: 400 14px Inter, sans-serif;
+    font:
+      400 14px Inter,
+      sans-serif;
     cursor: pointer;
     transition: all 0.15s;
 
@@ -249,7 +252,9 @@
     border-radius: 4px;
     background: transparent;
     color: #ef6f6c;
-    font: 600 12px Inter, sans-serif;
+    font:
+      600 12px Inter,
+      sans-serif;
     cursor: pointer;
     transition: all 0.15s;
 

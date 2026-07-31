@@ -9,7 +9,7 @@
   --accent-color: #e8ac3a;
 }
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --bg-color: #fafafa;
   --surface-color: #ffffff;
   --surface-hover: #f1f1f1;
@@ -21,13 +21,21 @@
 }
 
 body {
-  font-family: "Inter", "Segoe UI", sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
   background: var(--bg-color);
   color: var(--text-primary);
-  transition: background 250ms ease, color 250ms ease;
+  transition:
+    background 250ms ease,
+    color 250ms ease;
 }
 
-body *, body *::before, body *::after { transition-property: background-color, border-color, color; transition-duration: 250ms; transition-timing-function: ease; }
+body *,
+body *::before,
+body *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+}
 
 #root {
   min-height: 100vh;

@@ -1,4 +1,4 @@
-@use "../../../../styles/abstracts/variables" as *;
+@use '../../../../styles/abstracts/variables' as *;
 
 .article {
   &__interaction {
@@ -30,7 +30,7 @@
     border: none;
     padding: 0;
     margin: 0;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
 
     &--like {
@@ -64,7 +64,7 @@
 
   &__discussion-title {
     margin: 40px 0 0;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-weight: 700;
     font-size: 42px;
     line-height: 1.2;
@@ -73,7 +73,7 @@
 
   &__empty-state {
     margin-top: 24px;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     font-weight: 400;
     color: var(--text-secondary);
@@ -105,14 +105,14 @@
   }
 
   &__comment-author {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
   }
 
   &__comment-date {
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 400;
     color: var(--text-secondary);
@@ -120,7 +120,7 @@
 
   &__comment-text {
     margin: 0;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 400;
     line-height: 1.5;
@@ -160,7 +160,7 @@
     background: var(--surface-color);
     border: 1px solid var(--border-subtle);
     border-radius: 6px;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     color: var(--text-primary);
     resize: none;

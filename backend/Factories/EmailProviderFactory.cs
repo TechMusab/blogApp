@@ -8,7 +8,7 @@ namespace BlogApi.Factories;
 public static class EmailProviderFactory
 {
     public static IEmailSender CreateEmailSender(
-        IAppConfiguration configuration, 
+        IAppConfiguration configuration,
         IConfiguration rootConfiguration,
         IWebHostEnvironment environment)
     {

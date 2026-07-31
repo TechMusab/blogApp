@@ -1,2 +1,2 @@
-export * from './DropdownItem'
-export type { DropdownMenuItem } from './DropdownItem'
+export * from './DropdownItem';
+export type { DropdownMenuItem } from './DropdownItem';

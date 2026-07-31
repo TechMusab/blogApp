@@ -11,11 +11,13 @@
     border: 1px solid var(--border-color);
     border-radius: 10px;
     background: var(--surface-color);
-    transition: border-color 160ms ease, box-shadow 160ms ease;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease;
 
     &:focus-within {
       border-color: #e8ac3a;
-      box-shadow: 0 0 0 3px rgba(232, 172, 58, .1);
+      box-shadow: 0 0 0 3px rgba(232, 172, 58, 0.1);
     }
   }
 
@@ -34,7 +36,9 @@
     outline: 0;
     background: transparent;
     color: var(--text-primary);
-    font: 400 16px Inter, sans-serif;
+    font:
+      400 16px Inter,
+      sans-serif;
 
     &::placeholder {
       color: var(--text-secondary);

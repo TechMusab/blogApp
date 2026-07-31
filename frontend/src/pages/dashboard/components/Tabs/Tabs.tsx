@@ -1,12 +1,12 @@
-import './Tabs.scss'
+import './Tabs.scss';
 
-import { memo } from 'react'
+import { memo } from 'react';
 
 type TabsProps = {
-  tabs: Array<{ id: string; label: string }>
-  activeTab: string
-  onChange: (id: string) => void
-}
+  tabs: Array<{ id: string; label: string }>;
+  activeTab: string;
+  onChange: (id: string) => void;
+};
 
 export const Tabs = memo(function Tabs({ tabs, activeTab, onChange }: TabsProps) {
   return (
@@ -21,6 +21,5 @@ export const Tabs = memo(function Tabs({ tabs, activeTab, onChange }: TabsProps)
         </button>
       ))}
     </div>
-  )
-})
-
+  );
+});

@@ -1,4 +1,4 @@
-@use "../../styles/abstracts/variables" as *;
+@use '../../styles/abstracts/variables' as *;
 
 .create-post-page {
   min-height: 100vh;
@@ -8,7 +8,7 @@
   isolation: isolate;
 
   &::before {
-    content: "";
+    content: '';
     position: fixed;
     inset: 0;
     background: $color-page-bg;

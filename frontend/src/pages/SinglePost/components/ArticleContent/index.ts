@@ -1,1 +1,1 @@
-export * from './ArticleContent'
+export * from './ArticleContent';

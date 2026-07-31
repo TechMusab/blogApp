@@ -26,7 +26,7 @@ public class UserController : BaseController
     {
         var userId = GetCurrentUserId();
         _logger.LogInformation("GetProfile called for UserId: {UserId}", userId);
-        
+
         if (!userId.HasValue)
         {
             _logger.LogWarning("GetProfile failed: No user ID found in token");
@@ -50,7 +50,7 @@ public class UserController : BaseController
     {
         var userId = GetCurrentUserId();
         _logger.LogInformation("UpdateProfile called for UserId: {UserId}, Name: {Name}", userId, request.Name);
-        
+
         if (!userId.HasValue)
         {
             _logger.LogWarning("UpdateProfile failed: No user ID found in token");
@@ -74,7 +74,7 @@ public class UserController : BaseController
     {
         var userId = GetCurrentUserId();
         _logger.LogInformation("UpdateAvatar called for UserId: {UserId}", userId);
-        
+
         if (!userId.HasValue)
         {
             _logger.LogWarning("UpdateAvatar failed: No user ID found in token");
@@ -87,7 +87,7 @@ public class UserController : BaseController
             return BadRequest(new { message = "No file uploaded." });
         }
 
-        _logger.LogInformation("File details - Name: {FileName}, Size: {FileSize} bytes, ContentType: {ContentType}", 
+        _logger.LogInformation("File details - Name: {FileName}, Size: {FileSize} bytes, ContentType: {ContentType}",
             file.FileName, file.Length, file.ContentType);
 
         try

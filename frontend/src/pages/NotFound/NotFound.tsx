@@ -1,13 +1,13 @@
-import './NotFound.scss'
+import './NotFound.scss';
 
-import { memo } from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import type { RootState } from '../../redux/store'
+import { memo } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import type { RootState } from '../../redux/store';
 
 export const NotFoundPage = memo(function NotFoundPage() {
-  const token = useSelector((state: RootState) => state.auth.token)
-  const homePath = token ? '/dashboard' : '/'
+  const token = useSelector((state: RootState) => state.auth.token);
+  const homePath = token ? '/dashboard' : '/';
 
   return (
     <div className="not-found">
@@ -22,5 +22,5 @@ export const NotFoundPage = memo(function NotFoundPage() {
         </Link>
       </div>
     </div>
-  )
-})
+  );
+});

@@ -1,46 +1,80 @@
-import { Suspense, lazy, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import MainLayout from './layouts/MainLayout'
-import type { RootState } from './redux/store'
-import { setPagedPosts } from './redux/slices/posts/postsSlice'
-import { restoreSaved } from './redux/slices/savedPosts/savedPostsSlice'
-import { PostsService } from './services/PostsService'
-import { Loader } from './shared/components/Loader'
-import ProtectedRoute from './shared/components/ProtectedRoute/ProtectedRoute'
+import { Suspense, lazy, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import type { RootState } from './redux/store';
+import { setPagedPosts } from './redux/slices/posts/postsSlice';
+import { restoreSaved } from './redux/slices/savedPosts/savedPostsSlice';
+import { PostsService } from './services/PostsService';
+import { Loader } from './shared/components/Loader';
+import ProtectedRoute from './shared/components/ProtectedRoute/ProtectedRoute';
 
-const IntroPage = lazy(() => import('./pages/intro').then((module) => ({ default: module.IntroPage })))
-const LoginPage = lazy(() => import('./pages/login').then((module) => ({ default: module.LoginPage })))
-const SignupPage = lazy(() => import('./pages/signup').then((module) => ({ default: module.SignupPage })))
-const VerifyOtpPage = lazy(() => import('./pages/verifyOtp').then((module) => ({ default: module.VerifyOtpPage })))
-const DashboardPage = lazy(() => import('./pages/dashboard').then((module) => ({ default: module.DashboardPage })))
-const SinglePostPage = lazy(() => import('./pages/SinglePost').then((module) => ({ default: module.SinglePostPage })))
-const CreatePostPage = lazy(() => import('./pages/CreatePost').then((module) => ({ default: module.CreatePostPage })))
-const SavedPostsPage = lazy(() => import('./pages/SavedPosts').then((module) => ({ default: module.SavedPostsPage })))
-const YourPostsPage = lazy(() => import('./pages/YourPosts').then((module) => ({ default: module.YourPostsPage })))
-const SettingsPage = lazy(() => import('./pages/Settings/Settings').then((module) => ({ default: module.SettingsPage })))
-const NotFoundPage = lazy(() => import('./pages/NotFound').then((module) => ({ default: module.NotFoundPage })))
+const IntroPage = lazy(() =>
+  import('./pages/intro').then((module) => ({ default: module.IntroPage }))
+);
+const LoginPage = lazy(() =>
+  import('./pages/login').then((module) => ({ default: module.LoginPage }))
+);
+const SignupPage = lazy(() =>
+  import('./pages/signup').then((module) => ({ default: module.SignupPage }))
+);
+const VerifyOtpPage = lazy(() =>
+  import('./pages/verifyOtp').then((module) => ({ default: module.VerifyOtpPage }))
+);
+const DashboardPage = lazy(() =>
+  import('./pages/dashboard').then((module) => ({ default: module.DashboardPage }))
+);
+const SinglePostPage = lazy(() =>
+  import('./pages/SinglePost').then((module) => ({ default: module.SinglePostPage }))
+);
+const CreatePostPage = lazy(() =>
+  import('./pages/CreatePost').then((module) => ({ default: module.CreatePostPage }))
+);
+const SavedPostsPage = lazy(() =>
+  import('./pages/SavedPosts').then((module) => ({ default: module.SavedPostsPage }))
+);
+const YourPostsPage = lazy(() =>
+  import('./pages/YourPosts').then((module) => ({ default: module.YourPostsPage }))
+);
+const SettingsPage = lazy(() =>
+  import('./pages/Settings/Settings').then((module) => ({ default: module.SettingsPage }))
+);
+const NotFoundPage = lazy(() =>
+  import('./pages/NotFound').then((module) => ({ default: module.NotFoundPage }))
+);
 
 const App = () => {
-  const dispatch = useDispatch()
-  const token = useSelector((state: RootState) => state.auth.token)
+  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {
     PostsService.getPosts(1, 10)
       .then((pagedResult) => dispatch(setPagedPosts(pagedResult)))
-      .catch(() => dispatch(setPagedPosts({ items: [], totalCount: 0, pageNumber: 1, pageSize: 10, totalPages: 0, hasPrevious: false, hasNext: false })))
-  }, [dispatch])
+      .catch(() =>
+        dispatch(
+          setPagedPosts({
+            items: [],
+            totalCount: 0,
+            pageNumber: 1,
+            pageSize: 10,
+            totalPages: 0,
+            hasPrevious: false,
+            hasNext: false,
+          })
+        )
+      );
+  }, [dispatch]);
 
   useEffect(() => {
     if (!token) {
-      dispatch(restoreSaved([]))
-      return
+      dispatch(restoreSaved([]));
+      return;
     }
 
     PostsService.getSavedPostIds(token)
       .then((savedPostIds) => dispatch(restoreSaved(savedPostIds)))
-      .catch(() => dispatch(restoreSaved([])))
-  }, [dispatch, token])
+      .catch(() => dispatch(restoreSaved([])));
+  }, [dispatch, token]);
 
   return (
     <BrowserRouter>
@@ -64,7 +98,7 @@ const App = () => {
         </Routes>
       </Suspense>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default App
+export default App;

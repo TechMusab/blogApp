@@ -1,16 +1,16 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { Post, Comment, PagedResult } from '../../../types'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { Post, Comment, PagedResult } from '../../../types';
 
 interface PostsState {
-  posts: Post[]
+  posts: Post[];
   pagination: {
-    totalCount: number
-    pageNumber: number
-    pageSize: number
-    totalPages: number
-    hasPrevious: boolean
-    hasNext: boolean
-  }
+    totalCount: number;
+    pageNumber: number;
+    pageSize: number;
+    totalPages: number;
+    hasPrevious: boolean;
+    hasNext: boolean;
+  };
 }
 
 const initialState: PostsState = {
@@ -21,9 +21,9 @@ const initialState: PostsState = {
     pageSize: 10,
     totalPages: 0,
     hasPrevious: false,
-    hasNext: false
-  }
-}
+    hasNext: false,
+  },
+};
 
 const postsSlice = createSlice({
   name: 'posts',
@@ -31,7 +31,7 @@ const postsSlice = createSlice({
   reducers: {
     setPosts: (_, action: PayloadAction<Post[]>) => ({
       posts: action.payload,
-      pagination: initialState.pagination
+      pagination: initialState.pagination,
     }),
 
     setPagedPosts: (_, action: PayloadAction<PagedResult<Post>>) => ({
@@ -42,53 +42,53 @@ const postsSlice = createSlice({
         pageSize: action.payload.pageSize,
         totalPages: action.payload.totalPages,
         hasPrevious: action.payload.hasPrevious,
-        hasNext: action.payload.hasNext
-      }
+        hasNext: action.payload.hasNext,
+      },
     }),
 
     addPost: (state, action: PayloadAction<Post>) => {
-      state.posts.unshift(action.payload)
+      state.posts.unshift(action.payload);
     },
 
     toggleLike: (
       state,
       action: PayloadAction<{
-        postId: string
-        userId: string
-      }>,
+        postId: string;
+        userId: string;
+      }>
     ) => {
-      const { postId, userId } = action.payload
-      const post = state.posts.find((p) => p.id === postId)
+      const { postId, userId } = action.payload;
+      const post = state.posts.find((p) => p.id === postId);
 
-      if (!post) return
+      if (!post) return;
 
-      const index = post.likedBy.indexOf(userId)
+      const index = post.likedBy.indexOf(userId);
 
       if (index >= 0) {
-        post.likedBy.splice(index, 1)
-        post.likes--
+        post.likedBy.splice(index, 1);
+        post.likes--;
       } else {
-        post.likedBy.push(userId)
-        post.likes++
+        post.likedBy.push(userId);
+        post.likes++;
       }
     },
 
     addComment: (
       state,
       action: PayloadAction<{
-        postId: string
-        comment: Comment
-      }>,
+        postId: string;
+        comment: Comment;
+      }>
     ) => {
-      const post = state.posts.find((p) => p.id === action.payload.postId)
+      const post = state.posts.find((p) => p.id === action.payload.postId);
 
       if (post) {
-        post.commentsList.push(action.payload.comment)
-        post.comments += 1
+        post.commentsList.push(action.payload.comment);
+        post.comments += 1;
       }
     },
   },
-})
+});
 
-export const { setPosts, setPagedPosts, addPost, toggleLike, addComment } = postsSlice.actions
-export default postsSlice.reducer
+export const { setPosts, setPagedPosts, addPost, toggleLike, addComment } = postsSlice.actions;
+export default postsSlice.reducer;

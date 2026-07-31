@@ -1,63 +1,63 @@
-import './VerifyOtp.scss'
+import './VerifyOtp.scss';
 
-import { memo, useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { login, updateUser } from '../../redux/slices/auth/authSlice'
-import { AuthService } from '../../services/AuthService'
-import { UserService } from '../../services/UserService'
-import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel'
-import { ThemeToggle } from '../../shared/components/ThemeToggle'
-import type { OtpChallenge } from '../../types'
+import { memo, useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { login, updateUser } from '../../redux/slices/auth/authSlice';
+import { AuthService } from '../../services/AuthService';
+import { UserService } from '../../services/UserService';
+import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel';
+import { ThemeToggle } from '../../shared/components/ThemeToggle';
+import type { OtpChallenge } from '../../types';
 
 export const VerifyOtpPage = memo(function VerifyOtpPage() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const challenge = location.state as OtpChallenge & { avatarFile?: File } | null
-  const [email, setEmail] = useState(challenge?.email ?? '')
-  const [otp, setOtp] = useState('')
-  const [error, setError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [now, setNow] = useState(() => Date.now())
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const challenge = location.state as (OtpChallenge & { avatarFile?: File }) | null;
+  const [email, setEmail] = useState(challenge?.email ?? '');
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const interval = window.setInterval(() => setNow(Date.now()), 1000)
-    return () => window.clearInterval(interval)
-  }, [])
+    const interval = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(interval);
+  }, []);
 
-  const expiresAt = challenge ? new Date(challenge.expiresAt).getTime() : null
+  const expiresAt = challenge ? new Date(challenge.expiresAt).getTime() : null;
   const secondsLeft = useMemo(() => {
-    if (!expiresAt) return null
-    return Math.max(0, Math.ceil((expiresAt - now) / 1000))
-  }, [expiresAt, now])
+    if (!expiresAt) return null;
+    return Math.max(0, Math.ceil((expiresAt - now) / 1000));
+  }, [expiresAt, now]);
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    setError('')
-    setIsSubmitting(true)
+    event.preventDefault();
+    setError('');
+    setIsSubmitting(true);
 
     try {
-      const session = await AuthService.verifyRegistration({ email, otp })
-      dispatch(login(session))
-      
+      const session = await AuthService.verifyRegistration({ email, otp });
+      dispatch(login(session));
+
       // Upload avatar if provided
       if (challenge?.avatarFile) {
         try {
-          const updatedUser = await UserService.updateAvatar(challenge.avatarFile, session.token)
-          dispatch(updateUser({ avatar: updatedUser.avatar }))
+          const updatedUser = await UserService.updateAvatar(challenge.avatarFile, session.token);
+          dispatch(updateUser({ avatar: updatedUser.avatar }));
         } catch (avatarError) {
           // Don't block registration if avatar upload fails
         }
       }
-      
-      navigate('/dashboard')
+
+      navigate('/dashboard');
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unable to verify code.')
+      setError(error instanceof Error ? error.message : 'Unable to verify code.');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <main className="verify-otp">
@@ -103,23 +103,30 @@ export const VerifyOtpPage = memo(function VerifyOtpPage() {
 
             {secondsLeft !== null ? (
               <p className="verify-otp__timer">
-                {secondsLeft > 0 ? `${secondsLeft}s remaining` : 'Code expired. Please sign up again.'}
+                {secondsLeft > 0
+                  ? `${secondsLeft}s remaining`
+                  : 'Code expired. Please sign up again.'}
               </p>
             ) : null}
 
             {error ? <p className="verify-otp__error">{error}</p> : null}
 
-            <button className="verify-otp__button" type="submit" disabled={isSubmitting || otp.length !== 6}>
+            <button
+              className="verify-otp__button"
+              type="submit"
+              disabled={isSubmitting || otp.length !== 6}
+            >
               {isSubmitting ? 'Verifying...' : 'Verify account'}
             </button>
           </form>
 
           <div className="verify-otp__footer">
-            <Link className="verify-otp__link" to="/signup">Back to sign up</Link>
+            <Link className="verify-otp__link" to="/signup">
+              Back to sign up
+            </Link>
           </div>
         </div>
       </section>
     </main>
-  )
-})
-
+  );
+});

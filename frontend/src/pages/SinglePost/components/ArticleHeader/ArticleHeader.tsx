@@ -1,13 +1,13 @@
-import './ArticleHeader.scss'
+import './ArticleHeader.scss';
 
-import { memo } from 'react'
-import type { Post } from '../../../../types'
-import { Avatar } from '../../../../shared/components/Avatar'
+import { memo } from 'react';
+import type { Post } from '../../../../types';
+import { Avatar } from '../../../../shared/components/Avatar';
 
 type ArticleHeaderProps = {
-  post: Post
-  onBack: () => void
-}
+  post: Post;
+  onBack: () => void;
+};
 
 export const ArticleHeader = memo(function ArticleHeader({ post, onBack }: ArticleHeaderProps) {
   return (
@@ -33,6 +33,5 @@ export const ArticleHeader = memo(function ArticleHeader({ post, onBack }: Artic
 
       <hr className="article__divider" />
     </>
-  )
-})
-
+  );
+});

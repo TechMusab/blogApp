@@ -1,12 +1,12 @@
-import './DashboardGreeting.scss'
+import './DashboardGreeting.scss';
 
-import { memo } from 'react'
+import { memo } from 'react';
 
 type DashboardGreetingProps = {
-  userName: string
-  postCount: number
-  onNewPost: () => void
-}
+  userName: string;
+  postCount: number;
+  onNewPost: () => void;
+};
 
 export const DashboardGreeting = memo(function DashboardGreeting({
   userName,
@@ -29,6 +29,5 @@ export const DashboardGreeting = memo(function DashboardGreeting({
         New post
       </button>
     </section>
-  )
-})
-
+  );
+});

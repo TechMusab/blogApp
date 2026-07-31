@@ -1,13 +1,15 @@
-import './AuthMarketingPanel.scss'
+import './AuthMarketingPanel.scss';
 
-import { memo } from 'react'
+import { memo } from 'react';
 
 type AuthMarketingPanelProps = {
-  variant: 'login' | 'signup'
-}
+  variant: 'login' | 'signup';
+};
 
-export const AuthMarketingPanel = memo(function AuthMarketingPanel({ variant }: AuthMarketingPanelProps) {
-  const prefix = variant
+export const AuthMarketingPanel = memo(function AuthMarketingPanel({
+  variant,
+}: AuthMarketingPanelProps) {
+  const prefix = variant;
 
   return (
     <section className={`${prefix}__left`}>
@@ -24,7 +26,8 @@ export const AuthMarketingPanel = memo(function AuthMarketingPanel({ variant }: 
           <span>matters.</span>
         </h1>
         <p className={`${prefix}__description`}>
-          A quiet place for long-form writing. No algorithms, no noise — just words and the people who care about them.
+          A quiet place for long-form writing. No algorithms, no noise — just words and the people
+          who care about them.
         </p>
       </div>
 
@@ -33,18 +36,21 @@ export const AuthMarketingPanel = memo(function AuthMarketingPanel({ variant }: 
           <div className={`${prefix}__avatar`}>{variant === 'login' ? 'MV' : 'AC'}</div>
           <div>
             <div className={`${prefix}__author-name`}>Mara Voss</div>
-            <div className={`${prefix}__author-bio`}>Science writer obsessed with deep time and plate tectonics</div>
+            <div className={`${prefix}__author-bio`}>
+              Science writer obsessed with deep time and plate tectonics
+            </div>
           </div>
         </div>
         <div className={`${prefix}__author`}>
           <div className={`${prefix}__avatar`}>JR</div>
           <div>
             <div className={`${prefix}__author-name`}>Jonah Reeve</div>
-            <div className={`${prefix}__author-bio`}>Photographer, Shoots with film, Slow on Purpose</div>
+            <div className={`${prefix}__author-bio`}>
+              Photographer, Shoots with film, Slow on Purpose
+            </div>
           </div>
         </div>
       </div>
     </section>
-  )
-})
-
+  );
+});
