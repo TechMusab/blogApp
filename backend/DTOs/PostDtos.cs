@@ -54,12 +54,11 @@ public class CreatePostRequest
     [RegularExpression(@"^(https?:\/\/[^\s""<>{};\\]*|\/uploads\/[^\s""<>{};\\]*)$", ErrorMessage = "CoverImage must be a valid URL.")]
     public string? CoverImage { get; set; }
 
-    [Required]
     [MaxLength(100)]
     [RegularExpression(@"^[a-zA-Z\s-]*$", ErrorMessage = "Category can only contain letters, spaces, and hyphens.")]
-    public string Category { get; set; } = string.Empty;
+    public string? Category { get; set; }
 
-    [RegularExpression(@"^[a-zA-Z0-9\s,-]*$", ErrorMessage = "Tags can only contain letters, numbers, spaces, commas, and hyphens.")]
+    // [RegularExpression(@"^[a-zA-Z0-9\s.,#-]*$", ErrorMessage = "Tags can only contain letters, numbers, spaces, commas, periods, hashes, and hyphens.")]
     public string[]? Tags { get; set; }
 
     public bool Featured { get; set; }

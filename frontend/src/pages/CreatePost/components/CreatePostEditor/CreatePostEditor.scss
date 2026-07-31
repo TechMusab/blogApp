@@ -152,6 +152,27 @@ $color-muted: $color-secondary;
     }
   }
 
+  &__quote-input {
+    width: 100%;
+    margin-bottom: 28px;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: $color-quote;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.4;
+    caret-color: $color-accent;
+
+    &::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.55;
+      font-style: italic;
+    }
+  }
+
   &__image-upload {
     margin-bottom: 28px;
   }
@@ -233,6 +254,93 @@ $color-muted: $color-secondary;
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 36px;
+  }
+
+  &__post-tags {
+    margin-bottom: 24px;
+  }
+
+  &__tags-input-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  &__tags-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    background: transparent;
+    color: $color-text;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+
+    &::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.55;
+    }
+
+    &:focus {
+      border-color: $color-accent;
+    }
+  }
+
+  &__add-tag-btn {
+    padding: 8px 12px;
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    background: transparent;
+    color: $color-muted;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover:not(:disabled) {
+      border-color: $color-accent;
+      color: $color-accent;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(232, 172, 58, 0.1);
+    border: 1px solid rgba(232, 172, 58, 0.3);
+    border-radius: 4px;
+    color: $color-accent;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+
+  &__tag-remove {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $color-accent;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__tag-btn {

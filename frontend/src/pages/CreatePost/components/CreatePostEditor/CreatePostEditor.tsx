@@ -8,6 +8,9 @@ type CreatePostEditorProps = {
   content: string;
   category: string;
   categories: string[];
+  quote: string;
+  tags: string[];
+  tagInput: string;
   wordCount: number;
   coverImage: string;
   isUploadingImage: boolean;
@@ -16,6 +19,11 @@ type CreatePostEditorProps = {
   onExcerptChange: (value: string) => void;
   onContentChange: (value: string) => void;
   onCategoryChange: (value: string) => void;
+  onQuoteChange: (value: string) => void;
+  onTagInputChange: (value: string) => void;
+  onAddTag: () => void;
+  onRemoveTag: (tag: string) => void;
+  onTagInputKeyDown: (event: React.KeyboardEvent) => void;
   onImageUpload: (file: File) => void;
   onRemoveImage: () => void;
   onSubmit: (event: React.FormEvent) => void;
@@ -28,6 +36,9 @@ export const CreatePostEditor = memo(function CreatePostEditor({
   content,
   category,
   categories,
+  quote,
+  tags,
+  tagInput,
   wordCount,
   coverImage,
   isUploadingImage,
@@ -36,6 +47,11 @@ export const CreatePostEditor = memo(function CreatePostEditor({
   onExcerptChange,
   onContentChange,
   onCategoryChange,
+  onQuoteChange,
+  onTagInputChange,
+  onAddTag,
+  onRemoveTag,
+  onTagInputKeyDown,
   onImageUpload,
   onRemoveImage,
   onSubmit,
@@ -82,7 +98,7 @@ export const CreatePostEditor = memo(function CreatePostEditor({
               type="button"
               className="editor__publish-btn"
               onClick={onSubmit}
-              disabled={!title.trim() || !content.trim()}
+              disabled={!content.trim()}
             >
               Publish
             </button>
@@ -96,7 +112,6 @@ export const CreatePostEditor = memo(function CreatePostEditor({
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
             placeholder="Your title"
-            required
           />
 
           <input
@@ -105,6 +120,14 @@ export const CreatePostEditor = memo(function CreatePostEditor({
             value={excerpt}
             onChange={(e) => onExcerptChange(e.target.value)}
             placeholder="A short description (optional)"
+          />
+
+          <input
+            type="text"
+            className="editor__quote-input"
+            value={quote}
+            onChange={(e) => onQuoteChange(e.target.value)}
+            placeholder="Featured quote (optional)"
           />
 
           <div className="editor__image-upload">
@@ -155,6 +178,41 @@ export const CreatePostEditor = memo(function CreatePostEditor({
                 {cat}
               </button>
             ))}
+          </div>
+
+          <div className="editor__post-tags">
+            <div className="editor__tags-input-container">
+              <input
+                type="text"
+                className="editor__tags-input"
+                value={tagInput}
+                onChange={(e) => onTagInputChange(e.target.value)}
+                onKeyDown={onTagInputKeyDown}
+                placeholder="Add tags (press Enter)"
+              />
+              <button
+                type="button"
+                className="editor__add-tag-btn"
+                onClick={onAddTag}
+                disabled={!tagInput.trim()}
+              >
+                +
+              </button>
+            </div>
+            <div className="editor__tags-list">
+              {tags.map((tag) => (
+                <span key={tag} className="editor__tag-chip">
+                  {tag}
+                  <button
+                    type="button"
+                    className="editor__tag-remove"
+                    onClick={() => onRemoveTag(tag)}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
           </div>
 
           <textarea
