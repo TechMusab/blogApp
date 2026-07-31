@@ -1,12 +1,14 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Storage;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Storage;
 
 [ApiController]
 [Route("api/images")]
+[EnableCors("ReactApp")]
 public class ImageUploadController : BaseController
 {
     private readonly IImageStorage _imageStorage;

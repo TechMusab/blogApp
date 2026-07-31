@@ -18,27 +18,6 @@
     padding: 14px 20px;
   }
 
-  &__avatar {
-    display: grid;
-    width: 48px;
-    height: 48px;
-    flex: 0 0 48px;
-    place-items: center;
-    border: 1px solid #42638c;
-    border-radius: 50%;
-    background: #243b63;
-    color: #dceaff;
-    font: 500 14px Inter, sans-serif;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-  }
-
   &__name {
     display: block;
     color: #f5f3ef;

@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5191/api'
+import { API_BASE_URL, BACKEND_BASE_URL, getErrorMessage } from '../utils/api'
 
 export interface ImageUploadResponse {
   url: string
@@ -25,13 +25,7 @@ export class ImageService {
     }
 
     if (!response.ok) {
-      const errorText = await response.text()
-      try {
-        const error = JSON.parse(errorText)
-        throw new Error(error.message || 'Failed to upload image')
-      } catch {
-        throw new Error(errorText || 'Failed to upload image')
-      }
+      throw new Error(await getErrorMessage(response, 'Failed to upload image'))
     }
 
     const text = await response.text()
@@ -42,10 +36,9 @@ export class ImageService {
     try {
       const result = JSON.parse(text) as ImageUploadResponse
       // Construct full URL from relative path
-      const baseUrl = API_BASE_URL.replace('/api', '')
       result.url = result.relativePath.startsWith('http') 
         ? result.relativePath 
-        : `${baseUrl}${result.relativePath}`
+        : `${BACKEND_BASE_URL}${result.relativePath}`
       return result
     } catch {
       throw new Error('Invalid JSON response from server')
@@ -61,7 +54,7 @@ export class ImageService {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to delete image')
+      throw new Error(await getErrorMessage(response, 'Failed to delete image'))
     }
   }
 

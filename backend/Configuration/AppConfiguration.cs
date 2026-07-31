@@ -1,3 +1,5 @@
+using BlogApi.Helpers;
+
 namespace BlogApi.Configuration;
 
 // Protected Variations: Concrete implementation protecting against configuration changes
@@ -10,8 +12,7 @@ public class AppConfiguration : IAppConfiguration
         _configuration = configuration;
     }
 
-    public string JwtKey => _configuration["Jwt:Key"] 
-        ?? throw new InvalidOperationException("Jwt:Key is not configured.");
+    public string JwtKey => _configuration.GetRequiredConfigurationValue("Jwt:Key");
 
     public string JwtIssuer => _configuration["Jwt:Issuer"] ?? "FolioApi";
 

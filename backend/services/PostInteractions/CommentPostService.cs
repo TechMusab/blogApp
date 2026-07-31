@@ -1,4 +1,5 @@
 using BlogApi.DTOs;
+using BlogApi.Helpers;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Mappers;
 using BlogApi.Models;
@@ -21,10 +22,7 @@ public class CommentPostService : ICommentPostService
     public async Task<CommentDto> AddCommentAsync(int userId, int postId, AddCommentRequest request)
     {
         var post = await _postRepository.GetByIdAsync(postId);
-        if (post is null)
-        {
-            throw new InvalidOperationException("Post not found.");
-        }
+        ExceptionsHelper.ThrowIfNotFound(post, "Post not found.");
 
         var comment = new Comment
         {

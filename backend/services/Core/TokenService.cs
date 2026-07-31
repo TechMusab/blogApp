@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BlogApi.Helpers;
 using BlogApi.Interfaces.Core;
 using BlogApi.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -18,8 +19,7 @@ public class TokenService : ITokenService
 
     public string GenerateToken(User user, DateTime expiresAt)
     {
-        var jwtKey = _configuration["Jwt:Key"]
-            ?? throw new InvalidOperationException("Jwt:Key is not configured.");
+        var jwtKey = _configuration.GetRequiredConfigurationValue("Jwt:Key");
         var issuer = _configuration["Jwt:Issuer"];
         var audience = _configuration["Jwt:Audience"];
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));

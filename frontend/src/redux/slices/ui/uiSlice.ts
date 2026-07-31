@@ -2,7 +2,6 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 type UIState = {
   mobileMenuOpen: boolean
-  theme: 'dark' | 'light'
   activeTab: 'latest' | 'popular'
   searchQuery: string
   activeCategory: string
@@ -10,7 +9,6 @@ type UIState = {
 
 const initialState: UIState = {
   mobileMenuOpen: false,
-  theme: 'dark',
   activeTab: 'latest',
   searchQuery: '',
   activeCategory: 'All',

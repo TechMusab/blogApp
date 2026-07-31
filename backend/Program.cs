@@ -71,12 +71,18 @@ builder.Services.AddCors(options =>
     {
         var allowedOrigins = builder.Configuration
             .GetSection("Cors:AllowedOrigins")
-            .Get<string[]>()
-            ?? new[] { "http://localhost:5173", "https://localhost:5173" };
-
+            .Get<string[]>();
+        
+        if (allowedOrigins == null || allowedOrigins.Length == 0)
+        {
+            allowedOrigins = new[] { "http://localhost:5173", "https://localhost:5173" };
+        }
+        
         policy.WithOrigins(allowedOrigins)
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithExposedHeaders("Content-Disposition");
     });
 });
 builder.Services.AddDbContext<BlogDbContext>((serviceProvider, options) =>
@@ -106,14 +112,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
+        
+        // Allow anonymous OPTIONS requests for CORS preflight
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Method == "OPTIONS")
+                {
+                    context.NoResult();
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<LoggingMiddleware>();
-
 if (app.Environment.IsDevelopment())
 {
      app.UseSwagger();
@@ -121,10 +137,20 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles(); // Serve static files from wwwroot
+
+// CORS must be BEFORE authentication and custom middlewares
 app.UseCors("ReactApp");
+
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+// Custom middlewares should be AFTER CORS and authentication
+app.UseMiddleware<LoggingMiddleware>();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

@@ -1,4 +1,7 @@
 using BlogApi.Interfaces.Storage;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace BlogApi.Services.Storage;
 
@@ -9,6 +12,8 @@ public class LocalImageStorage : IImageStorage
     private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
     private readonly string[] _allowedMimeTypes = { "image/jpeg", "image/png", "image/gif", "image/webp" };
     private const long MaxFileSize = 5 * 1024 * 1024; // 5MB
+    private const int MaxAvatarSize = 30; // Maximum avatar size in pixels
+    private const int MaxPostImageSize = 800; // Maximum post image size in pixels
 
     public LocalImageStorage(IConfiguration configuration)
     {
@@ -39,10 +44,15 @@ public class LocalImageStorage : IImageStorage
             Directory.CreateDirectory(folderPath);
         }
 
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        // Resize image before saving
+        byte[] resizedImageBytes;
+        using (var imageStream = file.OpenReadStream())
         {
-            await file.CopyToAsync(stream);
+            var targetSize = folder == "avatars" ? MaxAvatarSize : MaxPostImageSize;
+            resizedImageBytes = await ResizeImageAsync(imageStream, targetSize);
         }
+
+        await File.WriteAllBytesAsync(filePath, resizedImageBytes);
 
         return Path.Combine(_baseUrl, folder, uniqueFileName).Replace("\\", "/");
     }
@@ -110,6 +120,38 @@ public class LocalImageStorage : IImageStorage
         var extension = Path.GetExtension(originalFileName).ToLowerInvariant();
         var guid = Guid.NewGuid().ToString("N");
         return $"{guid}{extension}";
+    }
+
+    private async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxSize)
+    {
+        using var image = Image.FromStream(imageStream);
+        
+        // Calculate new dimensions maintaining aspect ratio
+        int newWidth, newHeight;
+        if (image.Width > image.Height)
+        {
+            newWidth = maxSize;
+            newHeight = (int)(image.Height * ((float)maxSize / image.Width));
+        }
+        else
+        {
+            newHeight = maxSize;
+            newWidth = (int)(image.Width * ((float)maxSize / image.Height));
+        }
+
+        using var resizedImage = new Bitmap(newWidth, newHeight);
+        using (var graphics = Graphics.FromImage(resizedImage))
+        {
+            graphics.CompositingMode = CompositingMode.SourceCopy;
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+        }
+
+        using var memoryStream = new MemoryStream();
+        resizedImage.Save(memoryStream, ImageFormat.Png);
+        return memoryStream.ToArray();
     }
 
     public bool IsValidImage(IFormFile file)

@@ -2,12 +2,14 @@ using BlogApi.DTOs;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Services.PostInteractions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.PostInteractions;
 
 [ApiController]
 [Route("api/posts/saved")]
+[EnableCors("ReactApp")]
 public class SavedPostsController : BaseController
 {
     private readonly ISavedPostsService _savedPostsService;
@@ -69,6 +71,7 @@ public class SavedPostsController : BaseController
 
 [ApiController]
 [Route("api/posts/{postId:int}/save")]
+[EnableCors("ReactApp")]
 public class ToggleSavedController : BaseController
 {
     private readonly ISavedPostsService _savedPostsService;

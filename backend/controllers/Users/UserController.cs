@@ -1,12 +1,14 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Users;
 
 [ApiController]
 [Route("api/user")]
+[EnableCors("ReactApp")]
 public class UserController : BaseController
 {
     private readonly IUserService _userService;
@@ -71,7 +73,6 @@ public class UserController : BaseController
     public async Task<ActionResult<UserDto>> UpdateAvatar(IFormFile file)
     {
         var userId = GetCurrentUserId();
-        _logger.LogInformation("=== AVATAR UPLOAD START ===");
         _logger.LogInformation("UpdateAvatar called for UserId: {UserId}", userId);
         
         if (!userId.HasValue)
@@ -98,15 +99,12 @@ public class UserController : BaseController
                 return NotFound();
             }
 
-            _logger.LogInformation("=== AVATAR UPLOAD SUCCESS ===");
-            _logger.LogInformation("UserId: {UserId}, Avatar URL: {Avatar}", userId.Value, user.Avatar);
+            _logger.LogInformation("UpdateAvatar success for UserId: {UserId}, Avatar URL: {Avatar}", userId.Value, user.Avatar);
             return Ok(user);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "=== AVATAR UPLOAD ERROR ===");
-            _logger.LogError("Error details: {Message}", ex.Message);
-            _logger.LogError("Stack trace: {StackTrace}", ex.StackTrace);
+            _logger.LogError(ex, "UpdateAvatar failed for UserId: {UserId}", userId);
             return StatusCode(500, new { message = "Failed to upload avatar", error = ex.Message });
         }
     }

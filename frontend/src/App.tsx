@@ -19,6 +19,7 @@ const CreatePostPage = lazy(() => import('./pages/CreatePost').then((module) => 
 const SavedPostsPage = lazy(() => import('./pages/SavedPosts').then((module) => ({ default: module.SavedPostsPage })))
 const YourPostsPage = lazy(() => import('./pages/YourPosts').then((module) => ({ default: module.YourPostsPage })))
 const SettingsPage = lazy(() => import('./pages/Settings/Settings').then((module) => ({ default: module.SettingsPage })))
+const NotFoundPage = lazy(() => import('./pages/NotFound').then((module) => ({ default: module.NotFoundPage })))
 
 const App = () => {
   const dispatch = useDispatch()
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="/saved-posts" element={<SavedPostsPage />} />
               <Route path="/your-posts" element={<YourPostsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>
         </Routes>

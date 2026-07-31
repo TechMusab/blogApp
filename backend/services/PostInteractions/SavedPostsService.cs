@@ -1,4 +1,5 @@
 using BlogApi.DTOs;
+using BlogApi.Helpers;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Models;
 using BlogApi.Repositories;
@@ -24,10 +25,7 @@ public class SavedPostsService : ISavedPostsService
     public async Task<ToggleResponse> ToggleSavedAsync(int userId, int postId)
     {
         var post = await _postRepository.GetByIdAsync(postId);
-        if (post is null)
-        {
-            throw new InvalidOperationException("Post not found.");
-        }
+        ExceptionsHelper.ThrowIfNotFound(post, "Post not found.");
 
         var saved = await _savedPostRepository.FindAsync(userId, postId);
         var active = saved is null;

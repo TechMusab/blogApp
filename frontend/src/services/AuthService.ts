@@ -1,6 +1,6 @@
 import type { AuthResponse, AuthSession, OtpChallenge } from '../types'
+import { request, getErrorMessage } from '../utils/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5191/api'
 const SESSION_KEY = 'folio:auth'
 
 type LoginRequest = {
@@ -17,39 +17,11 @@ type VerifyRegistrationRequest = {
   otp: string
 }
 
-type ApiError = {
-  message?: string
-  title?: string
-  errors?: Record<string, string[]>
-}
-
 async function postJson<TResponse>(
   path: string,
   body: LoginRequest | RegisterRequest | VerifyRegistrationRequest,
 ): Promise<TResponse> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  })
-
-  if (!response.ok) {
-    throw new Error(await getErrorMessage(response))
-  }
-
-  return response.json() as Promise<TResponse>
-}
-
-async function getErrorMessage(response: Response): Promise<string> {
-  try {
-    const data = (await response.json()) as ApiError
-    const validationMessages = data.errors ? Object.values(data.errors).flat() : []
-    return data.message ?? validationMessages[0] ?? data.title ?? 'Authentication failed.'
-  } catch {
-    return 'Authentication failed.'
-  }
+  return request<TResponse>(path, { method: 'POST', body: JSON.stringify(body) })
 }
 
 function loadSession(): AuthSession | null {

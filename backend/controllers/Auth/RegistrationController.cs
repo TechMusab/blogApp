@@ -1,12 +1,14 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Auth;
 using BlogApi.Services.Auth;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Auth;
 
 [ApiController]
 [Route("api/auth/register")]
+[EnableCors("ReactApp")]
 public class RegistrationController : BaseController
 {
     private readonly IRegistrationService _registrationService;
@@ -47,6 +49,7 @@ public class RegistrationController : BaseController
 
 [ApiController]
 [Route("api/auth/verify-registration")]
+[EnableCors("ReactApp")]
 public class VerifyRegistrationController : BaseController
 {
     private readonly IRegistrationService _registrationService;

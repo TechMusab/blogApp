@@ -1,12 +1,14 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Posts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Posts;
 
 [ApiController]
 [Route("api/posts/your-posts")]
+[EnableCors("ReactApp")]
 public class YourPostsController : BaseController
 {
     private readonly IYourPostsService _yourPostsService;

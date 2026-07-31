@@ -2,12 +2,14 @@ using BlogApi.DTOs;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Services.PostInteractions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.PostInteractions;
 
 [ApiController]
 [Route("api/posts/{postId:int}/like")]
+[EnableCors("ReactApp")]
 public class LikePostController : BaseController
 {
     private readonly ILikePostService _likePostService;

@@ -2,12 +2,14 @@ using BlogApi.DTOs;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Services.PostInteractions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.PostInteractions;
 
 [ApiController]
 [Route("api/posts/{postId:int}/comments")]
+[EnableCors("ReactApp")]
 public class CommentPostController : BaseController
 {
     private readonly ICommentPostService _commentPostService;

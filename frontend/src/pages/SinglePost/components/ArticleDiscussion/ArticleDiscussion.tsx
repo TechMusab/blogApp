@@ -3,6 +3,7 @@ import './ArticleDiscussion.scss'
 import { memo } from 'react'
 import type { Comment } from '../../../../types'
 import { BookmarkButton } from '../../../../shared/components/BookmarkButton'
+import { Avatar } from '../../../../shared/components/Avatar'
 
 type ArticleDiscussionProps = {
   likes: number
@@ -29,16 +30,6 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
   onSendComment,
   postId,
 }: ArticleDiscussionProps) {
-  const BACKEND_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') ?? 'http://localhost:5191'
-
-  const renderAvatar = (avatar: string, author: string) => {
-    if (avatar && (avatar.startsWith('http') || avatar.startsWith('/'))) {
-      const fullUrl = avatar.startsWith('http') ? avatar : `${BACKEND_BASE_URL}${avatar}`
-      return <div className="article__comment-avatar"><img src={fullUrl} alt={author} /></div>
-    }
-    return <div className="article__comment-avatar">{avatar}</div>
-  }
-
   return (
     <div className="article__interaction">
       <hr className="article__interaction-divider" />
@@ -81,7 +72,9 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
         <div className="article__comments-list">
           {commentsList.map((comment) => (
             <div key={comment.id} className="article__comment-item">
-              {renderAvatar(comment.avatar, comment.author)}
+              <div className="article__comment-avatar">
+                <Avatar avatar={comment.avatar} name={comment.author} size="small" />
+              </div>
               <div className="article__comment-content">
                 <div className="article__comment-meta">
                   <span className="article__comment-author">{comment.author}</span>
@@ -95,7 +88,9 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
       )}
 
       <div className="article__comment-box">
-        {renderAvatar(userAvatar, 'You')}
+        <div className="article__comment-avatar">
+          <Avatar avatar={userAvatar} name="You" size="small" />
+        </div>
         <div className="article__comment-input-container">
           <textarea
             className="article__comment-textarea"

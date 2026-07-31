@@ -4,6 +4,7 @@ import { memo, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { DashboardNavbar } from '../../shared/components/DashboardNavbar'
+import { Avatar } from '../../shared/components/Avatar'
 import type { RootState } from '../../redux/store'
 import { logout, updateUser } from '../../redux/slices/auth/authSlice'
 import { UserService } from '../../services/UserService'
@@ -13,7 +14,6 @@ export const SettingsPage = memo(function SettingsPage() {
   const dispatch = useDispatch()
   const user = useSelector((state: RootState) => state.auth.user)
   const token = useSelector((state: RootState) => state.auth.token)
-  const BACKEND_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') ?? 'http://localhost:5191'
   
   const [name, setName] = useState(user?.name || '')
   const [email] = useState(user?.email || '')
@@ -28,25 +28,13 @@ export const SettingsPage = memo(function SettingsPage() {
     if (user?.avatar !== undefined) setAvatar(user.avatar)
   }, [user])
 
-  const getAvatarUrl = (url?: string) => {
-    if (!url) return ''
-    return url.startsWith('http') ? url : `${BACKEND_BASE_URL}${url}`
-  }
-
   const handleAvatarUpload = async (file: File) => {
-    console.log('=== SETTINGS AVATAR UPLOAD START ===')
-    console.log('File:', file.name, file.size, 'bytes')
-    console.log('Token exists:', !!token)
-    
     setIsUploadingAvatar(true)
     try {
       const updatedUser = await UserService.updateAvatar(file, token)
-      console.log('Settings avatar upload successful:', updatedUser)
       setAvatar(updatedUser.avatar || '')
       dispatch(updateUser({ avatar: updatedUser.avatar }))
     } catch (error) {
-      console.error('=== SETTINGS AVATAR UPLOAD FAILED ===')
-      console.error('Error:', error)
       setSaveMessage(error instanceof Error ? error.message : 'Failed to upload avatar')
       setTimeout(() => setSaveMessage(''), 3000)
     } finally {
@@ -123,9 +111,14 @@ export const SettingsPage = memo(function SettingsPage() {
               <div className="settings__form-group">
                 <label>Profile Picture</label>
                 <div className="settings__avatar-upload">
-                  {avatar ? (
-                    <div className="settings__avatar-preview">
-                      <img src={getAvatarUrl(avatar)} alt="Profile" className="settings__avatar-image" />
+                  <div className="settings__avatar-preview">
+                    <Avatar 
+                      avatar={avatar} 
+                      name={name} 
+                      size="large" 
+                      className="settings__avatar-image"
+                    />
+                    {avatar && (
                       <button
                         type="button"
                         className="settings__remove-avatar-btn"
@@ -134,14 +127,8 @@ export const SettingsPage = memo(function SettingsPage() {
                       >
                         Remove
                       </button>
-                    </div>
-                  ) : (
-                    <div className="settings__avatar-placeholder">
-                      <span className="settings__avatar-initials">
-                        {name?.split(' ').map((part) => part[0]).join('').slice(0, 2) || 'MV'}
-                      </span>
-                    </div>
-                  )}
+                    )}
+                  </div>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/gif,image/webp"

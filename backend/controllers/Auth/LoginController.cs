@@ -1,12 +1,14 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Auth;
 using BlogApi.Services.Auth;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Auth;
 
 [ApiController]
 [Route("api/auth/[controller]")]
+[EnableCors("ReactApp")]
 public class LoginController : BaseController
 {
     private readonly ILoginService _loginService;

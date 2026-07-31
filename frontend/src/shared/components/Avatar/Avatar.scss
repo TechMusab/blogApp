@@ -1,0 +1,41 @@
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; // Ensure the image doesn't overflow
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &--small {
+    width: 24px;
+    height: 24px;
+  }
+
+  &--medium {
+    width: 30px;
+    height: 30px;
+  }
+
+  &--large {
+    width: 30px;
+    height: 30px;
+  }
+
+  &--extraLarge {
+    width: 30px;
+    height: 30px;
+  }
+
+  &--fallback {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+  }
+}

@@ -135,18 +135,8 @@
   }
 
   &__comment-avatar {
-    width: 30px;
-    height: 30px;
-    background: #3a311e;
-    border: 1px solid $color-accent;
-    border-radius: 50%;
-    color: $color-accent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    // Avatar component handles styling internally
     flex-shrink: 0;
-    font-family: "Inter", sans-serif;
-    font-size: 10px;
     font-weight: 700;
     overflow: hidden;
 

@@ -44,14 +44,9 @@ export const VerifyOtpPage = memo(function VerifyOtpPage() {
       // Upload avatar if provided
       if (challenge?.avatarFile) {
         try {
-          console.log('=== VERIFY OTP AVATAR UPLOAD ===')
-          console.log('Avatar file:', challenge.avatarFile.name, challenge.avatarFile.size, 'bytes')
           const updatedUser = await UserService.updateAvatar(challenge.avatarFile, session.token)
-          console.log('Avatar upload successful:', updatedUser)
           dispatch(updateUser({ avatar: updatedUser.avatar }))
         } catch (avatarError) {
-          console.error('=== VERIFY OTP AVATAR UPLOAD FAILED ===')
-          console.error('Error:', avatarError)
           // Don't block registration if avatar upload fails
         }
       }

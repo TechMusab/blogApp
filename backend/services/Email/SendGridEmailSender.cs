@@ -1,3 +1,4 @@
+using BlogApi.Helpers;
 using BlogApi.Interfaces.Email;
 
 namespace BlogApi.Services.Email;
@@ -9,8 +10,8 @@ public class SendGridEmailSender : IEmailSender
 
     public SendGridEmailSender(IConfiguration configuration)
     {
-        _apiKey = configuration["SendGrid:ApiKey"] ?? throw new InvalidOperationException("SendGrid:ApiKey is not configured.");
-        _fromEmail = configuration["SendGrid:FromEmail"] ?? throw new InvalidOperationException("SendGrid:FromEmail is not configured.");
+        _apiKey = configuration.GetRequiredConfigurationValue("SendGrid:ApiKey");
+        _fromEmail = configuration.GetRequiredConfigurationValue("SendGrid:FromEmail");
     }
 
     public async Task SendRegistrationOtpAsync(string email, string name, string otp, DateTime expiresAt)

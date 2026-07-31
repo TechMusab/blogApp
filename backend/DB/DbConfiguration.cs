@@ -1,3 +1,5 @@
+using BlogApi.Helpers;
+
 namespace BlogApi.DB;
 
 public interface IDbConfiguration

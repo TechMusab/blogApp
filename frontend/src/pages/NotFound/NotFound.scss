@@ -1,0 +1,47 @@
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+
+  &__content {
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 120px;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin: 0;
+    line-height: 1;
+  }
+
+  &__message {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 20px 0 10px;
+  }
+
+  &__description {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin: 0 0 30px;
+  }
+
+  &__link {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.2s;
+
+    &:hover {
+      background: var(--accent-color-hover);
+    }
+  }
+}

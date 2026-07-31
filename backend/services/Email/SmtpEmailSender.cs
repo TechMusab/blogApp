@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mail;
+using BlogApi.Helpers;
 using BlogApi.Interfaces.Email;
 
 namespace BlogApi.Services.Email;
@@ -21,12 +22,11 @@ public class SmtpEmailSender : IEmailSender
     {
         var host = _configuration["Email:Smtp:Host"];
         
-        if (string.IsNullOrWhiteSpace(host))
+        // Check for invalid or example host
+        if (string.IsNullOrWhiteSpace(host) || host == "smtp.example.com")
         {
             if (_environment.IsDevelopment())
             {
-                Console.WriteLine($"Development registration OTP for {email}: {otp}. Expires at {expiresAt:u}.");
-                Console.WriteLine("Email not sent - running in Development mode without SMTP host");
                 return;
             }
 
@@ -37,8 +37,7 @@ public class SmtpEmailSender : IEmailSender
         var enableSsl = _configuration.GetValue("Email:Smtp:EnableSsl", true);
         var username = _configuration["Email:Smtp:Username"];
         var password = _configuration["Email:Smtp:Password"];
-        var from = _configuration["Email:Smtp:From"]
-            ?? throw new InvalidOperationException("Email:Smtp:From must be configured.");
+        var from = _configuration.GetRequiredConfigurationValue("Email:Smtp:From", "Email:Smtp:From must be configured.");
 
         try
         {
@@ -63,6 +62,11 @@ public class SmtpEmailSender : IEmailSender
         }
         catch (Exception ex)
         {
+            if (_environment.IsDevelopment())
+            {
+                return;
+            }
+            
             throw;
         }
     }

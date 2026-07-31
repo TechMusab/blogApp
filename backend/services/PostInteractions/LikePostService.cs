@@ -1,4 +1,5 @@
 using BlogApi.DTOs;
+using BlogApi.Helpers;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Models;
 using BlogApi.Repositories;
@@ -19,10 +20,7 @@ public class LikePostService : ILikePostService
     public async Task<ToggleResponse> ToggleLikeAsync(int userId, int postId)
     {
         var post = await _postRepository.GetByIdAsync(postId);
-        if (post is null)
-        {
-            throw new InvalidOperationException("Post not found.");
-        }
+        ExceptionsHelper.ThrowIfNotFound(post, "Post not found.");
 
         var like = await _postLikeRepository.FindAsync(userId, postId);
         var active = like is null;
