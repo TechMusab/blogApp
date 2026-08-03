@@ -28,6 +28,12 @@ LoadDotEnv(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Kestrel to listen on port 8080 for Render
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080);
+});
+
 // Add configuration from environment variables
 builder.Configuration.AddEnvironmentVariables();
 
