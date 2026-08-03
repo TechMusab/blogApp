@@ -49,31 +49,7 @@ Folio is a blog platform where users can discover, create, and discuss content. 
 - **Docker** for containerization
 - **Render** for hosting (both frontend and backend)
 - **Neon PostgreSQL** for managed database hosting
-- **Git** for version control (with some learning curve on force pushes 😅)
-
-## 📁 Project Structure
-
-```
-blogApp/
-├── frontend/                 # React application
-│   ├── src/
-│   │   ├── pages/          # Page components (Dashboard, Login, CreatePost, etc.)
-│   │   ├── shared/         # Reusable components (Avatar, Buttons, etc.)
-│   │   ├── layouts/        # Layout components
-│   │   └── main.tsx        # Entry point
-│   ├── package.json
-│   └── vite.config.ts
-├── backend/                 # ASP.NET Core API
-│   ├── controllers/        # API endpoints
-│   ├── services/           # Business logic
-│   ├── repositories/       # Data access layer
-│   ├── models/            # Database models
-│   ├── DTOs/              # Data transfer objects
-│   ├── Middleware/        # Custom middleware (logging, error handling)
-│   ├── Configuration/     # Configuration classes
-│   └── Program.cs         # Application entry point
-└── README.md
-```
+- **Git** for version control 
 
 ## 🚀 Getting Started
 
@@ -136,18 +112,6 @@ dotnet ef database update
 
 The migration files are in the `backend/Migrations` directory.
 
-## 🔐 Authentication Flow
-
-The authentication system uses JWT tokens with email verification:
-
-1. **Registration**: User signs up with email and password
-2. **OTP Verification**: System sends a 6-digit OTP via email
-3. **Account Activation**: User verifies OTP to activate account
-4. **Login**: User receives JWT token upon successful login
-5. **Protected Routes**: Frontend includes JWT token in Authorization header
-
-In development, the OTP is returned in the response for easier testing (never do this in production!).
-
 ## 🐳 Docker Deployment
 
 The backend includes a Dockerfile for containerized deployment:
@@ -188,19 +152,6 @@ Make sure your JWT key is at least 32 characters long and the same across your f
 ### Image Upload Issues
 In development, images are stored locally in `wwwroot/uploads`. Make sure this directory exists and has proper write permissions.
 
-## 🚧 Future Improvements
-
-There's always more to add:
-
-- [ ] Refresh token implementation for better security
-- [ ] Rich text editor with more formatting options
-- [ ] User follow/follower system
-- [ ] Post categories and tags management
-- [ ] Dark mode (partially implemented)
-- [ ] Email notifications for comments and likes
-- [ ] Post analytics and view counts
-- [ ] SEO optimization
-- [ ] Performance optimization with caching
 
 ## 📄 License
 
