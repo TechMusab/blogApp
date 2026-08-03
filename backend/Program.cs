@@ -39,7 +39,16 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IAppConfiguration, AppConfiguration>();
 builder.Services.AddSingleton<IDbConfiguration, DbConfiguration>();
 builder.Services.AddSingleton<IImageStorageConfiguration, ImageStorageConfiguration>();
-builder.Services.AddSingleton<IImageStorage, LocalImageStorage>();
+
+// Use Cloudinary for production, LocalImageStorage for development
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddSingleton<IImageStorage, CloudinaryImageStorage>();
+}
+else
+{
+    builder.Services.AddSingleton<IImageStorage, LocalImageStorage>();
+}
 builder.Services.AddScoped<ISanitizationService, SanitizationService>();
 builder.Services.AddScoped<IEmailSender>(sp =>
 {
