@@ -21,6 +21,7 @@ using BlogApi.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using System.Text;
 
 LoadDotEnv(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
@@ -88,7 +89,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<BlogDbContext>((serviceProvider, options) =>
 {
     var dbConfig = serviceProvider.GetRequiredService<IDbConfiguration>();
-    options.UseSqlServer(dbConfig.GetConnectionString());
+    options.UseNpgsql(dbConfig.GetConnectionString());
 });
 
 var jwtKey = builder.Configuration["Jwt:Key"]
