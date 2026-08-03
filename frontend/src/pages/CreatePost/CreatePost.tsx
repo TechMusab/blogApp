@@ -52,7 +52,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
 
     setIsUploadingImage(true);
     try {
-      const result = await ImageService.uploadImage(file, token, 'posts');
+      const result = await ImageService.uploadImage(file, token || '', 'posts');
       setCoverImage(result.url);
     } catch (error) {
       setImageError(error instanceof Error ? error.message : 'Failed to upload image');
@@ -135,19 +135,20 @@ export const CreatePostPage = memo(function CreatePostPage() {
     
     const paragraphs = cleanContent.split(/\n\n+/).filter((p) => p.trim() !== '');
 
-    const requestData = {
-      title: title.trim() || undefined,
-      excerpt: excerpt.trim() || undefined,
+    const requestData: any = {
+      title: title.trim(),
       content: cleanContent,
       coverImage:
         coverImage ||
         'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80',
-      category: category || undefined,
-      quote: quote.trim() || undefined,
-      tags: tags.length > 0 ? tags : undefined,
+      category: category,
       featured: false,
       paragraphs,
     };
+
+    if (excerpt.trim()) requestData.excerpt = excerpt.trim();
+    if (quote.trim()) requestData.quote = quote.trim();
+    if (tags.length > 0) requestData.tags = tags;
 
     try {
       const post = await PostsService.createPost(requestData, token);

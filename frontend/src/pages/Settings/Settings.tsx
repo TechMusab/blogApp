@@ -31,7 +31,7 @@ export const SettingsPage = memo(function SettingsPage() {
   const handleAvatarUpload = async (file: File) => {
     setIsUploadingAvatar(true);
     try {
-      const updatedUser = await UserService.updateAvatar(file, token);
+      const updatedUser = await UserService.updateAvatar(file, token || '');
       setAvatar(updatedUser.avatar || '');
       dispatch(updateUser({ avatar: updatedUser.avatar }));
     } catch (error) {
@@ -48,7 +48,7 @@ export const SettingsPage = memo(function SettingsPage() {
     setSaveMessage('');
 
     try {
-      const updatedUser = await UserService.updateProfile(name, token);
+      const updatedUser = await UserService.updateProfile(name, token || '');
       dispatch(
         updateUser({
           name: updatedUser.name,

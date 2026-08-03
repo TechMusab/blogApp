@@ -25,12 +25,12 @@ export const store = configureStore({
         ? { user: session.user, token: session.token, isAuthenticated: true }
         : { user: null, token: null, isAuthenticated: false };
     })(),
-    posts: [],
+    posts: { posts: [], pagination: { pageNumber: 1, pageSize: 10, totalCount: 0, totalPages: 0, hasPrevious: false, hasNext: false } },
     savedPosts: { savedPostIds: [] },
     theme: { theme: ThemeService.getTheme() },
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(persistenceListener.middleware),
+    getDefaultMiddleware().concat(persistenceListener.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

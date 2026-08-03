@@ -1,5 +1,5 @@
 import type { AuthResponse, AuthSession, OtpChallenge } from '../types';
-import { request, getErrorMessage } from '../utils/api';
+import { request } from '../utils/api';
 
 const SESSION_KEY = 'folio:auth';
 
