@@ -24,9 +24,13 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using System.Text;
 
-LoadDotEnv(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
-
 var builder = WebApplication.CreateBuilder(args);
+
+// Load .env file only in development
+if (builder.Environment.IsDevelopment())
+{
+    LoadDotEnv(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
+}
 
 // Configure Kestrel to listen on port 8080 for Render
 builder.WebHost.ConfigureKestrel(options =>
@@ -169,6 +173,12 @@ app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
+
+// Add a simple health check endpoint
+app.MapGet("/health", () => "OK");
+
+// Add a root endpoint for basic testing
+app.MapGet("/", () => "Blog API is running!");
 
 app.Run();
 
