@@ -36,6 +36,9 @@ public class ExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+        var environment = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
+        
+        // Log detailed error information server-side
         _logger.LogError(exception, "An unhandled exception occurred: {Message}", exception.Message);
 
         var response = context.Response;
@@ -43,7 +46,7 @@ public class ExceptionHandlingMiddleware
 
         var errorResponse = new ErrorResponse
         {
-            Message = exception.Message,
+            Message = environment.IsDevelopment() ? exception.Message : "An error occurred processing your request.",
             StatusCode = (int)HttpStatusCode.InternalServerError
         };
 
@@ -52,14 +55,20 @@ public class ExceptionHandlingMiddleware
             case UnauthorizedAccessException:
                 response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 errorResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
+                errorResponse.Message = environment.IsDevelopment() ? exception.Message : "Authentication failed.";
                 break;
             case InvalidOperationException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
                 errorResponse.StatusCode = (int)HttpStatusCode.BadRequest;
+                // Keep InvalidOperationException messages as they're typically user-facing validation errors
                 break;
             default:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                errorResponse.Message = "An internal server error occurred.";
+                // Generic error message in production to prevent information disclosure
+                if (!environment.IsDevelopment())
+                {
+                    errorResponse.Message = "An internal server error occurred. Please try again later.";
+                }
                 break;
         }
 

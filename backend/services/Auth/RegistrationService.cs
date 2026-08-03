@@ -69,7 +69,7 @@ public class RegistrationService : IRegistrationService
             Email = email,
             ExpiresAt = expiresAt,
             Message = "Verification code sent. It expires in 2 minutes.",
-            DevelopmentOtp = _environment.IsDevelopment() ? otp : null
+            DevelopmentOtp = _environment.IsDevelopment() && !_environment.IsProduction() ? otp : null
         };
     }
 

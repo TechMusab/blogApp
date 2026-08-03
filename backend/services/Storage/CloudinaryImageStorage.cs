@@ -1,20 +1,24 @@
 using BlogApi.Interfaces.Storage;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Logging;
 
 namespace BlogApi.Services.Storage;
 
 public class CloudinaryImageStorage : IImageStorage
 {
     private readonly Cloudinary _cloudinary;
+    private readonly ILogger<CloudinaryImageStorage> _logger;
     private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
     private readonly string[] _allowedMimeTypes = { "image/jpeg", "image/png", "image/gif", "image/webp" };
     private const long MaxFileSize = 5 * 1024 * 1024; // 5MB
     private const int MaxAvatarSize = 30; // Maximum avatar size in pixels
     private const int MaxPostImageSize = 800; // Maximum post image size in pixels
 
-    public CloudinaryImageStorage(IConfiguration configuration)
+    public CloudinaryImageStorage(IConfiguration configuration, ILogger<CloudinaryImageStorage> logger)
     {
+        _logger = logger;
+        
         var cloudName = configuration["Cloudinary:CloudName"];
         var apiKey = configuration["Cloudinary:ApiKey"];
         var apiSecret = configuration["Cloudinary:ApiSecret"];
@@ -119,13 +123,13 @@ public class CloudinaryImageStorage : IImageStorage
             if (deletionResult.Error != null)
             {
                 // Log error but don't throw - image might not exist
-                Console.WriteLine($"Failed to delete image from Cloudinary: {deletionResult.Error.Message}");
+                _logger.LogWarning("Failed to delete image from Cloudinary: {Error}", deletionResult.Error.Message);
             }
         }
         catch (Exception ex)
         {
             // Log error but don't throw - image might not be ours
-            Console.WriteLine($"Error deleting image: {ex.Message}");
+            _logger.LogWarning("Error deleting image: {Message}", ex.Message);
         }
     }
 

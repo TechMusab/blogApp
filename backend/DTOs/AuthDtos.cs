@@ -56,6 +56,8 @@ public class OtpChallengeResponse
     public string Email { get; set; } = string.Empty;
     public DateTime ExpiresAt { get; set; }
     public string Message { get; set; } = string.Empty;
+    // SECURITY: This field is only populated in development environment for testing purposes
+    // It will always be null in production to prevent OTP exposure
     public string? DevelopmentOtp { get; set; }
 }
 

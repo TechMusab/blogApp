@@ -17,9 +17,10 @@ public class LoggingMiddleware
     {
         var stopwatch = Stopwatch.StartNew();
         var request = context.Request;
+        var environment = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
 
-        // Detailed CORS logging
-        if (request.Method == "OPTIONS")
+        // Detailed CORS logging only in development
+        if (environment.IsDevelopment() && request.Method == "OPTIONS")
         {
             _logger.LogInformation("=== CORS PREFLIGHT REQUEST ===");
             _logger.LogInformation("Method: {Method}", request.Method);
@@ -42,8 +43,8 @@ public class LoggingMiddleware
             stopwatch.Stop();
             var response = context.Response;
 
-            // Log CORS headers for OPTIONS requests
-            if (request.Method == "OPTIONS")
+            // Log CORS headers for OPTIONS requests only in development
+            if (environment.IsDevelopment() && request.Method == "OPTIONS")
             {
                 _logger.LogInformation("=== CORS PREFLIGHT RESPONSE ===");
                 _logger.LogInformation("Status: {StatusCode}", response.StatusCode);

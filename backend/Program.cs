@@ -120,13 +120,50 @@ builder.Services.AddDbContext<BlogDbContext>((serviceProvider, options) =>
     options.UseNpgsql(dbConfig.GetConnectionString());
 });
 
-var jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException("Jwt:Key is not configured.");
-
-if (builder.Environment.IsProduction() && jwtKey.Contains("development-only", StringComparison.OrdinalIgnoreCase))
+// Validate required environment variables in production
+if (builder.Environment.IsProduction())
 {
-    throw new InvalidOperationException("Configure a production Jwt:Key before deploying.");
+    var requiredSettings = new[]
+    {
+        "Jwt:Key",
+        "ConnectionStrings:DefaultConnection"
+    };
+
+    foreach (var setting in requiredSettings)
+    {
+        var value = builder.Configuration[setting];
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new InvalidOperationException($"Required configuration setting '{setting}' is missing in production. Please set it as an environment variable.");
+        }
+    }
+
+    // Validate JWT key is not the development placeholder
+    var jwtKeyForValidation = builder.Configuration["Jwt:Key"];
+    if (jwtKeyForValidation != null && jwtKeyForValidation.Contains("development-only", StringComparison.OrdinalIgnoreCase))
+    {
+        throw new InvalidOperationException("Configure a production Jwt:Key before deploying.");
+    }
+
+    // Validate email configuration
+    var emailProvider = builder.Configuration["Email:Provider"];
+    if (string.IsNullOrWhiteSpace(emailProvider))
+    {
+        throw new InvalidOperationException("Email:Provider is not configured in production.");
+    }
+
+    if (emailProvider.Equals("Resend", StringComparison.OrdinalIgnoreCase))
+    {
+        var resendApiKey = builder.Configuration["Resend:ApiKey"];
+        if (string.IsNullOrWhiteSpace(resendApiKey))
+        {
+            throw new InvalidOperationException("Resend:ApiKey is not configured in production.");
+        }
+    }
 }
+
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("Jwt:Key is not configured. Set it in .env file or environment variable.");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

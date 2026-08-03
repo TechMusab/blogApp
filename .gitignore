@@ -1,7 +1,24 @@
+# Environment files
 backend/.env
 frontend/.env
+.env.local
+.env.*.local
+
+# Backend build outputs
 backend/bin/
 backend/obj/
 backend/check-build/
+
+# Frontend dependencies and build
 frontend/node_modules/
 frontend/dist/
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS files
+.DS_Store
+Thumbs.db
