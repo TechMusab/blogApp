@@ -20,6 +20,7 @@ using BlogApi.Services.Storage;
 using BlogApi.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using System.Text;
@@ -54,6 +55,10 @@ builder.Services.AddSingleton<IAppConfiguration, AppConfiguration>();
 builder.Services.AddSingleton<IDbConfiguration, DbConfiguration>();
 builder.Services.AddSingleton<IImageStorageConfiguration, ImageStorageConfiguration>();
 
+// Configure Resend options
+builder.Services.Configure<ResendOptions>(builder.Configuration.GetSection(ResendOptions.SectionName));
+builder.Services.AddSingleton<ResendEmailSender>();
+
 // Use Cloudinary for production, LocalImageStorage for development
 if (builder.Environment.IsProduction())
 {
@@ -69,7 +74,7 @@ builder.Services.AddScoped<IEmailSender>(sp =>
     var appConfig = sp.GetRequiredService<IAppConfiguration>();
     var config = sp.GetRequiredService<IConfiguration>();
     var environment = sp.GetRequiredService<IWebHostEnvironment>();
-    return EmailProviderFactory.CreateEmailSender(appConfig, config, environment);
+    return EmailProviderFactory.CreateEmailSender(appConfig, config, environment, sp);
 });
 builder.Services.AddScoped<IOtpService, OtpService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
