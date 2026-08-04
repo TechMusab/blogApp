@@ -81,12 +81,12 @@ public class BlogDbContext : DbContext
             entity.HasKey(fr => fr.Id);
 
             entity.HasOne(fr => fr.Sender)
-                .WithMany()
+                .WithMany(u => u.SentFriendRequests)
                 .HasForeignKey(fr => fr.SenderId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasOne(fr => fr.Receiver)
-                .WithMany()
+                .WithMany(u => u.ReceivedFriendRequests)
                 .HasForeignKey(fr => fr.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
