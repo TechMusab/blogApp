@@ -8,6 +8,7 @@ import { FriendRequestStatusValues } from '../../../../types';
 type UserCardProps = {
   user: UserProfile;
   onFriendAction: (userId: number, action: string) => void;
+  onRequestId?: (userId: number) => number | null;
 };
 
 export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCardProps) {
@@ -24,6 +25,26 @@ export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCar
     }
 
     if (user.friendStatus === FriendRequestStatusValues.Pending) {
+      // If the request was received from this user, show Accept/Reject
+      if (user.friendRequestDirection === 'received') {
+        return (
+          <div className="user-card__button-group">
+            <button
+              className="user-card__button user-card__button--primary"
+              onClick={() => onFriendAction(user.id, 'accept')}
+            >
+              Accept
+            </button>
+            <button
+              className="user-card__button user-card__button--secondary"
+              onClick={() => onFriendAction(user.id, 'reject')}
+            >
+              Reject
+            </button>
+          </div>
+        );
+      }
+      // If the request was sent by current user, show Cancel
       return (
         <button
           className="user-card__button user-card__button--secondary"

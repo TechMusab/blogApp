@@ -263,13 +263,18 @@ public class FriendService : IFriendService
                 var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
 
                 FriendRequestStatus? friendStatus = null;
-                if (friendRequest != null)
-                {
-                    friendStatus = friendRequest.Status;
-                }
-                else if (reverseRequest != null)
+                string? friendRequestDirection = null;
+                
+                // Prioritize reverse request (incoming) over direct request (outgoing)
+                if (reverseRequest != null)
                 {
                     friendStatus = reverseRequest.Status;
+                    friendRequestDirection = "received";
+                }
+                else if (friendRequest != null)
+                {
+                    friendStatus = friendRequest.Status;
+                    friendRequestDirection = "sent";
                 }
 
                 // Apply filter
@@ -300,7 +305,8 @@ public class FriendService : IFriendService
                     PostsCount = posts.Count(),
                     FriendsCount = 0, // Will be calculated properly later
                     PublicPostsCount = publicPosts,
-                    FriendStatus = friendStatus
+                    FriendStatus = friendStatus,
+                    FriendRequestDirection = friendRequestDirection
                 });
             }
             catch (Exception ex)
@@ -311,13 +317,18 @@ public class FriendService : IFriendService
                 var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
 
                 FriendRequestStatus? friendStatus = null;
-                if (friendRequest != null)
-                {
-                    friendStatus = friendRequest.Status;
-                }
-                else if (reverseRequest != null)
+                string? friendRequestDirection = null;
+                
+                // Prioritize reverse request (incoming) over direct request (outgoing)
+                if (reverseRequest != null)
                 {
                     friendStatus = reverseRequest.Status;
+                    friendRequestDirection = "received";
+                }
+                else if (friendRequest != null)
+                {
+                    friendStatus = friendRequest.Status;
+                    friendRequestDirection = "sent";
                 }
 
                 // Apply filter
@@ -341,7 +352,8 @@ public class FriendService : IFriendService
                     PostsCount = 0,
                     FriendsCount = 0,
                     PublicPostsCount = 0,
-                    FriendStatus = friendStatus
+                    FriendStatus = friendStatus,
+                    FriendRequestDirection = friendRequestDirection
                 });
             }
         }

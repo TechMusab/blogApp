@@ -15,6 +15,7 @@ public class UserDto
     public int PublicPostsCount { get; set; }
     public FriendRequestStatus? FriendStatus { get; set; }
     public bool IsVerified { get; set; }
+    public string? FriendRequestDirection { get; set; } // "sent" or "received"
 }
 
 public class UserProfileDto

@@ -56,6 +56,7 @@ export type UserProfile = {
   postsCount: number;
   friendsCount: number;
   friendStatus?: FriendRequestStatus;
+  friendRequestDirection?: 'sent' | 'received';
 };
 
 export type AuthState = {

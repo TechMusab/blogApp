@@ -4,7 +4,7 @@ import { memo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { UserCard } from './components/UserCard';
-import { FriendsService } from '../../services/FriendsService';
+import { FriendsService, type FriendRequest } from '../../services/FriendsService';
 import type { RootState } from '../../redux/store';
 import { addToast } from '../../redux/slices/toasts/toastsSlice';
 import type { UserProfile } from '../../types';
@@ -13,6 +13,8 @@ export const PeoplePage = memo(function PeoplePage() {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
   const [users, setUsers] = useState<UserProfile[]>([]);
+  const [incomingRequests, setIncomingRequests] = useState<FriendRequest[]>([]);
+  const [outgoingRequests, setOutgoingRequests] = useState<FriendRequest[]>([]);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'friends' | 'not_friends' | 'pending'>('all');
   const [loading, setLoading] = useState(true);
@@ -21,8 +23,14 @@ export const PeoplePage = memo(function PeoplePage() {
     if (!token) return;
     setLoading(true);
     try {
-      const data = await FriendsService.getAllUsers(search, filter, token);
+      const [data, incoming, outgoing] = await Promise.all([
+        FriendsService.getAllUsers(search, filter, token),
+        FriendsService.getIncomingRequests(token),
+        FriendsService.getOutgoingRequests(token),
+      ]);
       setUsers(data);
+      setIncomingRequests(incoming);
+      setOutgoingRequests(outgoing);
     } catch (error) {
       console.error('Failed to fetch users:', error);
     } finally {
@@ -42,19 +50,33 @@ export const PeoplePage = memo(function PeoplePage() {
     setFilter(newFilter);
   };
 
+  const getRequestId = (userId: number): number | null => {
+    // Check incoming requests (received from this user)
+    const incoming = incomingRequests.find(r => r.senderId === userId);
+    if (incoming) return incoming.id;
+    
+    // Check outgoing requests (sent to this user)
+    const outgoing = outgoingRequests.find(r => r.receiverId === userId);
+    if (outgoing) return outgoing.id;
+    
+    return null;
+  };
+
   const handleFriendAction = async (userId: number, action: string) => {
     try {
+      const requestId = getRequestId(userId);
+      
       if (action === 'send') {
         await FriendsService.sendFriendRequest(userId, token);
         dispatch(addToast({ message: 'Friend request sent!', type: 'success' }));
-      } else if (action === 'accept') {
-        await FriendsService.acceptFriendRequest(userId, token);
+      } else if (action === 'accept' && requestId) {
+        await FriendsService.acceptFriendRequest(requestId, token);
         dispatch(addToast({ message: 'Friend request accepted!', type: 'success' }));
-      } else if (action === 'reject') {
-        await FriendsService.rejectFriendRequest(userId, token);
+      } else if (action === 'reject' && requestId) {
+        await FriendsService.rejectFriendRequest(requestId, token);
         dispatch(addToast({ message: 'Friend request rejected.', type: 'info' }));
-      } else if (action === 'cancel') {
-        await FriendsService.cancelFriendRequest(userId, token);
+      } else if (action === 'cancel' && requestId) {
+        await FriendsService.cancelFriendRequest(requestId, token);
         dispatch(addToast({ message: 'Friend request cancelled.', type: 'info' }));
       } else if (action === 'remove') {
         await FriendsService.removeFriend(userId, token);
