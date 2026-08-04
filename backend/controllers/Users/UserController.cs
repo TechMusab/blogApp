@@ -123,12 +123,17 @@ public class UserController : BaseController
         [FromQuery] string? filter = null)
     {
         var userId = GetCurrentUserId();
+        Console.WriteLine($"[UserController.GetAllUsers] userId from token: {userId}");
+        Console.WriteLine($"[UserController.GetAllUsers] search: '{search}', filter: '{filter}'");
+        
         if (userId is null)
         {
+            Console.WriteLine("[UserController.GetAllUsers] Unauthorized - no userId");
             return Unauthorized();
         }
 
         var users = await _friendService.GetAllUsersAsync(userId.Value, search, filter);
+        Console.WriteLine($"[UserController.GetAllUsers] Returning {users.Count()} users");
         return Ok(users);
     }
 

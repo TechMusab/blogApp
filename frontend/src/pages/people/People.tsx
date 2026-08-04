@@ -21,10 +21,13 @@ export const PeoplePage = memo(function PeoplePage() {
     if (!token) return;
     setLoading(true);
     try {
+      console.log('[PeoplePage] Fetching users with search:', search, 'filter:', filter);
       const data = await FriendsService.getAllUsers(search, filter);
+      console.log('[PeoplePage] Received users:', data);
+      console.log('[PeoplePage] Users count:', data.length);
       setUsers(data);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      console.error('[PeoplePage] Failed to fetch users:', error);
     } finally {
       setLoading(false);
     }
