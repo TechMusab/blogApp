@@ -24,6 +24,11 @@ public class BlogDbContext : DbContext
             .HasIndex(u => u.Email)
             .IsUnique();
 
+        modelBuilder.Entity<User>()
+            .HasIndex(u => new { u.Provider, u.ProviderId })
+            .IsUnique()
+            .HasFilter("[Provider] IS NOT NULL AND [ProviderId] IS NOT NULL");
+
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.User)
             .WithMany(u => u.Comments)

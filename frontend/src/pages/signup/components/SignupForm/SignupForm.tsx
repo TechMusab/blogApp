@@ -2,6 +2,7 @@ import './SignupForm.scss';
 
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
+import { GoogleOAuthButton } from '../../../../shared/components/GoogleOAuthButton';
 
 type SignupFormProps = {
   name: string;
@@ -13,6 +14,7 @@ type SignupFormProps = {
   onPasswordChange: (value: string) => void;
   onTogglePassword: () => void;
   onSubmit: (event: React.FormEvent) => void;
+  onGoogleAuth: (credential: string) => void;
   error: string;
   isSubmitting: boolean;
   avatarPreview: string;
@@ -31,6 +33,7 @@ export const SignupForm = memo(function SignupForm({
   onTogglePassword,
   onAvatarChange,
   onSubmit,
+  onGoogleAuth,
   error,
   isSubmitting,
 }: SignupFormProps) {
@@ -129,6 +132,16 @@ export const SignupForm = memo(function SignupForm({
             {isSubmitting ? 'Creating account...' : 'Create account'}
           </button>
         </form>
+
+        <div className="signup__divider">
+          <span className="signup__divider-text">or</span>
+        </div>
+
+        <GoogleOAuthButton
+          onSuccess={onGoogleAuth}
+          text="signup_with"
+          onError={() => {}}
+        />
 
         <div className="signup__footer">
           <span className="signup__footer-text">Already a member?</span>

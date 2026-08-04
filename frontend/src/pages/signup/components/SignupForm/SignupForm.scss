@@ -118,6 +118,32 @@
     line-height: 1.4;
   }
 
+  &__divider {
+    position: relative;
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  &__divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+  }
+
+  &__divider-text {
+    position: relative;
+    display: inline-block;
+    padding: 0 12px;
+    background: $color-auth-bg;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+
   &__footer {
     margin-top: 12px;
     display: flex;

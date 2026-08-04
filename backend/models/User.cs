@@ -8,9 +8,13 @@ public class User
 
     public string Email { get; set; } = string.Empty;
 
-    public string PasswordHash { get; set; } = string.Empty;
+    public string? PasswordHash { get; set; }
 
     public bool IsVerified { get; set; } = false;
+
+    public string? Provider { get; set; }
+
+    public string? ProviderId { get; set; }
 
     public string OtpHash { get; set; } = string.Empty;
 
@@ -25,7 +29,7 @@ public class User
     public string? Avatar { get; set; }
 
     // Information Expert: Domain logic behavior
-    public bool CanVerifyOtp() => !IsVerified && OtpExpiresAt > DateTime.UtcNow && OtpAttemptCount < 5;
+    public bool CanVerifyOtp() => !IsVerified && !string.IsNullOrEmpty(PasswordHash) && OtpExpiresAt > DateTime.UtcNow && OtpAttemptCount < 5;
 
     public bool IsOtpExpired() => OtpExpiresAt <= DateTime.UtcNow;
 

@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import MainLayout from './layouts/MainLayout';
 import type { RootState } from './redux/store';
 import { setPagedPosts } from './redux/slices/posts/postsSlice';
@@ -43,6 +44,8 @@ const NotFoundPage = lazy(() =>
   import('./pages/NotFound').then((module) => ({ default: module.NotFoundPage }))
 );
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+
 const App = () => {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
@@ -77,27 +80,29 @@ const App = () => {
   }, [dispatch, token]);
 
   return (
-    <BrowserRouter>
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route path="/" element={<IntroPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/verify-otp" element={<VerifyOtpPage />} />
-          <Route element={<MainLayout />}>
-            <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/posts/:id" element={<SinglePostPage />} />
-              <Route path="/create" element={<CreatePostPage />} />
-              <Route path="/saved-posts" element={<SavedPostsPage />} />
-              <Route path="/your-posts" element={<YourPostsPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="*" element={<NotFoundPage />} />
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <BrowserRouter>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/" element={<IntroPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/verify-otp" element={<VerifyOtpPage />} />
+            <Route element={<MainLayout />}>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/posts/:id" element={<SinglePostPage />} />
+                <Route path="/create" element={<CreatePostPage />} />
+                <Route path="/saved-posts" element={<SavedPostsPage />} />
+                <Route path="/your-posts" element={<YourPostsPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   );
 };
 

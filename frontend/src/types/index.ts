@@ -26,6 +26,7 @@ export type User = {
   email: string;
   avatar: string;
   bio: string;
+  provider?: string;
 };
 
 export type AuthState = {

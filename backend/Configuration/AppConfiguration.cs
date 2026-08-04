@@ -28,4 +28,8 @@ public class AppConfiguration : IAppConfiguration
         ?? new[] { "http://localhost:5173", "https://localhost:5173" };
 
     public string EmailProvider => _configuration["Email:Provider"] ?? "Smtp";
+
+    public string GoogleClientId => _configuration.GetRequiredConfigurationValue("Google:ClientId");
+
+    public string GoogleClientSecret => _configuration.GetRequiredConfigurationValue("Google:ClientSecret");
 }

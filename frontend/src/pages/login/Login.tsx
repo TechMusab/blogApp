@@ -34,6 +34,21 @@ export const LoginPage = memo(function LoginPage() {
     }
   };
 
+  const handleGoogleAuth = async (credential: string) => {
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      const session = await AuthService.googleAuth({ idToken: credential });
+      dispatch(login(session));
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Unable to sign in with Google.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="login">
       <AuthMarketingPanel variant="login" />
@@ -49,6 +64,7 @@ export const LoginPage = memo(function LoginPage() {
         onPasswordChange={setPassword}
         onTogglePassword={() => setShowPassword((value) => !value)}
         onSubmit={handleSubmit}
+        onGoogleAuth={handleGoogleAuth}
         error={error}
         isSubmitting={isSubmitting}
       />

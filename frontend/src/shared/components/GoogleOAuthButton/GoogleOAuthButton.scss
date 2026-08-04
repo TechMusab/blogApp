@@ -1,0 +1,8 @@
+.google-oauth-button {
+  width: 100%;
+  margin-top: 1rem;
+  
+  :deep(div) {
+    width: 100% !important;
+  }
+}

@@ -10,4 +10,6 @@ public interface IAppConfiguration
     int MaxOtpAttempts { get; }
     string[] CorsAllowedOrigins { get; }
     string EmailProvider { get; }
+    string GoogleClientId { get; }
+    string GoogleClientSecret { get; }
 }

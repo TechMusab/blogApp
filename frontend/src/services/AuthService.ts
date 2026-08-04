@@ -17,9 +17,13 @@ type VerifyRegistrationRequest = {
   otp: string;
 };
 
+type GoogleAuthRequest = {
+  idToken: string;
+};
+
 async function postJson<TResponse>(
   path: string,
-  body: LoginRequest | RegisterRequest | VerifyRegistrationRequest
+  body: LoginRequest | RegisterRequest | VerifyRegistrationRequest | GoogleAuthRequest
 ): Promise<TResponse> {
   return request<TResponse>(path, { method: 'POST', body: JSON.stringify(body) });
 }
@@ -55,6 +59,8 @@ export const AuthService = {
     postJson<OtpChallenge>('/auth/register', request),
   verifyRegistration: (request: VerifyRegistrationRequest) =>
     postJson<AuthResponse>('/auth/verify-registration', request),
+  googleAuth: (request: GoogleAuthRequest) =>
+    postJson<AuthResponse>('/auth/googleauth', request),
   loadSession,
   saveSession,
   clearSession,

@@ -18,6 +18,7 @@ using BlogApi.Services.PostInteractions;
 using BlogApi.Services.Sanitization;
 using BlogApi.Services.Storage;
 using BlogApi.Services.Users;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -59,6 +60,9 @@ builder.Services.AddSingleton<IImageStorageConfiguration, ImageStorageConfigurat
 builder.Services.Configure<ResendOptions>(builder.Configuration.GetSection(ResendOptions.SectionName));
 builder.Services.AddSingleton<ResendEmailSender>();
 
+// Configure Google OAuth options
+builder.Services.Configure<GoogleAuthOptions>(builder.Configuration.GetSection(GoogleAuthOptions.SectionName));
+
 // Use Cloudinary for production, LocalImageStorage for development
 if (builder.Environment.IsProduction())
 {
@@ -80,6 +84,7 @@ builder.Services.AddScoped<IOtpService, OtpService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 builder.Services.AddScoped<IViewAllPostsService, ViewAllPostsService>();
 builder.Services.AddScoped<ISavedPostsService, SavedPostsService>();
 builder.Services.AddScoped<IYourPostsService, YourPostsService>();

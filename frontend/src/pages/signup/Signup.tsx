@@ -2,13 +2,16 @@ import './Signup.scss';
 
 import { memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel';
 import { ThemeToggle } from '../../shared/components/ThemeToggle';
 import { SignupForm } from './components/SignupForm';
 import { AuthService } from '../../services/AuthService';
+import { login } from '../../redux/slices/auth/authSlice';
 
 export const SignupPage = memo(function SignupPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,6 +47,21 @@ export const SignupPage = memo(function SignupPage() {
     }
   };
 
+  const handleGoogleAuth = async (credential: string) => {
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      const session = await AuthService.googleAuth({ idToken: credential });
+      dispatch(login(session));
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Unable to sign up with Google.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="signup">
       <AuthMarketingPanel variant="signup" />
@@ -63,6 +81,7 @@ export const SignupPage = memo(function SignupPage() {
         onTogglePassword={() => setShowPassword((value) => !value)}
         onAvatarChange={handleAvatarChange}
         onSubmit={handleSubmit}
+        onGoogleAuth={handleGoogleAuth}
         error={error}
         isSubmitting={isSubmitting}
       />
