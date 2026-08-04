@@ -27,7 +27,8 @@ public static class PostMapper
             Featured = post.Featured,
             Quote = post.Quote,
             Paragraphs = DeserializeOptional(post.ParagraphsJson),
-            CommentsList = post.Comments.OrderBy(comment => comment.CreatedAt).Select(ToCommentDto).ToArray()
+            CommentsList = post.Comments.OrderBy(comment => comment.CreatedAt).Select(ToCommentDto).ToArray(),
+            Visibility = post.Visibility
         };
     }
 

@@ -1,5 +1,6 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Posts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,8 @@ public class ViewPostController : BaseController
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PostDto>> GetPost(int id)
     {
-        var post = await _viewPostService.GetPostByIdAsync(id);
+        var userId = GetCurrentUserId();
+        var post = await _viewPostService.GetPostByIdAsync(id, userId);
         return post is null ? NotFound() : Ok(post);
     }
 }

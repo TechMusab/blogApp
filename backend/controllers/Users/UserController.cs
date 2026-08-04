@@ -1,5 +1,6 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Users;
+using BlogApi.Interfaces.Friends;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,17 @@ namespace BlogApi.Controllers.Users;
 public class UserController : BaseController
 {
     private readonly IUserService _userService;
+    private readonly IFriendService _friendService;
+    private readonly IUserProfileService _userProfileService;
+    private readonly IDashboardService _dashboardService;
     private readonly ILogger<UserController> _logger;
 
-    public UserController(IUserService userService, ILogger<UserController> logger)
+    public UserController(IUserService userService, IFriendService friendService, IUserProfileService userProfileService, IDashboardService dashboardService, ILogger<UserController> logger)
     {
         _userService = userService;
+        _friendService = friendService;
+        _userProfileService = userProfileService;
+        _dashboardService = dashboardService;
         _logger = logger;
     }
 
@@ -107,5 +114,49 @@ public class UserController : BaseController
             _logger.LogError(ex, "UpdateAvatar failed for UserId: {UserId}", userId);
             return StatusCode(500, new { message = "Failed to upload avatar", error = ex.Message });
         }
+    }
+
+    [Authorize]
+    [HttpGet("all")]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers(
+        [FromQuery] string? search = null,
+        [FromQuery] string? filter = null)
+    {
+        var userId = GetCurrentUserId();
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+
+        var users = await _friendService.GetAllUsersAsync(userId.Value, search, filter);
+        return Ok(users);
+    }
+
+    [Authorize]
+    [HttpGet("profile/{id}")]
+    public async Task<ActionResult<UserProfileDto>> GetUserProfile(int id)
+    {
+        var currentUserId = GetCurrentUserId();
+        var profile = await _userProfileService.GetUserProfileAsync(id, currentUserId);
+        if (profile == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(profile);
+    }
+
+    [Authorize]
+    [HttpGet("dashboard/stats")]
+    public async Task<ActionResult<DashboardStatsDto>> GetDashboardStats()
+    {
+        var userId = GetCurrentUserId();
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+
+        var stats = await _dashboardService.GetDashboardStatsAsync(userId.Value);
+        return Ok(stats);
     }
 }

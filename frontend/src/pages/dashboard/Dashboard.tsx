@@ -7,6 +7,7 @@ import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { SearchInput } from './components/Search';
 import { FilterChip } from './components/FilterChip';
 import { DashboardGreeting } from './components/DashboardGreeting';
+import { DashboardStats } from './components/DashboardStats';
 import { PostCard } from './components/PostCard';
 import { Tabs } from './components/Tabs';
 import type { RootState } from '../../redux/store';
@@ -75,6 +76,7 @@ export const DashboardPage = memo(function DashboardPage() {
           postCount={pagination.totalCount}
           onNewPost={() => navigate('/create')}
         />
+        <DashboardStats />
         <div className="dashboard__divider" />
         <section className="dashboard__discovery" aria-label="Find posts">
           <SearchInput

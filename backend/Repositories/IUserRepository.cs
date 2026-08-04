@@ -8,6 +8,7 @@ public interface IUserRepository
     Task<User?> GetByEmailAsync(string email);
     Task<User?> GetByProviderAsync(string provider, string providerId);
     Task<bool> EmailExistsAsync(string email);
+    Task<IEnumerable<User>> GetAllAsync();
     Task AddAsync(User user);
     Task CreateAsync(User user);
     Task UpdateAsync(User user);

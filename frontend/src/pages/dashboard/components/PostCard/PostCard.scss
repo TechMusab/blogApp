@@ -45,9 +45,6 @@
   }
 
   &__badge {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
     background: rgba(232, 172, 58, 0.12);
     border: 1px solid rgba(232, 172, 58, 0.35);
     color: #e8ac3a;
@@ -58,6 +55,14 @@
     text-transform: uppercase;
     padding: 6px 10px;
     border-radius: 4px;
+  }
+
+  &__badges {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    gap: 6px;
   }
 
   &__body {

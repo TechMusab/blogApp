@@ -15,6 +15,7 @@ public class BlogDbContext : DbContext
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<PostLike> PostLikes => Set<PostLike>();
     public DbSet<SavedPost> SavedPosts => Set<SavedPost>();
+    public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,6 +43,7 @@ public class BlogDbContext : DbContext
             entity.Property(p => p.CoverImage).HasMaxLength(1000);
             entity.Property(p => p.Category).HasMaxLength(100);
             entity.Property(p => p.ReadTime).HasMaxLength(50);
+            entity.Property(p => p.Visibility).HasDefaultValue(BlogVisibility.Public);
         });
 
         modelBuilder.Entity<PostLike>(entity =>
@@ -72,6 +74,24 @@ public class BlogDbContext : DbContext
                 .WithMany(post => post.SavedByUsers)
                 .HasForeignKey(saved => saved.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<FriendRequest>(entity =>
+        {
+            entity.HasKey(fr => fr.Id);
+
+            entity.HasOne(fr => fr.Sender)
+                .WithMany()
+                .HasForeignKey(fr => fr.SenderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(fr => fr.Receiver)
+                .WithMany()
+                .HasForeignKey(fr => fr.ReceiverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasIndex(fr => new { fr.SenderId, fr.ReceiverId }).IsUnique();
+            entity.HasIndex(fr => fr.Status);
         });
     }
 }

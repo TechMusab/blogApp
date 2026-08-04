@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import type { Post } from '../../../../types';
 import { BookmarkButton } from '../../../../shared/components/BookmarkButton';
 import { Avatar } from '../../../../shared/components/Avatar';
+import { VisibilityBadge } from '../../../../shared/components/VisibilityBadge';
 
 export const PostCard = memo(function PostCard({ post }: { post: Post }) {
   return (
@@ -13,7 +14,10 @@ export const PostCard = memo(function PostCard({ post }: { post: Post }) {
       <Link to={`/posts/${post.id}`} className="post-card__link">
         <div className="post-card__image-container">
           <img className="post-card__image" src={post.coverImage} alt={post.title} />
-          <span className="post-card__badge">{post.category}</span>
+          <div className="post-card__badges">
+            <span className="post-card__badge">{post.category}</span>
+            <VisibilityBadge visibility={post.visibility} />
+          </div>
         </div>
 
         <div className="post-card__body">

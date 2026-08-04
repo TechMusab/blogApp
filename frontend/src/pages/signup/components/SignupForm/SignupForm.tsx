@@ -60,23 +60,27 @@ export const SignupForm = memo(function SignupForm({
                   </span>
                 </div>
               )}
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/gif,image/webp"
-                onChange={(e) => {
-                  const file = e.target.files?.[0] || null;
-                  onAvatarChange(file);
-                }}
-                className="signup__avatar-input"
-              />
-              <button
-                type="button"
-                className="signup__remove-avatar"
-                onClick={() => onAvatarChange(null)}
-                disabled={!avatarPreview}
-              >
-                Remove
-              </button>
+              <label className="signup__avatar-input">
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    onAvatarChange(file);
+                  }}
+                  style={{ display: 'none' }}
+                />
+                Choose file
+              </label>
+              {avatarPreview && (
+                <button
+                  type="button"
+                  className="signup__remove-avatar"
+                  onClick={() => onAvatarChange(null)}
+                >
+                  Remove
+                </button>
+              )}
             </div>
           </label>
 

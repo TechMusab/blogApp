@@ -26,6 +26,8 @@ public class Post
 
     public string? ImageUrl { get; set; }
 
+    public BlogVisibility Visibility { get; set; } = BlogVisibility.Public;
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }

@@ -9,6 +9,7 @@ import type { RootState } from '../../redux/store';
 import { addPost } from '../../redux/slices/posts/postsSlice';
 import { PostsService } from '../../services/PostsService';
 import { ImageService } from '../../services/ImageService';
+import { BlogVisibility } from '../../types';
 
 export const CreatePostPage = memo(function CreatePostPage() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
   const [coverImage, setCoverImage] = useState('');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imageError, setImageError] = useState('');
+  const [visibility, setVisibility] = useState<BlogVisibility>(BlogVisibility.Public);
 
   const categories = [
     'Science',
@@ -144,6 +146,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
       category: category,
       featured: false,
       paragraphs,
+      visibility,
     };
 
     if (excerpt.trim()) requestData.excerpt = excerpt.trim();
@@ -182,6 +185,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
         coverImage={coverImage}
         isUploadingImage={isUploadingImage}
         imageError={imageError}
+        visibility={visibility}
         onTitleChange={setTitle}
         onExcerptChange={setExcerpt}
         onContentChange={handleContentChange}
@@ -193,6 +197,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
         onTagInputKeyDown={handleTagInputKeyDown}
         onImageUpload={handleImageUpload}
         onRemoveImage={handleRemoveImage}
+        onVisibilityChange={setVisibility}
         onSubmit={isSubmitting ? (event) => event.preventDefault() : handleSubmit}
         onClose={handleClose}
       />

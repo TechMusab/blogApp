@@ -28,6 +28,18 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
     closeMenu();
     navigate('/your-posts');
   }, [closeMenu, navigate]);
+  const goToPeople = useCallback(() => {
+    closeMenu();
+    navigate('/people');
+  }, [closeMenu, navigate]);
+  const goToFriends = useCallback(() => {
+    closeMenu();
+    navigate('/friends');
+  }, [closeMenu, navigate]);
+  const goToFriendRequests = useCallback(() => {
+    closeMenu();
+    navigate('/friend-requests');
+  }, [closeMenu, navigate]);
   const goToSettings = useCallback(() => {
     closeMenu();
     navigate('/settings');
@@ -80,10 +92,13 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
               </div>
             }
             items={[
-              { label: 'Account settings', icon: '⚙', onClick: goToSettings },
+              { label: 'Discover People', icon: '👥', onClick: goToPeople },
+              { label: 'Friends', icon: '👤', onClick: goToFriends },
+              { label: 'Friend Requests', icon: '📨', onClick: goToFriendRequests },
               { label: 'Saved posts', icon: '▱', onClick: goToSaved },
               { label: 'Your posts', icon: '☰', onClick: goToYourPosts },
               { label: 'Write a post', icon: '✎', onClick: goToCreate },
+              { label: 'Account settings', icon: '⚙', onClick: goToSettings },
             ]}
             footerItem={{ label: 'Sign out', icon: '⇥', danger: true, onClick: handleLogout }}
           />

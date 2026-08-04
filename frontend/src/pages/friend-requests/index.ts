@@ -1,0 +1,1 @@
+export { FriendRequestsPage } from './FriendRequests';

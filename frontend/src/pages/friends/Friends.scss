@@ -1,0 +1,206 @@
+@use '../../styles/abstracts/variables' as *;
+
+.friends {
+  min-height: 100vh;
+  background: var(--bg-color);
+
+  &__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  &__header {
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+  }
+
+  &__subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  &__search {
+    margin-bottom: 32px;
+  }
+
+  &__search-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--surface-color);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 250ms ease;
+
+    &:focus {
+      border-color: $color-auth-accent;
+    }
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+
+  &__loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 250ms ease;
+
+    &:hover {
+      border-color: $color-auth-accent;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__card-avatar {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__card-info {
+    text-align: center;
+  }
+
+  &__card-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+  }
+
+  &__card-email {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 8px 0;
+  }
+
+  &__card-joined {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0 0 12px 0;
+  }
+
+  &__card-stats {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  &__card-stat {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+
+    strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+  }
+
+  &__card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__card-button {
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 250ms ease;
+
+    &--message {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+
+      &:hover:not(:disabled) {
+        border-color: $color-auth-accent;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    &--remove {
+      background: transparent;
+      color: #ef4444;
+      border: 1px solid #ef4444;
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .friends {
+    &__content {
+      padding: 24px 16px;
+    }
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__subtitle {
+      font-size: 14px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

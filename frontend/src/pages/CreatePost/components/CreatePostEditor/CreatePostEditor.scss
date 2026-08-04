@@ -177,6 +177,20 @@ $color-muted: $color-secondary;
     margin-bottom: 28px;
   }
 
+  &__visibility-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  &__label {
+    color: $color-muted;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
   &__upload-btn {
     padding: 10px 16px;
     border: 1px dashed $color-border;

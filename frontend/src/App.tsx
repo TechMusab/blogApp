@@ -9,6 +9,7 @@ import { restoreSaved } from './redux/slices/savedPosts/savedPostsSlice';
 import { PostsService } from './services/PostsService';
 import { Loader } from './shared/components/Loader';
 import ProtectedRoute from './shared/components/ProtectedRoute/ProtectedRoute';
+import { ToastContainer } from './shared/components/Toast/ToastContainer';
 
 const IntroPage = lazy(() =>
   import('./pages/intro').then((module) => ({ default: module.IntroPage }))
@@ -36,6 +37,15 @@ const SavedPostsPage = lazy(() =>
 );
 const YourPostsPage = lazy(() =>
   import('./pages/YourPosts').then((module) => ({ default: module.YourPostsPage }))
+);
+const PeoplePage = lazy(() =>
+  import('./pages/people').then((module) => ({ default: module.PeoplePage }))
+);
+const FriendRequestsPage = lazy(() =>
+  import('./pages/friend-requests').then((module) => ({ default: module.FriendRequestsPage }))
+);
+const FriendsPage = lazy(() =>
+  import('./pages/friends').then((module) => ({ default: module.FriendsPage }))
 );
 const SettingsPage = lazy(() =>
   import('./pages/Settings/Settings').then((module) => ({ default: module.SettingsPage }))
@@ -95,12 +105,16 @@ const App = () => {
                 <Route path="/create" element={<CreatePostPage />} />
                 <Route path="/saved-posts" element={<SavedPostsPage />} />
                 <Route path="/your-posts" element={<YourPostsPage />} />
+                <Route path="/people" element={<PeoplePage />} />
+                <Route path="/friend-requests" element={<FriendRequestsPage />} />
+                <Route path="/friends" element={<FriendsPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Route>
           </Routes>
         </Suspense>
+        <ToastContainer />
       </BrowserRouter>
     </GoogleOAuthProvider>
   );

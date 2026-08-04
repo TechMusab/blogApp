@@ -1,6 +1,8 @@
 import './CreatePostEditor.scss';
 
 import { memo, useRef } from 'react';
+import { VisibilityDropdown } from '../../../shared/components/VisibilityDropdown';
+import { BlogVisibility } from '../../../types';
 
 type CreatePostEditorProps = {
   title: string;
@@ -15,6 +17,7 @@ type CreatePostEditorProps = {
   coverImage: string;
   isUploadingImage: boolean;
   imageError: string;
+  visibility: BlogVisibility;
   onTitleChange: (value: string) => void;
   onExcerptChange: (value: string) => void;
   onContentChange: (value: string) => void;
@@ -26,6 +29,7 @@ type CreatePostEditorProps = {
   onTagInputKeyDown: (event: React.KeyboardEvent) => void;
   onImageUpload: (file: File) => void;
   onRemoveImage: () => void;
+  onVisibilityChange: (value: BlogVisibility) => void;
   onSubmit: (event: React.FormEvent) => void;
   onClose: () => void;
 };
@@ -43,6 +47,7 @@ export const CreatePostEditor = memo(function CreatePostEditor({
   coverImage,
   isUploadingImage,
   imageError,
+  visibility,
   onTitleChange,
   onExcerptChange,
   onContentChange,
@@ -54,6 +59,7 @@ export const CreatePostEditor = memo(function CreatePostEditor({
   onTagInputKeyDown,
   onImageUpload,
   onRemoveImage,
+  onVisibilityChange,
   onSubmit,
   onClose,
 }: CreatePostEditorProps) {
@@ -163,6 +169,11 @@ export const CreatePostEditor = memo(function CreatePostEditor({
             )}
 
             {imageError && <div className="editor__image-error">{imageError}</div>}
+          </div>
+
+          <div className="editor__visibility-row">
+            <label className="editor__label">Privacy</label>
+            <VisibilityDropdown value={visibility} onChange={onVisibilityChange} />
           </div>
 
           <hr className="editor__divider" />

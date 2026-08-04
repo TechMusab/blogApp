@@ -28,6 +28,8 @@ public class User
 
     public string? Avatar { get; set; }
 
+    public string? Bio { get; set; }
+
     // Information Expert: Domain logic behavior
     public bool CanVerifyOtp() => !IsVerified && !string.IsNullOrEmpty(PasswordHash) && OtpExpiresAt > DateTime.UtcNow && OtpAttemptCount < 5;
 
@@ -68,4 +70,8 @@ public class User
     public ICollection<PostLike> LikedPosts { get; set; } = new List<PostLike>();
 
     public ICollection<SavedPost> SavedPosts { get; set; } = new List<SavedPost>();
+
+    public ICollection<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();
+
+    public ICollection<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
 }

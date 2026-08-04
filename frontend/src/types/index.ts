@@ -1,3 +1,16 @@
+export enum BlogVisibility {
+  Public = 0,
+  FriendsOnly = 1,
+  Private = 2,
+}
+
+export enum FriendRequestStatus {
+  Pending = 0,
+  Accepted = 1,
+  Rejected = 2,
+  Cancelled = 3,
+}
+
 export type Post = {
   id: string;
   title: string;
@@ -18,6 +31,7 @@ export type Post = {
   quote?: string;
   paragraphs?: string[];
   commentsList: Comment[];
+  visibility: BlogVisibility;
 };
 
 export type User = {
@@ -27,6 +41,17 @@ export type User = {
   avatar: string;
   bio: string;
   provider?: string;
+};
+
+export type UserProfile = {
+  id: number;
+  name: string;
+  email: string;
+  avatar?: string;
+  createdAt: string;
+  postsCount: number;
+  friendsCount: number;
+  friendStatus?: FriendRequestStatus;
 };
 
 export type AuthState = {

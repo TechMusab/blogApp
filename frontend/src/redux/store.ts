@@ -4,6 +4,7 @@ import postsReducer from './slices/posts/postsSlice';
 import uiReducer from './slices/ui/uiSlice';
 import savedPostsReducer from './slices/savedPosts/savedPostsSlice';
 import themeReducer, { setTheme, toggleTheme } from './slices/theme/themeSlice';
+import toastsReducer from './slices/toasts/toastsSlice';
 import { ThemeService } from '../services/ThemeService';
 import { AuthService } from '../services/AuthService';
 import type { Theme } from '../services/ThemeService';
@@ -17,6 +18,7 @@ export const store = configureStore({
     ui: uiReducer,
     savedPosts: savedPostsReducer,
     theme: themeReducer,
+    toasts: toastsReducer,
   },
   preloadedState: {
     auth: (() => {

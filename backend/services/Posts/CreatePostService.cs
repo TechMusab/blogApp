@@ -43,7 +43,8 @@ public class CreatePostService : ICreatePostService
             Quote = !string.IsNullOrWhiteSpace(request.Quote) ? _sanitizationService.SanitizeInput(request.Quote) : null,
             TagsJson = SerializeOptional(_sanitizationService.SanitizeArray(request.Tags ?? Array.Empty<string>())),
             ParagraphsJson = SerializeOptional(_sanitizationService.SanitizeArray(paragraphs ?? Array.Empty<string>())),
-            UserId = userId
+            UserId = userId,
+            Visibility = request.Visibility
         };
 
         await _postRepository.AddAsync(post);

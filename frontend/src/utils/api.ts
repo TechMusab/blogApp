@@ -52,7 +52,13 @@ export async function request<TResponse>(
 
 export function getAvatarUrl(avatar?: string): string {
   if (!avatar) return '';
-  if (avatar.startsWith('http')) return avatar;
+  if (avatar.startsWith('http')) {
+    // Resize Google avatar images to 30x30
+    if (avatar.includes('googleusercontent.com')) {
+      return avatar.replace(/=s\d+-c$/, '=s30-c');
+    }
+    return avatar;
+  }
   if (avatar.startsWith('/')) return `${BACKEND_BASE_URL}${avatar}`;
   return '';
 }

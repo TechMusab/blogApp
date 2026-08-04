@@ -1,5 +1,6 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Posts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,8 @@ public class ViewAllPostsController : BaseController
     [HttpGet]
     public async Task<ActionResult<PagedResult<PostDto>>> GetAllPosts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var posts = await _viewAllPostsService.GetAllPostsPagedAsync(pageNumber, pageSize);
+        var userId = GetCurrentUserId();
+        var posts = await _viewAllPostsService.GetAllPostsPagedAsync(pageNumber, pageSize, userId);
         return Ok(posts);
     }
 }
