@@ -20,8 +20,8 @@ export const FriendRequestsPage = memo(function FriendRequestsPage() {
     setLoading(true);
     try {
       const [incoming, outgoing] = await Promise.all([
-        FriendsService.getIncomingRequests(),
-        FriendsService.getOutgoingRequests(),
+        FriendsService.getIncomingRequests(token),
+        FriendsService.getOutgoingRequests(token),
       ]);
       setIncomingRequests(incoming);
       setOutgoingRequests(outgoing);
@@ -38,7 +38,7 @@ export const FriendRequestsPage = memo(function FriendRequestsPage() {
 
   const handleAccept = async (requestId: number) => {
     try {
-      await FriendsService.acceptFriendRequest(requestId);
+      await FriendsService.acceptFriendRequest(requestId, token);
       dispatch(addToast({ message: 'Friend request accepted!', type: 'success' }));
       fetchRequests();
     } catch (error) {
@@ -49,7 +49,7 @@ export const FriendRequestsPage = memo(function FriendRequestsPage() {
 
   const handleReject = async (requestId: number) => {
     try {
-      await FriendsService.rejectFriendRequest(requestId);
+      await FriendsService.rejectFriendRequest(requestId, token);
       dispatch(addToast({ message: 'Friend request rejected.', type: 'info' }));
       fetchRequests();
     } catch (error) {
@@ -60,7 +60,7 @@ export const FriendRequestsPage = memo(function FriendRequestsPage() {
 
   const handleCancel = async (requestId: number) => {
     try {
-      await FriendsService.cancelFriendRequest(requestId);
+      await FriendsService.cancelFriendRequest(requestId, token);
       dispatch(addToast({ message: 'Friend request cancelled.', type: 'info' }));
       fetchRequests();
     } catch (error) {

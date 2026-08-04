@@ -26,63 +26,54 @@ export type FriendRequestResponse = {
 };
 
 export const FriendsService = {
-  async getAllUsers(search?: string, filter?: string): Promise<UserProfile[]> {
-    const token = localStorage.getItem('token');
+  async getAllUsers(search?: string, filter?: string, token?: string | null): Promise<UserProfile[]> {
     const params = new URLSearchParams();
     if (search) params.append('search', search);
     if (filter) params.append('filter', filter);
     const query = params.toString();
-    return request<UserProfile[]>(`/user/all${query ? `?${query}` : ''}`, undefined, token);
+    return request<UserProfile[]>(`/user/all${query ? `?${query}` : ''}`, undefined, token ?? undefined);
   },
 
-  async getFriends(): Promise<UserProfile[]> {
-    const token = localStorage.getItem('token');
-    return request<UserProfile[]>('/friends', undefined, token);
+  async getFriends(token?: string | null): Promise<UserProfile[]> {
+    return request<UserProfile[]>('/friends', undefined, token ?? undefined);
   },
 
-  async getIncomingRequests(): Promise<FriendRequest[]> {
-    const token = localStorage.getItem('token');
-    return request<FriendRequest[]>('/friends/requests/incoming', undefined, token);
+  async getIncomingRequests(token?: string | null): Promise<FriendRequest[]> {
+    return request<FriendRequest[]>('/friends/requests/incoming', undefined, token ?? undefined);
   },
 
-  async getOutgoingRequests(): Promise<FriendRequest[]> {
-    const token = localStorage.getItem('token');
-    return request<FriendRequest[]>('/friends/requests/outgoing', undefined, token);
+  async getOutgoingRequests(token?: string | null): Promise<FriendRequest[]> {
+    return request<FriendRequest[]>('/friends/requests/outgoing', undefined, token ?? undefined);
   },
 
-  async sendFriendRequest(receiverId: number): Promise<FriendRequestResponse> {
-    const token = localStorage.getItem('token');
+  async sendFriendRequest(receiverId: number, token?: string | null): Promise<FriendRequestResponse> {
     return request<FriendRequestResponse>('/friends/request', {
       method: 'POST',
       body: JSON.stringify({ receiverId }),
-    }, token);
+    }, token ?? undefined);
   },
 
-  async acceptFriendRequest(requestId: number): Promise<FriendRequestResponse> {
-    const token = localStorage.getItem('token');
+  async acceptFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
     return request<FriendRequestResponse>(`/friends/accept/${requestId}`, {
       method: 'POST',
-    }, token);
+    }, token ?? undefined);
   },
 
-  async rejectFriendRequest(requestId: number): Promise<FriendRequestResponse> {
-    const token = localStorage.getItem('token');
+  async rejectFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
     return request<FriendRequestResponse>(`/friends/reject/${requestId}`, {
       method: 'POST',
-    }, token);
+    }, token ?? undefined);
   },
 
-  async cancelFriendRequest(requestId: number): Promise<FriendRequestResponse> {
-    const token = localStorage.getItem('token');
+  async cancelFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
     return request<FriendRequestResponse>(`/friends/cancel/${requestId}`, {
       method: 'POST',
-    }, token);
+    }, token ?? undefined);
   },
 
-  async removeFriend(friendId: number): Promise<FriendRequestResponse> {
-    const token = localStorage.getItem('token');
+  async removeFriend(friendId: number, token?: string | null): Promise<FriendRequestResponse> {
     return request<FriendRequestResponse>(`/friends/remove/${friendId}`, {
       method: 'DELETE',
-    }, token);
+    }, token ?? undefined);
   },
 };

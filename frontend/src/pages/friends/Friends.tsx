@@ -20,7 +20,7 @@ export const FriendsPage = memo(function FriendsPage() {
     if (!token) return;
     setLoading(true);
     try {
-      const data = await FriendsService.getFriends();
+      const data = await FriendsService.getFriends(token);
       setFriends(data);
     } catch (error) {
       console.error('Failed to fetch friends:', error);
@@ -36,7 +36,7 @@ export const FriendsPage = memo(function FriendsPage() {
   const handleRemoveFriend = async (friendId: number) => {
     if (!confirm('Are you sure you want to remove this friend?')) return;
     try {
-      await FriendsService.removeFriend(friendId);
+      await FriendsService.removeFriend(friendId, token);
       dispatch(addToast({ message: 'Friend removed successfully.', type: 'info' }));
       fetchFriends();
     } catch (error) {

@@ -13,7 +13,7 @@ export const DashboardStats = memo(function DashboardStats() {
   useEffect(() => {
     if (!token) return;
     setLoading(true);
-    DashboardService.getStats()
+    DashboardService.getStats(token)
       .then((data) => {
         setStats(data);
         setLoading(false);

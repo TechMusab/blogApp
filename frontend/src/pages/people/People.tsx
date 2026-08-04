@@ -22,7 +22,7 @@ export const PeoplePage = memo(function PeoplePage() {
     setLoading(true);
     try {
       console.log('[PeoplePage] Fetching users with search:', search, 'filter:', filter);
-      const data = await FriendsService.getAllUsers(search, filter);
+      const data = await FriendsService.getAllUsers(search, filter, token);
       console.log('[PeoplePage] Received users:', data);
       console.log('[PeoplePage] Users count:', data.length);
       setUsers(data);
@@ -48,19 +48,19 @@ export const PeoplePage = memo(function PeoplePage() {
   const handleFriendAction = async (userId: number, action: string) => {
     try {
       if (action === 'send') {
-        await FriendsService.sendFriendRequest(userId);
+        await FriendsService.sendFriendRequest(userId, token);
         dispatch(addToast({ message: 'Friend request sent!', type: 'success' }));
       } else if (action === 'accept') {
-        await FriendsService.acceptFriendRequest(userId);
+        await FriendsService.acceptFriendRequest(userId, token);
         dispatch(addToast({ message: 'Friend request accepted!', type: 'success' }));
       } else if (action === 'reject') {
-        await FriendsService.rejectFriendRequest(userId);
+        await FriendsService.rejectFriendRequest(userId, token);
         dispatch(addToast({ message: 'Friend request rejected.', type: 'info' }));
       } else if (action === 'cancel') {
-        await FriendsService.cancelFriendRequest(userId);
+        await FriendsService.cancelFriendRequest(userId, token);
         dispatch(addToast({ message: 'Friend request cancelled.', type: 'info' }));
       } else if (action === 'remove') {
-        await FriendsService.removeFriend(userId);
+        await FriendsService.removeFriend(userId, token);
         dispatch(addToast({ message: 'Friend removed.', type: 'info' }));
       }
       fetchUsers();

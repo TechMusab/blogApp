@@ -11,8 +11,7 @@ export type DashboardStats = {
 };
 
 export const DashboardService = {
-  async getStats(): Promise<DashboardStats> {
-    const token = localStorage.getItem('token');
-    return request<DashboardStats>('/user/dashboard/stats', undefined, token);
+  async getStats(token?: string | null): Promise<DashboardStats> {
+    return request<DashboardStats>('/user/dashboard/stats', undefined, token ?? undefined);
   },
 };
