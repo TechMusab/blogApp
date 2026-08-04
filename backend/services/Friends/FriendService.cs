@@ -255,44 +255,89 @@ public class FriendService : IFriendService
         var result = new List<UserDto>();
         foreach (var user in users)
         {
-            var posts = await _postRepository.GetByAuthorIdAsync(user.Id);
-            var friendRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(currentUserId, user.Id);
-            var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
+            try
+            {
+                var posts = await _postRepository.GetByAuthorIdAsync(user.Id);
+                var friendRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(currentUserId, user.Id);
+                var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
 
-            FriendRequestStatus? friendStatus = null;
-            if (friendRequest != null)
-            {
-                friendStatus = friendRequest.Status;
-            }
-            else if (reverseRequest != null)
-            {
-                friendStatus = reverseRequest.Status;
-            }
+                FriendRequestStatus? friendStatus = null;
+                if (friendRequest != null)
+                {
+                    friendStatus = friendRequest.Status;
+                }
+                else if (reverseRequest != null)
+                {
+                    friendStatus = reverseRequest.Status;
+                }
 
-            // Apply filter
-            if (!string.IsNullOrWhiteSpace(filter))
-            {
-                if (filter == "friends" && friendStatus != FriendRequestStatus.Accepted)
-                    continue;
-                if (filter == "not_friends" && friendStatus == FriendRequestStatus.Accepted)
-                    continue;
-                if (filter == "pending" && friendStatus != FriendRequestStatus.Pending)
-                    continue;
-            }
+                // Apply filter
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    if (filter == "friends" && friendStatus != FriendRequestStatus.Accepted)
+                        continue;
+                    if (filter == "not_friends" && friendStatus == FriendRequestStatus.Accepted)
+                        continue;
+                    if (filter == "pending" && friendStatus != FriendRequestStatus.Pending)
+                        continue;
+                }
 
-            var publicPosts = posts.Count(p => p.Visibility == BlogVisibility.Public);
-            result.Add(new UserDto
+                var publicPosts = posts.Count(p => p.Visibility == BlogVisibility.Public);
+                result.Add(new UserDto
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Avatar = user.Avatar,
+                    CreatedAt = user.CreatedAt,
+                    PostsCount = posts.Count(),
+                    FriendsCount = 0, // Will be calculated properly later
+                    PublicPostsCount = publicPosts,
+                    FriendStatus = friendStatus
+                });
+            }
+            catch (Exception ex)
             {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                Avatar = user.Avatar,
-                CreatedAt = user.CreatedAt,
-                PostsCount = posts.Count(),
-                FriendsCount = 0, // Will be calculated properly later
-                PublicPostsCount = publicPosts,
-                FriendStatus = friendStatus
-            });
+                // Log error but continue with other users
+                Console.WriteLine($"Error processing user {user.Id}: {ex.Message}");
+                // Add user with default values if post query fails
+                var friendRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(currentUserId, user.Id);
+                var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
+
+                FriendRequestStatus? friendStatus = null;
+                if (friendRequest != null)
+                {
+                    friendStatus = friendRequest.Status;
+                }
+                else if (reverseRequest != null)
+                {
+                    friendStatus = reverseRequest.Status;
+                }
+
+                // Apply filter
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    if (filter == "friends" && friendStatus != FriendRequestStatus.Accepted)
+                        continue;
+                    if (filter == "not_friends" && friendStatus == FriendRequestStatus.Accepted)
+                        continue;
+                    if (filter == "pending" && friendStatus != FriendRequestStatus.Pending)
+                        continue;
+                }
+
+                result.Add(new UserDto
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Avatar = user.Avatar,
+                    CreatedAt = user.CreatedAt,
+                    PostsCount = 0,
+                    FriendsCount = 0,
+                    PublicPostsCount = 0,
+                    FriendStatus = friendStatus
+                });
+            }
         }
 
         return result;
