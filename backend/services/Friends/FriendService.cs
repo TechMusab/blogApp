@@ -240,13 +240,8 @@ public class FriendService : IFriendService
 
     public async Task<IEnumerable<UserDto>> GetAllUsersAsync(int currentUserId, string? search = null, string? filter = null)
     {
-        Console.WriteLine($"[GetAllUsersAsync] currentUserId: {currentUserId}, search: '{search}', filter: '{filter}'");
-        
         var allUsers = await _userRepository.GetAllAsync();
-        Console.WriteLine($"[GetAllUsersAsync] Total users in DB: {allUsers.Count()}");
-        
         var users = allUsers.Where(u => u.Id != currentUserId).ToList();
-        Console.WriteLine($"[GetAllUsersAsync] Users excluding current: {users.Count()}");
 
         // Apply search filter
         if (!string.IsNullOrWhiteSpace(search))
@@ -255,18 +250,14 @@ public class FriendService : IFriendService
                 u.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                 u.Email.Contains(search, StringComparison.OrdinalIgnoreCase)
             ).ToList();
-            Console.WriteLine($"[GetAllUsersAsync] Users after search: {users.Count()}");
         }
 
         var result = new List<UserDto>();
         foreach (var user in users)
         {
-            Console.WriteLine($"[GetAllUsersAsync] Processing user {user.Id}: {user.Name}");
-            
             try
             {
                 var posts = await _postRepository.GetByAuthorIdAsync(user.Id);
-                Console.WriteLine($"[GetAllUsersAsync] User {user.Id} has {posts.Count()} posts");
                 
                 var friendRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(currentUserId, user.Id);
                 var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
@@ -275,35 +266,25 @@ public class FriendService : IFriendService
                 if (friendRequest != null)
                 {
                     friendStatus = friendRequest.Status;
-                    Console.WriteLine($"[GetAllUsersAsync] User {user.Id} friendStatus (direct): {friendStatus}");
                 }
                 else if (reverseRequest != null)
                 {
                     friendStatus = reverseRequest.Status;
-                    Console.WriteLine($"[GetAllUsersAsync] User {user.Id} friendStatus (reverse): {friendStatus}");
-                }
-                else
-                {
-                    Console.WriteLine($"[GetAllUsersAsync] User {user.Id} friendStatus: null");
                 }
 
                 // Apply filter
                 if (!string.IsNullOrWhiteSpace(filter))
                 {
-                    Console.WriteLine($"[GetAllUsersAsync] Applying filter '{filter}' for user {user.Id}");
                     if (filter == "friends" && friendStatus != FriendRequestStatus.Accepted)
                     {
-                        Console.WriteLine($"[GetAllUsersAsync] User {user.Id} skipped (not friends)");
                         continue;
                     }
                     if (filter == "not_friends" && friendStatus == FriendRequestStatus.Accepted)
                     {
-                        Console.WriteLine($"[GetAllUsersAsync] User {user.Id} skipped (is friend)");
                         continue;
                     }
                     if (filter == "pending" && friendStatus != FriendRequestStatus.Pending)
                     {
-                        Console.WriteLine($"[GetAllUsersAsync] User {user.Id} skipped (not pending)");
                         continue;
                     }
                 }
@@ -321,14 +302,10 @@ public class FriendService : IFriendService
                     PublicPostsCount = publicPosts,
                     FriendStatus = friendStatus
                 });
-                Console.WriteLine($"[GetAllUsersAsync] User {user.Id} added to result");
             }
             catch (Exception ex)
             {
                 // Log error but continue with other users
-                Console.WriteLine($"[GetAllUsersAsync] Error processing user {user.Id}: {ex.Message}");
-                Console.WriteLine($"[GetAllUsersAsync] Stack trace: {ex.StackTrace}");
-                
                 // Add user with default values if post query fails
                 var friendRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(currentUserId, user.Id);
                 var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
@@ -366,11 +343,9 @@ public class FriendService : IFriendService
                     PublicPostsCount = 0,
                     FriendStatus = friendStatus
                 });
-                Console.WriteLine($"[GetAllUsersAsync] User {user.Id} added to result (error fallback)");
             }
         }
 
-        Console.WriteLine($"[GetAllUsersAsync] Final result count: {result.Count()}");
         return result;
     }
 
