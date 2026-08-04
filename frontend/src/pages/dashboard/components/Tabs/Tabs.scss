@@ -18,6 +18,12 @@
     transition: all 200ms ease;
     display: flex;
     align-items: center;
+    gap: 6px;
+
+    &__icon {
+      display: flex;
+      align-items: center;
+    }
 
     &--active {
       background: var(--surface-hover);

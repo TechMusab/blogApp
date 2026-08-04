@@ -23,10 +23,11 @@ public class FriendRequestRepository : IFriendRequestRepository
 
     public async Task<FriendRequest?> GetBySenderAndReceiverAsync(int senderId, int receiverId)
     {
-        return await _context.FriendRequests
+        var request = await _context.FriendRequests
             .Include(fr => fr.Sender)
             .Include(fr => fr.Receiver)
             .FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+        return request;
     }
 
     public async Task<IEnumerable<FriendRequest>> GetIncomingRequestsAsync(int userId)

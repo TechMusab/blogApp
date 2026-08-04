@@ -54,19 +54,19 @@ export const FriendsService = {
   },
 
   async acceptFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
-    return request<FriendRequestResponse>(`/friends/accept/${requestId}`, {
+    return request<FriendRequestResponse>(`/friends/request/accept/${requestId}`, {
       method: 'POST',
     }, token ?? undefined);
   },
 
   async rejectFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
-    return request<FriendRequestResponse>(`/friends/reject/${requestId}`, {
+    return request<FriendRequestResponse>(`/friends/request/reject/${requestId}`, {
       method: 'POST',
     }, token ?? undefined);
   },
 
   async cancelFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
-    return request<FriendRequestResponse>(`/friends/cancel/${requestId}`, {
+    return request<FriendRequestResponse>(`/friends/request/cancel/${requestId}`, {
       method: 'POST',
     }, token ?? undefined);
   },

@@ -36,6 +36,8 @@ export type Post = {
   paragraphs?: string[];
   commentsList: Comment[];
   visibility: BlogVisibility;
+  authorFriendStatus?: FriendRequestStatus;
+  authorFriendRequestDirection?: 'sent' | 'received';
 };
 
 export type User = {

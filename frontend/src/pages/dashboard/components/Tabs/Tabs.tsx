@@ -3,7 +3,7 @@ import './Tabs.scss';
 import { memo } from 'react';
 
 type TabsProps = {
-  tabs: Array<{ id: string; label: string }>;
+  tabs: Array<{ id: string; label: string; icon?: React.ReactNode }>;
   activeTab: string;
   onChange: (id: string) => void;
 };
@@ -17,6 +17,7 @@ export const Tabs = memo(function Tabs({ tabs, activeTab, onChange }: TabsProps)
           className={`tabs__item ${activeTab === tab.id ? 'tabs__item--active' : ''}`}
           onClick={() => onChange(tab.id)}
         >
+          {tab.icon && <span className="tabs__icon">{tab.icon}</span>}
           {tab.label}
         </button>
       ))}

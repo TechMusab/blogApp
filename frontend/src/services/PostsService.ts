@@ -22,8 +22,13 @@ type ToggleResponse = {
 };
 
 export const PostsService = {
-  getPosts: (pageNumber = 1, pageSize = 10) =>
-    request<PagedResult<Post>>(`/posts?pageNumber=${pageNumber}&pageSize=${pageSize}`),
+  getPosts: (pageNumber = 1, pageSize = 10, token?: string) =>
+    request<PagedResult<Post>>(`/posts?pageNumber=${pageNumber}&pageSize=${pageSize}`, {}, token),
+  getPost: (postId: string, token?: string) => {
+    return request<Post>(`/posts/${postId}`, {}, token);
+  },
+  searchPosts: (query: string, token?: string) =>
+    request<Post[]>(`/posts/search?q=${encodeURIComponent(query)}`, {}, token),
   createPost: (body: CreatePostRequest, token: string) =>
     request<Post>('/posts', { method: 'POST', body: JSON.stringify(body) }, token),
   toggleLike: (postId: string, token: string) =>

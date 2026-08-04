@@ -4,7 +4,8 @@ import type { RootState } from '../store';
 const selectPosts = (state: RootState) => state.posts?.posts ?? [];
 const selectQuery = (state: RootState) => state.ui.searchQuery;
 const selectCategory = (state: RootState) => state.ui.activeCategory;
-const selectPaginationState = (state: RootState) =>
+
+export const selectPaginationState = (state: RootState) =>
   state.posts?.pagination ?? {
     totalCount: 0,
     pageNumber: 1,
@@ -61,5 +62,3 @@ export const selectCategories = createSelector([selectPosts], (posts) => {
     ...categories.map((name) => ({ name, count: counts.get(name) ?? 0 })),
   ];
 });
-
-export const selectPagination = createSelector([selectPaginationState], (pagination) => pagination);

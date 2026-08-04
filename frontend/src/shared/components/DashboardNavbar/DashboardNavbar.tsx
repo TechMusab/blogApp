@@ -3,6 +3,7 @@ import './DashboardNavbar.scss';
 import { memo, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Search, Users, Mail, Bookmark, Menu, Pen, Settings, LogOut } from 'lucide-react';
 import { Dropdown } from '../Dropdown';
 import { ThemeToggle } from '../ThemeToggle';
 import { Avatar } from '../Avatar';
@@ -59,7 +60,7 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
       </div>
       <div className="dashboard__navbar-right">
         <button type="button" className="dashboard__write-btn" onClick={goToCreate}>
-          <span aria-hidden="true">✎</span>Write
+          <Pen size={16} aria-hidden="true" />Write
         </button>
         <ThemeToggle />
         <div className="dashboard__profile-menu">
@@ -92,15 +93,15 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
               </div>
             }
             items={[
-              { label: 'Discover People', icon: '👥', onClick: goToPeople },
-              { label: 'Friends', icon: '👤', onClick: goToFriends },
-              { label: 'Friend Requests', icon: '📨', onClick: goToFriendRequests },
-              { label: 'Saved posts', icon: '▱', onClick: goToSaved },
-              { label: 'Your posts', icon: '☰', onClick: goToYourPosts },
-              { label: 'Write a post', icon: '✎', onClick: goToCreate },
-              { label: 'Account settings', icon: '⚙', onClick: goToSettings },
+              { label: 'Discover People', icon: <Search size={18} />, onClick: goToPeople },
+              { label: 'Friends', icon: <Users size={18} />, onClick: goToFriends },
+              { label: 'Friend Requests', icon: <Mail size={18} />, onClick: goToFriendRequests },
+              { label: 'Saved posts', icon: <Bookmark size={18} />, onClick: goToSaved },
+              { label: 'Your posts', icon: <Menu size={18} />, onClick: goToYourPosts },
+              { label: 'Write a post', icon: <Pen size={18} />, onClick: goToCreate },
+              { label: 'Account settings', icon: <Settings size={18} />, onClick: goToSettings },
             ]}
-            footerItem={{ label: 'Sign out', icon: '⇥', danger: true, onClick: handleLogout }}
+            footerItem={{ label: 'Sign out', icon: <LogOut size={18} />, danger: true, onClick: handleLogout }}
           />
         </div>
       </div>

@@ -23,6 +23,7 @@ public class CreatePostController : BaseController
     public async Task<ActionResult<PostDto>> CreatePost(CreatePostRequest request)
     {
         var userId = GetCurrentUserId();
+        
         if (userId is null)
         {
             return Unauthorized();

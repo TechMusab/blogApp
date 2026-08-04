@@ -65,12 +65,12 @@ public class ResendEmailSender : IEmailSender
         catch (ResendException ex)
         {
             _logger.LogError(ex, "Resend API error when sending email to {Email}: {Message}", email, ex.Message);
-            throw new InvalidOperationException($"Failed to send email via Resend: {ex.Message}", ex);
+            throw new InvalidOperationException("Failed to send verification email. Please try again.", ex);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unexpected error when sending email to {Email}: {Message}", email, ex.Message);
-            throw new InvalidOperationException($"Failed to send email: {ex.Message}", ex);
+            throw new InvalidOperationException("Failed to send verification email. Please try again.", ex);
         }
     }
 }

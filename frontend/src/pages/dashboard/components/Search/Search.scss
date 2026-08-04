@@ -24,9 +24,8 @@
   &__icon {
     margin-right: 12px;
     color: #8d8985;
-    font-size: 25px;
-    line-height: 1;
-    transform: rotate(-20deg);
+    display: flex;
+    align-items: center;
   }
 
   input {
@@ -50,8 +49,8 @@
     padding: 4px;
     background: transparent;
     color: #918d87;
-    font-size: 23px;
-    line-height: 1;
+    display: flex;
+    align-items: center;
     cursor: pointer;
 
     &:hover {

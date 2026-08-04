@@ -58,6 +58,54 @@ $color-text: $color-white;
     margin-top: 5px;
   }
 
+  &__friend-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms ease;
+
+    &--primary {
+      background: $color-accent;
+      color: $color-white;
+
+      &:hover {
+        filter: brightness(0.9);
+      }
+    }
+
+    &--secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: $color-text;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    &--danger {
+      background: rgba(255, 59, 48, 0.1);
+      color: #ff3b30;
+      border: 1px solid rgba(255, 59, 48, 0.3);
+
+      &:hover {
+        background: rgba(255, 59, 48, 0.2);
+      }
+    }
+  }
+
+  &__friend-button-group {
+    display: flex;
+    gap: 8px;
+  }
+
   &__avatar {
     // Avatar component handles styling internally
     flex-shrink: 0;

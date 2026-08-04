@@ -13,12 +13,18 @@ Folio is a blog platform where users can discover, create, and discuss content. 
 - **Read & Engage**: Full article reading experience with like and comment features
 - **Save for Later**: Bookmark posts to read later in your saved posts section
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **User Discovery**: Find and connect with other writers through the people discovery system
+- **Friend System**: Send, accept, reject, and cancel friend requests to build your network
+- **Social Engagement**: View posts from friends and manage your connections
 
 ### For Writers
 - **Create Posts**: Rich text editor for writing blog posts with cover images
 - **Manage Content**: View and manage all your published posts
 - **User Profiles**: Customizable profiles with avatar uploads
 - **Comment System**: Engage with readers through comments on your posts
+- **Post Visibility**: Control who can see your posts (public, friends-only, private)
+- **Friend Requests**: Manage incoming and outgoing friend requests
+- **Network Building**: Grow your audience by connecting with other writers
 
 ### Behind the Scenes
 - **JWT Authentication**: Secure token-based authentication
@@ -44,6 +50,8 @@ Folio is a blog platform where users can discover, create, and discuss content. 
 - **Cloudinary** for image hosting in production
 - **Resend** for email services (migrated from Brevo which had some issues)
 - **Swagger/OpenAPI** for API documentation
+- **Feature-Based Controllers** - Each controller handles a single responsibility for better maintainability
+- **Service Layer Architecture** - Dedicated services for each feature following SOLID principles
 
 ### DevOps & Deployment
 - **Docker** for containerization
@@ -98,6 +106,61 @@ dotnet run
 
 The API will run on `http://localhost:8080`
 
+## 🌐 API Endpoints
+
+### Friend System
+- `POST /api/friends/request` - Send a friend request
+- `POST /api/friends/request/accept/{id}` - Accept a friend request
+- `POST /api/friends/request/reject/{id}` - Reject a friend request
+- `POST /api/friends/request/cancel/{id}` - Cancel a friend request
+- `GET /api/friends` - Get list of friends
+- `DELETE /api/friends/remove/{friendId}` - Remove a friend
+- `GET /api/friends/requests/incoming` - Get incoming friend requests
+- `GET /api/friends/requests/outgoing` - Get outgoing friend requests
+
+### Posts
+- `GET /api/posts` - Get all posts with filtering and pagination
+- `GET /api/posts/{id}` - Get a specific post
+- `POST /api/posts` - Create a new post
+- `PUT /api/posts/{id}` - Update a post
+- `DELETE /api/posts/{id}` - Delete a post
+- `GET /api/posts/search` - Search posts
+- `GET /api/posts/your` - Get current user's posts
+
+### Authentication
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/verify-registration` - Verify registration with OTP
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/google` - Google OAuth login
+
+## 🏗️ Architecture
+
+### Feature-Based Controller Design
+The backend follows a feature-based controller architecture where each controller handles a single responsibility:
+
+**Friends Module (8 Controllers):**
+- `SendFriendRequestController` - Handles sending friend requests
+- `AcceptFriendRequestController` - Handles accepting friend requests
+- `RejectFriendRequestController` - Handles rejecting friend requests
+- `CancelFriendRequestController` - Handles canceling friend requests
+- `GetFriendsController` - Handles retrieving friends list
+- `RemoveFriendController` - Handles removing friends
+- `GetIncomingRequestsController` - Handles retrieving incoming requests
+- `GetOutgoingRequestsController` - Handles retrieving outgoing requests
+
+**Benefits:**
+- Single Responsibility Principle - each controller has one job
+- Better testability - easier to unit test individual controllers
+- Improved maintainability - changes to one feature don't affect others
+- Clear API structure - logical endpoint grouping
+
+### Service Layer
+Each controller has a corresponding service that implements business logic:
+- Dedicated interfaces for each service
+- Dependency injection for loose coupling
+- Repository pattern for data access
+- Clean separation of concerns
+
 ## 🗄️ Database Setup
 
 I initially used SQL Server, but migrating to PostgreSQL made deployment much easier, especially with Neon's managed service. Here's how to set up the database:
@@ -134,6 +197,8 @@ This project has taught me a lot:
 - **Database Migrations**: Entity Framework Core migrations are powerful, but I learned the hard way to be careful with schema changes in production.
 - **Email Services**: Started with Brevo, but had reliability issues. Resend has been much more stable for transactional emails.
 - **Deployment**: Moving from local development to cloud deployment taught me about environment variables, CORS, and the importance of proper configuration management.
+- **Architecture Refactoring**: Recently refactored the monolithic FriendsController into 8 feature-based controllers with dedicated services, following the Single Responsibility Principle. This has made the codebase much more maintainable and testable.
+- **Friend System Implementation**: Built a complete friend request system with send, accept, reject, cancel, and remove functionality, along with user discovery and filtering capabilities.
 
 ## 🔧 Common Issues & Solutions
 

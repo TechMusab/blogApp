@@ -53,11 +53,15 @@ export const PeoplePage = memo(function PeoplePage() {
   const getRequestId = (userId: number): number | null => {
     // Check incoming requests (received from this user)
     const incoming = incomingRequests.find(r => r.senderId === userId);
-    if (incoming) return incoming.id;
+    if (incoming) {
+      return incoming.id;
+    }
     
     // Check outgoing requests (sent to this user)
     const outgoing = outgoingRequests.find(r => r.receiverId === userId);
-    if (outgoing) return outgoing.id;
+    if (outgoing) {
+      return outgoing.id;
+    }
     
     return null;
   };
@@ -84,7 +88,7 @@ export const PeoplePage = memo(function PeoplePage() {
       }
       fetchUsers();
     } catch (error) {
-      console.error('Friend action failed:', error);
+      console.error('[PeoplePage] Friend action failed:', error);
       dispatch(addToast({ message: 'Action failed. Please try again.', type: 'error' }));
     }
   };

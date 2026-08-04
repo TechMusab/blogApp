@@ -1,6 +1,7 @@
 import './DashboardGreeting.scss';
 
 import { memo } from 'react';
+import { Pen } from 'lucide-react';
 
 type DashboardGreetingProps = {
   userName: string;
@@ -25,7 +26,7 @@ export const DashboardGreeting = memo(function DashboardGreeting({
         <p className="dashboard__subtitle">{postCount} posts from the community.</p>
       </div>
       <button className="dashboard__new-post-btn" onClick={onNewPost}>
-        <span className="dashboard__new-post-icon">✎</span>
+        <span className="dashboard__new-post-icon"><Pen size={18} /></span>
         New post
       </button>
     </section>

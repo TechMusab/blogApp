@@ -61,7 +61,7 @@ const App = () => {
   const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {
-    PostsService.getPosts(1, 10)
+    PostsService.getPosts(1, 10, token || undefined)
       .then((pagedResult) => dispatch(setPagedPosts(pagedResult)))
       .catch(() =>
         dispatch(
@@ -76,7 +76,7 @@ const App = () => {
           })
         )
       );
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   useEffect(() => {
     if (!token) {

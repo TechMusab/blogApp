@@ -15,6 +15,6 @@ public class SearchPostService : ISearchPostService
     public async Task<IEnumerable<PostDto>> SearchPostsAsync(string query)
     {
         var posts = await _postRepository.SearchAsync(query);
-        return posts.Select(PostMapper.ToPostDto);
+        return posts.Select(post => PostMapper.ToPostDto(post));
     }
 }

@@ -2,6 +2,7 @@ import './Search.scss';
 
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
+import { Search, X } from 'lucide-react';
 import type { Post } from '../../../../types';
 import { SearchDropdown } from './components/SearchDropdown';
 
@@ -82,7 +83,7 @@ export const SearchInput = memo(function SearchInput({
     >
       <div className="search__field">
         <span className="search__icon" aria-hidden="true">
-          ⌕
+          <Search size={18} />
         </span>
         <input
           value={value}
@@ -101,7 +102,7 @@ export const SearchInput = memo(function SearchInput({
             onClick={() => updateValue('')}
             aria-label="Clear search"
           >
-            ×
+            <X size={16} />
           </button>
         )}
       </div>

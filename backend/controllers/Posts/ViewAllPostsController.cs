@@ -18,6 +18,7 @@ public class ViewAllPostsController : BaseController
         _viewAllPostsService = viewAllPostsService;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<PagedResult<PostDto>>> GetAllPosts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {

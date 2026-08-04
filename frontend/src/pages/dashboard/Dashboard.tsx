@@ -1,13 +1,13 @@
 import './Dashboard.scss';
 
-import { memo, useCallback, useMemo, useState, useEffect } from 'react';
+import { memo, useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, Calendar, Flame } from 'lucide-react';
 import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { SearchInput } from './components/Search';
 import { FilterChip } from './components/FilterChip';
 import { DashboardGreeting } from './components/DashboardGreeting';
-import { DashboardStats } from './components/DashboardStats';
 import { PostCard } from './components/PostCard';
 import { Tabs } from './components/Tabs';
 import type { RootState } from '../../redux/store';
@@ -15,7 +15,7 @@ import {
   selectCategories,
   selectFilteredPosts,
   selectSearchResults,
-  selectPagination,
+  selectPaginationState,
 } from '../../redux/selectors/postsSelectors';
 import { setActiveCategory, setActiveTab, setSearchQuery } from '../../redux/slices/ui/uiSlice';
 import { setPagedPosts } from '../../redux/slices/posts/postsSlice';
@@ -25,12 +25,15 @@ export const DashboardPage = memo(function DashboardPage() {
   const posts = useSelector(selectFilteredPosts);
   const searchResults = useSelector(selectSearchResults);
   const categories = useSelector(selectCategories);
-  const pagination = useSelector(selectPagination);
+  const pagination = useSelector(selectPaginationState);
   const { activeTab, activeCategory, searchQuery } = useSelector((state: RootState) => state.ui);
   const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
+  const hasFetchedPosts = useRef(false);
   const displayedPosts = useMemo(
     () => (activeTab === 'popular' ? [...posts].sort((a, b) => b.likes - a.likes) : posts),
     [posts, activeTab]
@@ -44,9 +47,11 @@ export const DashboardPage = memo(function DashboardPage() {
   const handlePageChange = useCallback(
     (newPage: number) => {
       setCurrentPage(newPage);
-      PostsService.getPosts(newPage, 10)
-        .then((pagedResult) => dispatch(setPagedPosts(pagedResult)))
-        .catch(() =>
+      PostsService.getPosts(newPage, 10, token || undefined)
+        .then((pagedResult) => {
+          dispatch(setPagedPosts(pagedResult));
+        })
+        .catch(() => {
           dispatch(
             setPagedPosts({
               items: [],
@@ -57,15 +62,48 @@ export const DashboardPage = memo(function DashboardPage() {
               hasPrevious: false,
               hasNext: false,
             })
-          )
-        );
+          );
+        });
     },
-    [dispatch]
+    [dispatch, token, currentPage]
   );
 
   useEffect(() => {
     setCurrentPage(pagination.pageNumber);
   }, [pagination.pageNumber]);
+
+  // Refresh posts when navigating back to dashboard
+  useEffect(() => {
+    // Only fetch posts if we're actually on the dashboard page and haven't fetched yet
+    if (token && location.pathname === '/dashboard' && !hasFetchedPosts.current) {
+      hasFetchedPosts.current = true;
+      
+      PostsService.getPosts(1, 10, token)
+        .then((pagedResult) => {
+          dispatch(setPagedPosts(pagedResult));
+        })
+        .catch(() => {
+          dispatch(
+            setPagedPosts({
+              items: [],
+              totalCount: 0,
+              pageNumber: 1,
+              pageSize: 10,
+              totalPages: 0,
+              hasPrevious: false,
+              hasNext: false,
+            })
+          );
+        });
+    }
+  }, [location.pathname, token, dispatch]);
+
+  // Reset fetch flag when navigating away from dashboard
+  useEffect(() => {
+    if (location.pathname !== '/dashboard') {
+      hasFetchedPosts.current = false;
+    }
+  }, [location.pathname]);
 
   return (
     <div className="dashboard">
@@ -76,7 +114,6 @@ export const DashboardPage = memo(function DashboardPage() {
           postCount={pagination.totalCount}
           onNewPost={() => navigate('/create')}
         />
-        <DashboardStats />
         <div className="dashboard__divider" />
         <section className="dashboard__discovery" aria-label="Find posts">
           <SearchInput
@@ -100,8 +137,8 @@ export const DashboardPage = memo(function DashboardPage() {
         <section className="dashboard__filter-section">
           <Tabs
             tabs={[
-              { id: 'latest', label: 'Latest' },
-              { id: 'popular', label: 'Popular' },
+              { id: 'latest', label: 'Latest', icon: <Calendar size={16} /> },
+              { id: 'popular', label: 'Popular', icon: <Flame size={16} /> },
             ]}
             activeTab={activeTab}
             onChange={(value) => dispatch(setActiveTab(value as 'latest' | 'popular'))}
@@ -119,6 +156,7 @@ export const DashboardPage = memo(function DashboardPage() {
               disabled={!pagination.hasPrevious}
               onClick={() => handlePageChange(currentPage - 1)}
             >
+              <ChevronLeft size={16} />
               Previous
             </button>
             <span className="pagination__info">
@@ -130,6 +168,7 @@ export const DashboardPage = memo(function DashboardPage() {
               onClick={() => handlePageChange(currentPage + 1)}
             >
               Next
+              <ChevronRight size={16} />
             </button>
           </div>
         )}

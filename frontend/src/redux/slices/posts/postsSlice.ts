@@ -34,17 +34,37 @@ const postsSlice = createSlice({
       pagination: initialState.pagination,
     }),
 
-    setPagedPosts: (_, action: PayloadAction<PagedResult<Post>>) => ({
-      posts: action.payload.items,
-      pagination: {
+    setPagedPosts: (state, action: PayloadAction<PagedResult<Post>>) => {
+      // Merge with existing posts to preserve friend status
+      const mergedPosts = action.payload.items.map(newPost => {
+        const existingPost = state.posts.find(p => p.id === newPost.id);
+        
+        if (existingPost) {
+          // Preserve friend status from existing post if it has more detailed data
+          if (existingPost.authorFriendStatus !== null && existingPost.authorFriendStatus !== undefined) {
+            return {
+              ...newPost,
+              authorFriendStatus: existingPost.authorFriendStatus,
+              authorFriendRequestDirection: existingPost.authorFriendRequestDirection
+            };
+          } else {
+            return newPost;
+          }
+        }
+        
+        return newPost;
+      });
+      
+      state.posts = mergedPosts;
+      state.pagination = {
         totalCount: action.payload.totalCount,
         pageNumber: action.payload.pageNumber,
         pageSize: action.payload.pageSize,
         totalPages: action.payload.totalPages,
         hasPrevious: action.payload.hasPrevious,
         hasNext: action.payload.hasNext,
-      },
-    }),
+      };
+    },
 
     addPost: (state, action: PayloadAction<Post>) => {
       state.posts.unshift(action.payload);
@@ -87,8 +107,17 @@ const postsSlice = createSlice({
         post.comments += 1;
       }
     },
+
+    updatePost: (state, action: PayloadAction<Post>) => {
+      const index = state.posts.findIndex((p) => p.id === action.payload.id);
+      if (index >= 0) {
+        state.posts[index] = action.payload;
+      } else {
+        state.posts.push(action.payload);
+      }
+    },
   },
 });
 
-export const { setPosts, setPagedPosts, addPost, toggleLike, addComment } = postsSlice.actions;
+export const { setPosts, setPagedPosts, addPost, toggleLike, addComment, updatePost } = postsSlice.actions;
 export default postsSlice.reducer;

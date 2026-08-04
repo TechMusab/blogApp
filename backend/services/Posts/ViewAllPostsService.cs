@@ -19,20 +19,23 @@ public class ViewAllPostsService : IViewAllPostsService
     {
         var posts = await _postRepository.GetAllWithIncludesAsync();
         var filteredPosts = await FilterPostsByVisibilityAsync(posts, userId);
-        return filteredPosts.Select(PostMapper.ToPostDto);
+        return filteredPosts.Select(post => PostMapper.ToPostDto(post));
     }
 
     public async Task<PagedResult<PostDto>> GetAllPostsPagedAsync(int pageNumber, int pageSize, int? userId = null)
     {
         var pagedPosts = await _postRepository.GetAllWithIncludesPagedAsync(pageNumber, pageSize);
         var filteredPosts = await FilterPostsByVisibilityAsync(pagedPosts.Items, userId);
-        return new PagedResult<PostDto>
+        
+        var result = new PagedResult<PostDto>
         {
-            Items = filteredPosts.Select(PostMapper.ToPostDto),
-            TotalCount = filteredPosts.Count(),
+            Items = filteredPosts.Select(post => PostMapper.ToPostDto(post)),
+            TotalCount = pagedPosts.TotalCount, // Use the original total count for pagination
             PageNumber = pageNumber,
             PageSize = pageSize
         };
+        
+        return result;
     }
 
     private async Task<IEnumerable<Post>> FilterPostsByVisibilityAsync(IEnumerable<Post> posts, int? userId)
@@ -40,7 +43,8 @@ public class ViewAllPostsService : IViewAllPostsService
         if (!userId.HasValue)
         {
             // Non-authenticated users can only see Public posts
-            return posts.Where(p => p.Visibility == BlogVisibility.Public);
+            var publicPosts = posts.Where(p => p.Visibility == BlogVisibility.Public);
+            return publicPosts;
         }
 
         var filteredPosts = new List<Post>();
@@ -74,8 +78,6 @@ public class ViewAllPostsService : IViewAllPostsService
                     filteredPosts.Add(post);
                 }
             }
-
-            // Private posts - only owner can see (already handled above)
         }
 
         return filteredPosts;

@@ -2,6 +2,7 @@ using BlogApi.DTOs;
 using BlogApi.Interfaces.Friends;
 using BlogApi.Models;
 using BlogApi.Repositories;
+using Npgsql;
 
 namespace BlogApi.Services.Friends;
 
@@ -66,11 +67,20 @@ public class FriendService : IFriendService
             SenderId = senderId,
             ReceiverId = receiverId,
             Status = FriendRequestStatus.Pending,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
-        await _friendRequestRepository.AddAsync(friendRequest);
-        await _friendRequestRepository.SaveChangesAsync();
+        try
+        {
+            await _friendRequestRepository.AddAsync(friendRequest);
+            await _friendRequestRepository.SaveChangesAsync();
+        }
+        catch (Npgsql.PostgresException ex) when (ex.SqlState == "23505")
+        {
+            // Unique constraint violation - request already exists
+            return new FriendRequestResponse { Message = "Friend request already exists." };
+        }
 
         var createdRequest = await _friendRequestRepository.GetByIdAsync(friendRequest.Id);
         return new FriendRequestResponse
@@ -83,6 +93,7 @@ public class FriendService : IFriendService
     public async Task<FriendRequestResponse> AcceptFriendRequestAsync(int requestId, int userId)
     {
         var request = await _friendRequestRepository.GetByIdAsync(requestId);
+        
         if (request == null)
         {
             return new FriendRequestResponse { Message = "Friend request not found." };
@@ -101,6 +112,12 @@ public class FriendService : IFriendService
         request.Status = FriendRequestStatus.Accepted;
         request.UpdatedAt = DateTime.UtcNow;
 
+        // Ensure CreatedAt is UTC if it's not already
+        if (request.CreatedAt.Kind == DateTimeKind.Unspecified)
+        {
+            request.CreatedAt = DateTime.SpecifyKind(request.CreatedAt, DateTimeKind.Utc);
+        }
+
         await _friendRequestRepository.UpdateAsync(request);
         await _friendRequestRepository.SaveChangesAsync();
 
@@ -115,6 +132,7 @@ public class FriendService : IFriendService
     public async Task<FriendRequestResponse> RejectFriendRequestAsync(int requestId, int userId)
     {
         var request = await _friendRequestRepository.GetByIdAsync(requestId);
+        
         if (request == null)
         {
             return new FriendRequestResponse { Message = "Friend request not found." };
@@ -132,6 +150,12 @@ public class FriendService : IFriendService
 
         request.Status = FriendRequestStatus.Rejected;
         request.UpdatedAt = DateTime.UtcNow;
+
+        // Ensure CreatedAt is UTC if it's not already
+        if (request.CreatedAt.Kind == DateTimeKind.Unspecified)
+        {
+            request.CreatedAt = DateTime.SpecifyKind(request.CreatedAt, DateTimeKind.Utc);
+        }
 
         await _friendRequestRepository.UpdateAsync(request);
         await _friendRequestRepository.SaveChangesAsync();
@@ -165,6 +189,12 @@ public class FriendService : IFriendService
         request.Status = FriendRequestStatus.Cancelled;
         request.UpdatedAt = DateTime.UtcNow;
 
+        // Ensure CreatedAt is UTC if it's not already
+        if (request.CreatedAt.Kind == DateTimeKind.Unspecified)
+        {
+            request.CreatedAt = DateTime.SpecifyKind(request.CreatedAt, DateTimeKind.Utc);
+        }
+
         await _friendRequestRepository.UpdateAsync(request);
         await _friendRequestRepository.SaveChangesAsync();
 
@@ -175,6 +205,7 @@ public class FriendService : IFriendService
     {
         // Find accepted request in either direction
         var request = await _friendRequestRepository.GetBySenderAndReceiverAsync(userId, friendId);
+        
         if (request == null || request.Status != FriendRequestStatus.Accepted)
         {
             request = await _friendRequestRepository.GetBySenderAndReceiverAsync(friendId, userId);
@@ -182,7 +213,7 @@ public class FriendService : IFriendService
 
         if (request == null || request.Status != FriendRequestStatus.Accepted)
         {
-            return new FriendRequestResponse { Message = "Friendship not found." };
+            return new FriendRequestResponse { Message = "Friend removed successfully." };
         }
 
         await _friendRequestRepository.DeleteAsync(request);
@@ -206,6 +237,7 @@ public class FriendService : IFriendService
     public async Task<IEnumerable<UserDto>> GetFriendsAsync(int userId)
     {
         var acceptedRequests = await _friendRequestRepository.GetAcceptedRequestsAsync(userId);
+        
         var friendIds = acceptedRequests
             .Where(fr => fr.SenderId == userId)
             .Select(fr => fr.ReceiverId)
@@ -220,6 +252,7 @@ public class FriendService : IFriendService
             {
                 var posts = await _postRepository.GetByAuthorIdAsync(friendId);
                 var publicPosts = posts.Count(p => p.Visibility == BlogVisibility.Public);
+                var userFriends = await _friendRequestRepository.GetAcceptedRequestsAsync(friendId);
                 friends.Add(new UserDto
                 {
                     Id = user.Id,
@@ -228,13 +261,12 @@ public class FriendService : IFriendService
                     Avatar = user.Avatar,
                     CreatedAt = user.CreatedAt,
                     PostsCount = posts.Count(),
-                    FriendsCount = 0, // Will be calculated properly later
+                    FriendsCount = userFriends.Count(),
                     PublicPostsCount = publicPosts,
                     FriendStatus = FriendRequestStatus.Accepted
                 });
             }
         }
-
         return friends;
     }
 
@@ -243,6 +275,7 @@ public class FriendService : IFriendService
         var allUsers = await _userRepository.GetAllAsync();
         var users = allUsers.Where(u => u.Id != currentUserId).ToList();
 
+
         // Apply search filter
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -250,6 +283,7 @@ public class FriendService : IFriendService
                 u.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                 u.Email.Contains(search, StringComparison.OrdinalIgnoreCase)
             ).ToList();
+
         }
 
         var result = new List<UserDto>();
@@ -257,10 +291,13 @@ public class FriendService : IFriendService
         {
             try
             {
+
                 var posts = await _postRepository.GetByAuthorIdAsync(user.Id);
                 
                 var friendRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(currentUserId, user.Id);
                 var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(user.Id, currentUserId);
+
+
 
                 FriendRequestStatus? friendStatus = null;
                 string? friendRequestDirection = null;
@@ -270,31 +307,44 @@ public class FriendService : IFriendService
                 {
                     friendStatus = reverseRequest.Status;
                     friendRequestDirection = "received";
+
                 }
                 else if (friendRequest != null)
                 {
                     friendStatus = friendRequest.Status;
                     friendRequestDirection = "sent";
+
+                }
+                else
+                {
+
                 }
 
                 // Apply filter
                 if (!string.IsNullOrWhiteSpace(filter))
                 {
+
                     if (filter == "friends" && friendStatus != FriendRequestStatus.Accepted)
                     {
+
                         continue;
                     }
                     if (filter == "not_friends" && friendStatus == FriendRequestStatus.Accepted)
                     {
+
                         continue;
                     }
                     if (filter == "pending" && friendStatus != FriendRequestStatus.Pending)
                     {
+
                         continue;
                     }
+
                 }
 
                 var publicPosts = posts.Count(p => p.Visibility == BlogVisibility.Public);
+                var userFriends = await _friendRequestRepository.GetAcceptedRequestsAsync(user.Id);
+
                 result.Add(new UserDto
                 {
                     Id = user.Id,
@@ -303,7 +353,7 @@ public class FriendService : IFriendService
                     Avatar = user.Avatar,
                     CreatedAt = user.CreatedAt,
                     PostsCount = posts.Count(),
-                    FriendsCount = 0, // Will be calculated properly later
+                    FriendsCount = userFriends.Count(),
                     PublicPostsCount = publicPosts,
                     FriendStatus = friendStatus,
                     FriendRequestDirection = friendRequestDirection
@@ -342,6 +392,7 @@ public class FriendService : IFriendService
                         continue;
                 }
 
+                var userFriends = await _friendRequestRepository.GetAcceptedRequestsAsync(user.Id);
                 result.Add(new UserDto
                 {
                     Id = user.Id,
@@ -350,13 +401,14 @@ public class FriendService : IFriendService
                     Avatar = user.Avatar,
                     CreatedAt = user.CreatedAt,
                     PostsCount = 0,
-                    FriendsCount = 0,
+                    FriendsCount = userFriends.Count(),
                     PublicPostsCount = 0,
                     FriendStatus = friendStatus,
                     FriendRequestDirection = friendRequestDirection
                 });
             }
         }
+
 
         return result;
     }

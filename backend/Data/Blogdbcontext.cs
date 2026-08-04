@@ -80,6 +80,12 @@ public class BlogDbContext : DbContext
         {
             entity.HasKey(fr => fr.Id);
 
+            entity.Property(fr => fr.CreatedAt)
+                .HasDefaultValueSql("NOW()");
+
+            entity.Property(fr => fr.UpdatedAt)
+                .HasDefaultValueSql("NOW()");
+
             entity.HasOne(fr => fr.Sender)
                 .WithMany(u => u.SentFriendRequests)
                 .HasForeignKey(fr => fr.SenderId)

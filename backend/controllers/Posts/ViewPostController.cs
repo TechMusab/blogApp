@@ -18,6 +18,7 @@ public class ViewPostController : BaseController
         _viewPostService = viewPostService;
     }
 
+    [Authorize]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PostDto>> GetPost(int id)
     {

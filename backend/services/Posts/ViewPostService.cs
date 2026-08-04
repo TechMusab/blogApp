@@ -29,7 +29,27 @@ public class ViewPostService : IViewPostService
             return null;
         }
 
-        return PostMapper.ToPostDto(post);
+        // Get friend status if userId is provided and not the author
+        FriendRequestStatus? friendStatus = null;
+        string? friendRequestDirection = null;
+        if (userId.HasValue && post.UserId != userId.Value)
+        {
+            var friendRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(userId.Value, post.UserId);
+            var reverseRequest = await _friendRequestRepository.GetBySenderAndReceiverAsync(post.UserId, userId.Value);
+
+            // Prioritize reverse request (incoming) over direct request (outgoing)
+            if (reverseRequest != null)
+            {
+                friendStatus = reverseRequest.Status;
+                friendRequestDirection = "received";
+            }
+            else if (friendRequest != null)
+            {
+                friendStatus = friendRequest.Status;
+                friendRequestDirection = "sent";
+            }
+        }
+        return PostMapper.ToPostDto(post, friendStatus, friendRequestDirection);
     }
 
     private async Task<bool> CanUserViewPostAsync(Post post, int? userId)

@@ -100,8 +100,14 @@ builder.Services.AddScoped<ILikePostService, LikePostService>();
 builder.Services.AddScoped<ISearchPostService, SearchPostService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
-builder.Services.AddScoped<IDashboardService, DashboardService>();
-builder.Services.AddScoped<IFriendService, FriendService>();
+builder.Services.AddScoped<ISendFriendRequestService, SendFriendRequestService>();
+builder.Services.AddScoped<IAcceptFriendRequestService, AcceptFriendRequestService>();
+builder.Services.AddScoped<IRejectFriendRequestService, RejectFriendRequestService>();
+builder.Services.AddScoped<ICancelFriendRequestService, CancelFriendRequestService>();
+builder.Services.AddScoped<IRemoveFriendService, RemoveFriendService>();
+builder.Services.AddScoped<IGetFriendsService, GetFriendsService>();
+builder.Services.AddScoped<IGetIncomingRequestsService, GetIncomingRequestsService>();
+builder.Services.AddScoped<IGetOutgoingRequestsService, GetOutgoingRequestsService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ISavedPostRepository, SavedPostRepository>();
@@ -131,7 +137,11 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<BlogDbContext>((serviceProvider, options) =>
 {
     var dbConfig = serviceProvider.GetRequiredService<IDbConfiguration>();
-    options.UseNpgsql(dbConfig.GetConnectionString());
+    options.UseNpgsql(dbConfig.GetConnectionString(), npgsqlOptions =>
+    {
+        npgsqlOptions.EnableRetryOnFailure();
+        npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+    });
 });
 
 // Validate required environment variables in production

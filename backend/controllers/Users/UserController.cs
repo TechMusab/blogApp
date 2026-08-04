@@ -15,15 +15,13 @@ public class UserController : BaseController
     private readonly IUserService _userService;
     private readonly IFriendService _friendService;
     private readonly IUserProfileService _userProfileService;
-    private readonly IDashboardService _dashboardService;
     private readonly ILogger<UserController> _logger;
 
-    public UserController(IUserService userService, IFriendService friendService, IUserProfileService userProfileService, IDashboardService dashboardService, ILogger<UserController> logger)
+    public UserController(IUserService userService, IFriendService friendService, IUserProfileService userProfileService, ILogger<UserController> logger)
     {
         _userService = userService;
         _friendService = friendService;
         _userProfileService = userProfileService;
-        _dashboardService = dashboardService;
         _logger = logger;
     }
 
@@ -123,17 +121,13 @@ public class UserController : BaseController
         [FromQuery] string? filter = null)
     {
         var userId = GetCurrentUserId();
-        Console.WriteLine($"[UserController.GetAllUsers] userId from token: {userId}");
-        Console.WriteLine($"[UserController.GetAllUsers] search: '{search}', filter: '{filter}'");
         
         if (userId is null)
         {
-            Console.WriteLine("[UserController.GetAllUsers] Unauthorized - no userId");
             return Unauthorized();
         }
 
         var users = await _friendService.GetAllUsersAsync(userId.Value, search, filter);
-        Console.WriteLine($"[UserController.GetAllUsers] Returning {users.Count()} users");
         return Ok(users);
     }
 
@@ -149,19 +143,5 @@ public class UserController : BaseController
         }
 
         return Ok(profile);
-    }
-
-    [Authorize]
-    [HttpGet("dashboard/stats")]
-    public async Task<ActionResult<DashboardStatsDto>> GetDashboardStats()
-    {
-        var userId = GetCurrentUserId();
-        if (userId is null)
-        {
-            return Unauthorized();
-        }
-
-        var stats = await _dashboardService.GetDashboardStatsAsync(userId.Value);
-        return Ok(stats);
     }
 }

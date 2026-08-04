@@ -1,10 +1,11 @@
 import './DropdownItem.scss';
 
 import { memo } from 'react';
+import type { ReactNode } from 'react';
 
 export type DropdownMenuItem = {
   label: string;
-  icon: string;
+  icon: ReactNode;
   danger?: boolean;
   onClick: () => void;
 };

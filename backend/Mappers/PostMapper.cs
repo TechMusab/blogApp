@@ -5,7 +5,7 @@ namespace BlogApi.Mappers;
 
 public static class PostMapper
 {
-    public static PostDto ToPostDto(Post post)
+    public static PostDto ToPostDto(Post post, FriendRequestStatus? authorFriendStatus = null, string? authorFriendRequestDirection = null)
     {
         return new PostDto
         {
@@ -28,7 +28,9 @@ public static class PostMapper
             Quote = post.Quote,
             Paragraphs = DeserializeOptional(post.ParagraphsJson),
             CommentsList = post.Comments.OrderBy(comment => comment.CreatedAt).Select(ToCommentDto).ToArray(),
-            Visibility = post.Visibility
+            Visibility = post.Visibility,
+            AuthorFriendStatus = authorFriendStatus,
+            AuthorFriendRequestDirection = authorFriendRequestDirection
         };
     }
 

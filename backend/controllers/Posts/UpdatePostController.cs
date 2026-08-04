@@ -23,6 +23,7 @@ public class UpdatePostController : BaseController
     public async Task<ActionResult<PostDto>> UpdatePost(int id, UpdatePostRequest request)
     {
         var userId = GetCurrentUserId();
+        
         if (userId is null)
         {
             return Unauthorized();

@@ -14,7 +14,7 @@ public class PostDto
     public string Category { get; set; } = string.Empty;
     public string[]? Tags { get; set; }
     public string AuthorId { get; set; } = string.Empty;
-    public string Author { get; set; } = string.Empty;
+    public string Author { get; set; } = string.Empty; 
     public string Avatar { get; set; } = string.Empty;
     public string Date { get; set; } = string.Empty;
     public string ReadTime { get; set; } = string.Empty;
@@ -26,6 +26,8 @@ public class PostDto
     public string[]? Paragraphs { get; set; }
     public CommentDto[] CommentsList { get; set; } = Array.Empty<CommentDto>();
     public BlogVisibility Visibility { get; set; } = BlogVisibility.Public;
+    public FriendRequestStatus? AuthorFriendStatus { get; set; }
+    public string? AuthorFriendRequestDirection { get; set; }
 }
 
 public class CommentDto

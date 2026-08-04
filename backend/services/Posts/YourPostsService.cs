@@ -15,6 +15,6 @@ public class YourPostsService : IYourPostsService
     public async Task<IEnumerable<PostDto>> GetUserPostsAsync(int userId)
     {
         var posts = await _postRepository.GetByAuthorIdWithIncludesAsync(userId);
-        return posts.Select(PostMapper.ToPostDto);
+        return posts.Select(post => PostMapper.ToPostDto(post));
     }
 }
