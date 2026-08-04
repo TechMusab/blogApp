@@ -309,7 +309,7 @@ public class FriendService : IFriendService
                     FriendRequestDirection = friendRequestDirection
                 });
             }
-            catch (Exception ex)
+            catch
             {
                 // Log error but continue with other users
                 // Add user with default values if post query fails
