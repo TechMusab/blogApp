@@ -2,7 +2,8 @@ import './UserCard.scss';
 
 import { memo } from 'react';
 import { Avatar } from '../../../../shared/components/Avatar';
-import type { UserProfile, FriendRequestStatus } from '../../../../types';
+import type { UserProfile } from '../../../../types';
+import { FriendRequestStatusValues } from '../../../../types';
 
 type UserCardProps = {
   user: UserProfile;
@@ -11,7 +12,7 @@ type UserCardProps = {
 
 export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCardProps) {
   const getFriendButton = () => {
-    if (user.friendStatus === FriendRequestStatus.Accepted) {
+    if (user.friendStatus === FriendRequestStatusValues.Accepted) {
       return (
         <button
           className="user-card__button user-card__button--danger"
@@ -22,7 +23,7 @@ export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCar
       );
     }
 
-    if (user.friendStatus === FriendRequestStatus.Pending) {
+    if (user.friendStatus === FriendRequestStatusValues.Pending) {
       return (
         <button
           className="user-card__button user-card__button--secondary"

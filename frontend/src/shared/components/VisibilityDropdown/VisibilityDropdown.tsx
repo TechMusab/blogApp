@@ -1,11 +1,10 @@
 import './VisibilityDropdown.scss';
 
 import { memo } from 'react';
-import { BlogVisibility } from '../../../types';
 
 type VisibilityDropdownProps = {
-  value: BlogVisibility;
-  onChange: (value: BlogVisibility) => void;
+  value: number;
+  onChange: (value: number) => void;
   disabled?: boolean;
 };
 
@@ -15,16 +14,16 @@ export const VisibilityDropdown = memo(function VisibilityDropdown({
   disabled = false,
 }: VisibilityDropdownProps) {
   const options = [
-    { value: BlogVisibility.Public, label: '🌍 Public' },
-    { value: BlogVisibility.FriendsOnly, label: '👥 Friends Only' },
-    { value: BlogVisibility.Private, label: '🔒 Private' },
+    { value: 0, label: '🌍 Public' },
+    { value: 1, label: '👥 Friends Only' },
+    { value: 2, label: '🔒 Private' },
   ];
 
   return (
     <select
       className="visibility-dropdown"
       value={value}
-      onChange={(e) => onChange(Number(e.target.value) as BlogVisibility)}
+      onChange={(e) => onChange(Number(e.target.value))}
       disabled={disabled}
     >
       {options.map((option) => (

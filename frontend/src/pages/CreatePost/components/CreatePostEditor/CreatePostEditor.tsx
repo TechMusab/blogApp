@@ -1,8 +1,7 @@
 import './CreatePostEditor.scss';
 
 import { memo, useRef } from 'react';
-import { VisibilityDropdown } from '../../../shared/components/VisibilityDropdown';
-import { BlogVisibility } from '../../../types';
+import { VisibilityDropdown } from '../../../../shared/components/VisibilityDropdown';
 
 type CreatePostEditorProps = {
   title: string;
@@ -17,7 +16,7 @@ type CreatePostEditorProps = {
   coverImage: string;
   isUploadingImage: boolean;
   imageError: string;
-  visibility: BlogVisibility;
+  visibility: number;
   onTitleChange: (value: string) => void;
   onExcerptChange: (value: string) => void;
   onContentChange: (value: string) => void;
@@ -29,7 +28,7 @@ type CreatePostEditorProps = {
   onTagInputKeyDown: (event: React.KeyboardEvent) => void;
   onImageUpload: (file: File) => void;
   onRemoveImage: () => void;
-  onVisibilityChange: (value: BlogVisibility) => void;
+  onVisibilityChange: (value: number) => void;
   onSubmit: (event: React.FormEvent) => void;
   onClose: () => void;
 };

@@ -1,20 +1,19 @@
 import './VisibilityBadge.scss';
 
 import { memo } from 'react';
-import { BlogVisibility } from '../../../types';
 
 type VisibilityBadgeProps = {
-  visibility: BlogVisibility;
+  visibility: number;
 };
 
 export const VisibilityBadge = memo(function VisibilityBadge({ visibility }: VisibilityBadgeProps) {
   const getVisibilityInfo = () => {
     switch (visibility) {
-      case BlogVisibility.Public:
+      case 0:
         return { icon: '🌍', label: 'Public', className: 'visibility-badge--public' };
-      case BlogVisibility.FriendsOnly:
+      case 1:
         return { icon: '👥', label: 'Friends', className: 'visibility-badge--friends' };
-      case BlogVisibility.Private:
+      case 2:
         return { icon: '🔒', label: 'Private', className: 'visibility-badge--private' };
       default:
         return { icon: '🌍', label: 'Public', className: 'visibility-badge--public' };

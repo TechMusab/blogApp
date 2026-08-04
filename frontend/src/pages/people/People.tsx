@@ -7,7 +7,7 @@ import { UserCard } from './components/UserCard';
 import { FriendsService } from '../../services/FriendsService';
 import type { RootState } from '../../redux/store';
 import { addToast } from '../../redux/slices/toasts/toastsSlice';
-import type { UserProfile, FriendRequestStatus } from '../../types';
+import type { UserProfile } from '../../types';
 
 export const PeoplePage = memo(function PeoplePage() {
   const dispatch = useDispatch();

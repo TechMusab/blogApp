@@ -1,15 +1,19 @@
-export enum BlogVisibility {
-  Public = 0,
-  FriendsOnly = 1,
-  Private = 2,
-}
+export type BlogVisibility = 0 | 1 | 2;
 
-export enum FriendRequestStatus {
-  Pending = 0,
-  Accepted = 1,
-  Rejected = 2,
-  Cancelled = 3,
-}
+export const BlogVisibilityValues = {
+  Public: 0,
+  FriendsOnly: 1,
+  Private: 2,
+};
+
+export type FriendRequestStatus = 0 | 1 | 2 | 3;
+
+export const FriendRequestStatusValues = {
+  Pending: 0,
+  Accepted: 1,
+  Rejected: 2,
+  Cancelled: 3,
+};
 
 export type Post = {
   id: string;

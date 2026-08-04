@@ -9,7 +9,6 @@ import type { RootState } from '../../redux/store';
 import { addPost } from '../../redux/slices/posts/postsSlice';
 import { PostsService } from '../../services/PostsService';
 import { ImageService } from '../../services/ImageService';
-import { BlogVisibility } from '../../types';
 
 export const CreatePostPage = memo(function CreatePostPage() {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
   const [coverImage, setCoverImage] = useState('');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imageError, setImageError] = useState('');
-  const [visibility, setVisibility] = useState<BlogVisibility>(BlogVisibility.Public);
+  const [visibility, setVisibility] = useState(0);
 
   const categories = [
     'Science',

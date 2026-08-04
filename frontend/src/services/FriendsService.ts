@@ -1,4 +1,4 @@
-import { api } from './api';
+import { request } from '../utils/api';
 import type { UserProfile, FriendRequestStatus } from '../types';
 
 export type FriendRequest = {
@@ -27,51 +27,62 @@ export type FriendRequestResponse = {
 
 export const FriendsService = {
   async getAllUsers(search?: string, filter?: string): Promise<UserProfile[]> {
+    const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (search) params.append('search', search);
     if (filter) params.append('filter', filter);
     const query = params.toString();
-    const response = await api.get(`/user/all${query ? `?${query}` : ''}`);
-    return response.data;
+    return request<UserProfile[]>(`/user/all${query ? `?${query}` : ''}`, undefined, token);
   },
 
   async getFriends(): Promise<UserProfile[]> {
-    const response = await api.get('/friends');
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<UserProfile[]>('/friends', undefined, token);
   },
 
   async getIncomingRequests(): Promise<FriendRequest[]> {
-    const response = await api.get('/friends/requests/incoming');
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<FriendRequest[]>('/friends/requests/incoming', undefined, token);
   },
 
   async getOutgoingRequests(): Promise<FriendRequest[]> {
-    const response = await api.get('/friends/requests/outgoing');
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<FriendRequest[]>('/friends/requests/outgoing', undefined, token);
   },
 
   async sendFriendRequest(receiverId: number): Promise<FriendRequestResponse> {
-    const response = await api.post('/friends/request', { receiverId });
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<FriendRequestResponse>('/friends/request', {
+      method: 'POST',
+      body: JSON.stringify({ receiverId }),
+    }, token);
   },
 
   async acceptFriendRequest(requestId: number): Promise<FriendRequestResponse> {
-    const response = await api.post(`/friends/accept/${requestId}`);
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<FriendRequestResponse>(`/friends/accept/${requestId}`, {
+      method: 'POST',
+    }, token);
   },
 
   async rejectFriendRequest(requestId: number): Promise<FriendRequestResponse> {
-    const response = await api.post(`/friends/reject/${requestId}`);
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<FriendRequestResponse>(`/friends/reject/${requestId}`, {
+      method: 'POST',
+    }, token);
   },
 
   async cancelFriendRequest(requestId: number): Promise<FriendRequestResponse> {
-    const response = await api.post(`/friends/cancel/${requestId}`);
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<FriendRequestResponse>(`/friends/cancel/${requestId}`, {
+      method: 'POST',
+    }, token);
   },
 
   async removeFriend(friendId: number): Promise<FriendRequestResponse> {
-    const response = await api.delete(`/friends/remove/${friendId}`);
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<FriendRequestResponse>(`/friends/remove/${friendId}`, {
+      method: 'DELETE',
+    }, token);
   },
 };

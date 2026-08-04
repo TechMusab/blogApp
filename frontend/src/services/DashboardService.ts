@@ -1,4 +1,4 @@
-import { api } from './api';
+import { request } from '../utils/api';
 
 export type DashboardStats = {
   totalPosts: number;
@@ -12,7 +12,7 @@ export type DashboardStats = {
 
 export const DashboardService = {
   async getStats(): Promise<DashboardStats> {
-    const response = await api.get('/user/dashboard/stats');
-    return response.data;
+    const token = localStorage.getItem('token');
+    return request<DashboardStats>('/user/dashboard/stats', undefined, token);
   },
 };

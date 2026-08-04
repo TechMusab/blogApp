@@ -1,13 +1,13 @@
 import './DashboardStats.scss';
 
 import { memo, useEffect, useState } from 'react';
-import { DashboardService, type DashboardStats } from '../../../../services/DashboardService';
+import { DashboardService, type DashboardStats as DashboardStatsType } from '../../../../services/DashboardService';
 import type { RootState } from '../../../../redux/store';
 import { useSelector } from 'react-redux';
 
 export const DashboardStats = memo(function DashboardStats() {
   const token = useSelector((state: RootState) => state.auth.token);
-  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [stats, setStats] = useState<DashboardStatsType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
