@@ -8,7 +8,6 @@ import { FriendsService, type FriendRequest } from '../../../services/FriendsSer
 import type { RootState } from '../../../redux/store';
 import { addToast } from '../../../redux/slices/toasts/toastsSlice';
 import type { UserProfile } from '../../../types';
-import { FriendRequestStatusValues } from '../../../types';
 
 type PeopleModalProps = {
   isOpen: boolean;
