@@ -177,18 +177,14 @@ $color-muted: $color-secondary;
     margin-bottom: 28px;
   }
 
-  &__visibility-row {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 28px;
-  }
-
-  &__label {
-    color: $color-muted;
+  &__section-heading {
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   &__upload-btn {

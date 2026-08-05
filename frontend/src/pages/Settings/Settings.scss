@@ -298,7 +298,7 @@
     transition: background 0.15s;
 
     &:hover:not(:disabled) {
-      background: var(--hover-color);
+      background: #d97706;
     }
 
     &:disabled {

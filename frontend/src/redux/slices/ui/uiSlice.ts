@@ -2,14 +2,16 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type UIState = {
   mobileMenuOpen: boolean;
-  activeTab: 'latest' | 'popular';
+  activeTab: 'my-posts' | 'saved' | 'community';
+  sortOrder: 'latest' | 'popular';
   searchQuery: string;
   activeCategory: string;
 };
 
 const initialState: UIState = {
   mobileMenuOpen: false,
-  activeTab: 'latest',
+  activeTab: 'community',
+  sortOrder: 'latest',
   searchQuery: '',
   activeCategory: 'All',
 };
@@ -24,6 +26,9 @@ const uiSlice = createSlice({
     setActiveTab: (state, action: PayloadAction<UIState['activeTab']>) => {
       state.activeTab = action.payload;
     },
+    setSortOrder: (state, action: PayloadAction<UIState['sortOrder']>) => {
+      state.sortOrder = action.payload;
+    },
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
@@ -33,6 +38,6 @@ const uiSlice = createSlice({
   },
 });
 
-export const { toggleMobileMenu, setActiveTab, setSearchQuery, setActiveCategory } =
+export const { toggleMobileMenu, setActiveTab, setSortOrder, setSearchQuery, setActiveCategory } =
   uiSlice.actions;
 export default uiSlice.reducer;

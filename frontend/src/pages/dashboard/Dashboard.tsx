@@ -3,13 +3,14 @@ import './Dashboard.scss';
 import { memo, useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Calendar, Flame } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar, Flame, User, Bookmark, Users } from 'lucide-react';
 import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { SearchInput } from './components/Search';
 import { FilterChip } from './components/FilterChip';
 import { DashboardGreeting } from './components/DashboardGreeting';
 import { PostCard } from './components/PostCard';
 import { Tabs } from './components/Tabs';
+import { SortToggle } from './components/SortToggle/SortToggle';
 import type { RootState } from '../../redux/store';
 import {
   selectCategories,
@@ -17,7 +18,8 @@ import {
   selectSearchResults,
   selectPaginationState,
 } from '../../redux/selectors/postsSelectors';
-import { setActiveCategory, setActiveTab, setSearchQuery } from '../../redux/slices/ui/uiSlice';
+import { selectSavedPosts } from '../../redux/selectors/savedPostsSelectors';
+import { setActiveCategory, setActiveTab, setSearchQuery, setSortOrder } from '../../redux/slices/ui/uiSlice';
 import { setPagedPosts } from '../../redux/slices/posts/postsSlice';
 import { PostsService } from '../../services/PostsService';
 
@@ -26,7 +28,8 @@ export const DashboardPage = memo(function DashboardPage() {
   const searchResults = useSelector(selectSearchResults);
   const categories = useSelector(selectCategories);
   const pagination = useSelector(selectPaginationState);
-  const { activeTab, activeCategory, searchQuery } = useSelector((state: RootState) => state.ui);
+  const savedPosts = useSelector(selectSavedPosts);
+  const { activeTab, sortOrder, activeCategory, searchQuery } = useSelector((state: RootState) => state.ui);
   const user = useSelector((state: RootState) => state.auth.user);
   const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch();
@@ -34,10 +37,29 @@ export const DashboardPage = memo(function DashboardPage() {
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const hasFetchedPosts = useRef(false);
-  const displayedPosts = useMemo(
-    () => (activeTab === 'popular' ? [...posts].sort((a, b) => b.likes - a.likes) : posts),
-    [posts, activeTab]
-  );
+  const displayedPosts = useMemo(() => {
+    let filteredPosts;
+    switch (activeTab) {
+      case 'my-posts':
+        filteredPosts = posts.filter((post) => post.authorId === user?.id);
+        break;
+      case 'saved':
+        filteredPosts = savedPosts;
+        break;
+      case 'community':
+      default:
+        filteredPosts = posts;
+        break;
+    }
+
+    // Apply sorting
+    if (sortOrder === 'popular') {
+      return [...filteredPosts].sort((a, b) => b.likes - a.likes);
+    } else {
+      // Latest - sort by date DESC
+      return [...filteredPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+  }, [posts, savedPosts, activeTab, sortOrder, user?.id]);
   const changeQuery = useCallback((query: string) => dispatch(setSearchQuery(query)), [dispatch]);
   const selectPost = useCallback(
     (post: { id: string }) => navigate(`/posts/${post.id}`),
@@ -137,11 +159,20 @@ export const DashboardPage = memo(function DashboardPage() {
         <section className="dashboard__filter-section">
           <Tabs
             tabs={[
+              { id: 'community', label: 'Community', icon: <Users size={16} /> },
+              { id: 'my-posts', label: 'My Posts', icon: <User size={16} /> },
+              { id: 'saved', label: 'Saved', icon: <Bookmark size={16} /> },
+            ]}
+            activeTab={activeTab}
+            onChange={(value) => dispatch(setActiveTab(value as 'my-posts' | 'saved' | 'community'))}
+          />
+          <SortToggle
+            options={[
               { id: 'latest', label: 'Latest', icon: <Calendar size={16} /> },
               { id: 'popular', label: 'Popular', icon: <Flame size={16} /> },
             ]}
-            activeTab={activeTab}
-            onChange={(value) => dispatch(setActiveTab(value as 'latest' | 'popular'))}
+            activeSort={sortOrder}
+            onChange={(value) => dispatch(setSortOrder(value as 'latest' | 'popular'))}
           />
         </section>
         <div className="dashboard__grid">

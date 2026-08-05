@@ -8,6 +8,7 @@ export type DropdownMenuItem = {
   icon: ReactNode;
   danger?: boolean;
   onClick: () => void;
+  className?: string;
 };
 
 export const DropdownItem = memo(function DropdownItem({
@@ -15,11 +16,12 @@ export const DropdownItem = memo(function DropdownItem({
   icon,
   danger,
   onClick,
+  className,
 }: DropdownMenuItem) {
   return (
     <button
       type="button"
-      className={`dropdown-item${danger ? ' dropdown-item--danger' : ''}`}
+      className={`dropdown-item${danger ? ' dropdown-item--danger' : ''}${className ? ` ${className}` : ''}`}
       onClick={onClick}
     >
       <span className="dropdown-item__icon" aria-hidden="true">

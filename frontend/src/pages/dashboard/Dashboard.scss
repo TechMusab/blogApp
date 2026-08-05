@@ -27,6 +27,8 @@
   &__filter-section {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 16px;
   }
 
   &__discovery {
@@ -89,10 +91,43 @@
   }
 }
 
+@media (max-width: 900px) {
+  .dashboard {
+    &__filter-section {
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard {
     &__content {
       padding: 20px;
+    }
+
+    &__filter-section {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    &__content {
+      padding: 20px;
+    }
+
+    &__filter-section {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
     }
 
     &__grid {

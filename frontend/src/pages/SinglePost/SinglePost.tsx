@@ -9,6 +9,7 @@ import { ArticleContent } from './components/ArticleContent';
 import { ArticleDiscussion } from './components/ArticleDiscussion';
 import type { RootState } from '../../redux/store';
 import { toggleLike, addComment, updatePost } from '../../redux/slices/posts/postsSlice';
+import { toggleSaved } from '../../redux/slices/savedPosts/savedPostsSlice';
 import { PostsService } from '../../services/PostsService';
 import { FriendsService } from '../../services/FriendsService';
 
@@ -21,7 +22,9 @@ export const SinglePostPage = memo(function SinglePostPage() {
   );
   const user = useSelector((state: RootState) => state.auth.user);
   const token = useSelector((state: RootState) => state.auth.token);
+  const savedPostIds = useSelector((state: RootState) => state.savedPosts.savedPostIds);
   const hasLiked = !!user && (post?.likedBy ?? []).includes(user.id);
+  const isSaved = !!post && savedPostIds.includes(post.id);
   const [commentText, setCommentText] = useState('');
   const hasFetchedPost = useRef(false);
 
@@ -133,6 +136,28 @@ export const SinglePostPage = memo(function SinglePostPage() {
     }
   };
 
+  const handleShare = () => {
+    if (navigator.share && post) {
+      navigator.share({
+        title: post.title,
+        text: post.excerpt || post.content.substring(0, 150),
+        url: window.location.href,
+      }).catch(() => {
+        // User cancelled or share failed
+      });
+    } else {
+      // Fallback: copy URL to clipboard
+      navigator.clipboard.writeText(window.location.href).catch(() => {
+        // Clipboard access failed
+      });
+    }
+  };
+
+  const handleSave = () => {
+    if (!user || !token || !post) return;
+    dispatch(toggleSaved(post.id));
+  };
+
   // Don't show friend button if viewing own post
   const showFriendButton = user && post.authorId !== user.id;
 
@@ -146,6 +171,9 @@ export const SinglePostPage = memo(function SinglePostPage() {
             post={post} 
             onBack={() => navigate('/dashboard')} 
             onFriendAction={showFriendButton ? handleFriendAction : undefined}
+            onShare={handleShare}
+            onSave={handleSave}
+            isSaved={isSaved}
           />
 
           <ArticleContent post={post} paragraphs={paragraphs} />

@@ -3,10 +3,11 @@ import './DashboardNavbar.scss';
 import { memo, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Search, Users, Mail, Bookmark, Menu, Pen, Settings, LogOut } from 'lucide-react';
+import { Users, Bookmark, Menu, Pen, Settings, LogOut } from 'lucide-react';
 import { Dropdown } from '../Dropdown';
 import { ThemeToggle } from '../ThemeToggle';
 import { Avatar } from '../Avatar';
+import { PeopleModal } from '../PeopleModal/PeopleModal';
 import type { RootState } from '../../../redux/store';
 import { logout } from '../../../redux/slices/auth/authSlice';
 
@@ -15,31 +16,21 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [peopleModalOpen, setPeopleModalOpen] = useState(false);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const openPeopleModal = useCallback(() => setPeopleModalOpen(true), []);
+  const closePeopleModal = useCallback(() => setPeopleModalOpen(false), []);
   const goToDashboard = useCallback(() => navigate('/dashboard'), [navigate]);
   const goToCreate = useCallback(() => {
     closeMenu();
     navigate('/create');
   }, [closeMenu, navigate]);
   const goToSaved = useCallback(() => {
-    closeMenu();
     navigate('/saved-posts');
-  }, [closeMenu, navigate]);
+  }, [navigate]);
   const goToYourPosts = useCallback(() => {
     closeMenu();
     navigate('/your-posts');
-  }, [closeMenu, navigate]);
-  const goToPeople = useCallback(() => {
-    closeMenu();
-    navigate('/people');
-  }, [closeMenu, navigate]);
-  const goToFriends = useCallback(() => {
-    closeMenu();
-    navigate('/friends');
-  }, [closeMenu, navigate]);
-  const goToFriendRequests = useCallback(() => {
-    closeMenu();
-    navigate('/friend-requests');
   }, [closeMenu, navigate]);
   const goToSettings = useCallback(() => {
     closeMenu();
@@ -59,6 +50,16 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
         <span className="dashboard__navbar-brand">Folio</span>
       </div>
       <div className="dashboard__navbar-right">
+        <button 
+          type="button" 
+          className={`dashboard__people-btn ${peopleModalOpen ? 'dashboard__people-btn--active' : ''}`} 
+          onClick={openPeopleModal}
+        >
+          <Users size={16} aria-hidden="true" />People
+        </button>
+        <button type="button" className="dashboard__saved-btn" onClick={goToSaved}>
+          <Bookmark size={16} aria-hidden="true" />Saved
+        </button>
         <button type="button" className="dashboard__write-btn" onClick={goToCreate}>
           <Pen size={16} aria-hidden="true" />Write
         </button>
@@ -93,18 +94,17 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
               </div>
             }
             items={[
-              { label: 'Discover People', icon: <Search size={18} />, onClick: goToPeople },
-              { label: 'Friends', icon: <Users size={18} />, onClick: goToFriends },
-              { label: 'Friend Requests', icon: <Mail size={18} />, onClick: goToFriendRequests },
-              { label: 'Saved posts', icon: <Bookmark size={18} />, onClick: goToSaved },
+              { label: 'People', icon: <Users size={18} />, onClick: () => { closeMenu(); openPeopleModal(); }, className: 'dropdown-item--mobile-only' },
+              { label: 'Write a post', icon: <Pen size={18} />, onClick: goToCreate, className: 'dropdown-item--mobile-only' },
+              { label: 'Saved posts', icon: <Bookmark size={18} />, onClick: goToSaved, className: 'dropdown-item--mobile-only' },
               { label: 'Your posts', icon: <Menu size={18} />, onClick: goToYourPosts },
-              { label: 'Write a post', icon: <Pen size={18} />, onClick: goToCreate },
               { label: 'Account settings', icon: <Settings size={18} />, onClick: goToSettings },
             ]}
             footerItem={{ label: 'Sign out', icon: <LogOut size={18} />, danger: true, onClick: handleLogout }}
           />
         </div>
       </div>
+      <PeopleModal isOpen={peopleModalOpen} onClose={closePeopleModal} />
     </nav>
   );
 });

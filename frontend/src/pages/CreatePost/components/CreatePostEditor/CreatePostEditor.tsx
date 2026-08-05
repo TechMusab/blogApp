@@ -170,12 +170,7 @@ export const CreatePostEditor = memo(function CreatePostEditor({
             {imageError && <div className="editor__image-error">{imageError}</div>}
           </div>
 
-          <div className="editor__visibility-row">
-            <label className="editor__label">Privacy</label>
-            <VisibilityDropdown value={visibility} onChange={onVisibilityChange} />
-          </div>
-
-          <hr className="editor__divider" />
+          <h3 className="editor__section-heading">CATEGORY</h3>
 
           <div className="editor__tags-row">
             {categories.map((cat) => (
@@ -189,6 +184,10 @@ export const CreatePostEditor = memo(function CreatePostEditor({
               </button>
             ))}
           </div>
+
+          <VisibilityDropdown value={visibility} onChange={onVisibilityChange} />
+
+          <hr className="editor__divider" />
 
           <div className="editor__post-tags">
             <div className="editor__tags-input-container">

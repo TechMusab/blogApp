@@ -3,6 +3,13 @@
 $color-text: $color-white;
 
 .article {
+  &__header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
   &__back {
     display: inline-flex;
     align-items: center;
@@ -23,10 +30,41 @@ $color-text: $color-white;
     }
   }
 
+  &__actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: $color-secondary;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms ease;
+
+    &:hover {
+      color: $color-text;
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  &__badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 0;
+  }
+
   &__category {
     display: inline-flex;
     align-items: center;
-    margin-top: 24px;
     padding: 6px 12px;
     height: 30px;
     background: rgba(232, 172, 58, 0.1);
@@ -40,8 +78,29 @@ $color-text: $color-white;
     color: $color-accent;
   }
 
+  &__visibility-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    height: 30px;
+    background: #2A2A2A;
+    border: 1px solid #3F3F46;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #A1A1AA;
+
+    svg {
+      color: #A1A1AA;
+    }
+  }
+
   &__title {
-    margin: 5px 0 0;
+    margin: 8px 0 0;
     max-width: 760px;
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 30px;
@@ -54,8 +113,15 @@ $color-text: $color-white;
   &__author {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 14px;
     margin-top: 5px;
+  }
+
+  &__author-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
 
   &__friend-button {
@@ -63,40 +129,30 @@ $color-text: $color-white;
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    border: none;
+    border: 1px solid #f59e0b;
     border-radius: 6px;
+    background: rgba(245, 158, 11, 0.1);
     font-family: 'Inter', sans-serif;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
+    color: #f59e0b;
     cursor: pointer;
     transition: all 200ms ease;
 
-    &--primary {
-      background: $color-accent;
-      color: $color-white;
-
-      &:hover {
-        filter: brightness(0.9);
-      }
+    &:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #d97706;
     }
 
-    &--secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: $color-text;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    &--gold-secondary {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: rgba(245, 158, 11, 0.8);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-    }
-
-    &--danger {
-      background: rgba(255, 59, 48, 0.1);
-      color: #ff3b30;
-      border: 1px solid rgba(255, 59, 48, 0.3);
-
-      &:hover {
-        background: rgba(255, 59, 48, 0.2);
+        background: rgba(245, 158, 11, 0.15);
+        border-color: #f59e0b;
+        color: #f59e0b;
       }
     }
   }
@@ -143,23 +199,5 @@ $color-text: $color-white;
     margin: 8px 0 0;
     border: none;
     border-top: 1px solid $color-border;
-  }
-}
-
-@media (max-width: 1024px) {
-  .article {
-    &__title {
-      font-size: 28px;
-      line-height: 1.3;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .article {
-    &__title {
-      font-size: 24px;
-      line-height: 1.3;
-    }
   }
 }
