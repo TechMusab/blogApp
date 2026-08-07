@@ -23,7 +23,7 @@ export const DashboardGreeting = memo(function DashboardGreeting({
           <br />
           <span className="dashboard__heading-accent">{userName}.</span>
         </h1>
-        <p className="dashboard__subtitle">{postCount} posts from the community.</p>
+        <p className="dashboard__subtitle">{postCount} blogs from the community.</p>
       </div>
       <button className="dashboard__new-post-btn" onClick={onNewPost}>
         <span className="dashboard__new-post-icon"><Pen size={18} /></span>

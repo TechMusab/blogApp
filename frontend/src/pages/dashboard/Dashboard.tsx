@@ -160,7 +160,7 @@ export const DashboardPage = memo(function DashboardPage() {
           <Tabs
             tabs={[
               { id: 'community', label: 'Community', icon: <Users size={16} /> },
-              { id: 'my-posts', label: 'My Posts', icon: <User size={16} /> },
+              { id: 'my-posts', label: 'My Blogs', icon: <User size={16} /> },
               { id: 'saved', label: 'Saved', icon: <Bookmark size={16} /> },
             ]}
             activeTab={activeTab}
