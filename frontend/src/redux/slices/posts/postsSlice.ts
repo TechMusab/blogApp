@@ -70,6 +70,10 @@ const postsSlice = createSlice({
       state.posts.unshift(action.payload);
     },
 
+    removePost: (state, action: PayloadAction<string>) => {
+      state.posts = state.posts.filter((p) => p.id !== action.payload);
+    },
+
     toggleLike: (
       state,
       action: PayloadAction<{
@@ -119,5 +123,5 @@ const postsSlice = createSlice({
   },
 });
 
-export const { setPosts, setPagedPosts, addPost, toggleLike, addComment, updatePost } = postsSlice.actions;
+export const { setPosts, setPagedPosts, addPost, removePost, toggleLike, addComment, updatePost } = postsSlice.actions;
 export default postsSlice.reducer;

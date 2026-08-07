@@ -124,6 +124,54 @@ $color-text: $color-white;
     gap: 14px;
   }
 
+  &__author-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 6px;
+    background: transparent;
+    color: #f59e0b;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms ease;
+
+    &:hover {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: #f59e0b;
+    }
+  }
+
+  &__delete-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    border-radius: 6px;
+    background: transparent;
+    color: #f44336;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms ease;
+
+    &:hover {
+      background: rgba(244, 67, 54, 0.1);
+      border-color: #f44336;
+    }
+  }
+
   &__friend-button {
     display: inline-flex;
     align-items: center;

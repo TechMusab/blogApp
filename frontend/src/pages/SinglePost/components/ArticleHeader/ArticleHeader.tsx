@@ -1,10 +1,12 @@
 import './ArticleHeader.scss';
 
 import { memo } from 'react';
-import { UserPlus, UserMinus, Share, Bookmark, Globe, Users, Lock } from 'lucide-react';
+import { UserPlus, UserMinus, Share, Bookmark, Globe, Users, Lock, Trash2, Edit } from 'lucide-react';
 import type { Post } from '../../../../types';
 import { Avatar } from '../../../../shared/components/Avatar';
 import { FriendRequestStatusValues, BlogVisibilityValues } from '../../../../types';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../../redux/store';
 
 type ArticleHeaderProps = {
   post: Post;
@@ -13,9 +15,14 @@ type ArticleHeaderProps = {
   onShare?: () => void;
   onSave?: () => void;
   isSaved?: boolean;
+  onDelete?: () => void;
+  onEdit?: () => void;
 };
 
-export const ArticleHeader = memo(function ArticleHeader({ post, onBack, onFriendAction, onShare, onSave, isSaved }: ArticleHeaderProps) {
+export const ArticleHeader = memo(function ArticleHeader({ post, onBack, onFriendAction, onShare, onSave, isSaved, onDelete, onEdit }: ArticleHeaderProps) {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const isOwner = user && post.authorId === user.id;
+
   const getVisibilityBadge = () => {
     const visibilityConfig = {
       [BlogVisibilityValues.Public]: { icon: Globe, label: 'PUBLIC' },
@@ -124,7 +131,33 @@ export const ArticleHeader = memo(function ArticleHeader({ post, onBack, onFrien
             <span className="article__meta">{post.date}</span>
           </div>
         </div>
-        {getFriendButton()}
+        <div className="article__author-right">
+          {getFriendButton()}
+          {isOwner && (
+            <>
+              {onEdit && (
+                <button
+                  type="button"
+                  className="article__edit-btn"
+                  onClick={onEdit}
+                >
+                  <Edit size={16} />
+                  Edit
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  type="button"
+                  className="article__delete-btn"
+                  onClick={onDelete}
+                >
+                  <Trash2 size={16} />
+                  Delete
+                </button>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <hr className="article__divider" />

@@ -1,9 +1,14 @@
 import './ArticleDiscussion.scss';
 
-import { memo } from 'react';
+import { memo, useState } from 'react';
+import { Edit, Trash2, X, Check } from 'lucide-react';
 import type { Comment } from '../../../../types';
 import { BookmarkButton } from '../../../../shared/components/BookmarkButton';
 import { Avatar } from '../../../../shared/components/Avatar';
+import { useSelector, useDispatch } from 'react-redux';
+import { PostsService } from '../../../../services/PostsService';
+import { addToast } from '../../../../redux/slices/toasts/toastsSlice';
+import type { RootState } from '../../../../redux/store';
 
 type ArticleDiscussionProps = {
   likes: number;
@@ -16,6 +21,8 @@ type ArticleDiscussionProps = {
   onCommentChange: (value: string) => void;
   onSendComment: (event: React.FormEvent) => void;
   postId: string;
+  onCommentUpdate?: (commentId: string, updatedComment: Comment) => void;
+  onCommentDelete?: (commentId: string) => void;
 };
 
 export const ArticleDiscussion = memo(function ArticleDiscussion({
@@ -29,7 +36,65 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
   onCommentChange,
   onSendComment,
   postId,
+  onCommentUpdate,
+  onCommentDelete,
 }: ArticleDiscussionProps) {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const dispatch = useDispatch();
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
+
+  const handleEditComment = (comment: Comment) => {
+    setEditingCommentId(comment.id);
+    setEditText(comment.text);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCommentId(null);
+    setEditText('');
+  };
+
+  const handleSaveEdit = async () => {
+    if (!token || !editingCommentId) return;
+    try {
+      const updatedComment = await PostsService.updateComment(postId, editingCommentId, { text: editText }, token);
+      if (onCommentUpdate) {
+        onCommentUpdate(editingCommentId, updatedComment);
+      }
+      dispatch(addToast({ message: 'Comment updated successfully', type: 'success' }));
+      setEditingCommentId(null);
+      setEditText('');
+    } catch (error) {
+      console.error('Failed to update comment:', error);
+      dispatch(addToast({ message: 'Failed to update comment', type: 'error' }));
+    }
+  };
+
+  const handleDeleteComment = (commentId: string) => {
+    setShowDeleteConfirm(commentId);
+  };
+
+  const confirmDeleteComment = async () => {
+    if (!token || !showDeleteConfirm) return;
+    try {
+      await PostsService.deleteComment(postId, showDeleteConfirm, token);
+      if (onCommentDelete) {
+        onCommentDelete(showDeleteConfirm);
+      }
+      dispatch(addToast({ message: 'Comment deleted successfully', type: 'success' }));
+      setShowDeleteConfirm(null);
+    } catch (error) {
+      console.error('Failed to delete comment:', error);
+      dispatch(addToast({ message: 'Failed to delete comment', type: 'error' }));
+    }
+  };
+
+  const isCommentOwner = (comment: Comment) => {
+    return user && comment.userId === user.id;
+  };
+
   return (
     <div className="article__interaction">
       <hr className="article__interaction-divider" />
@@ -83,8 +148,54 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
                 <div className="article__comment-meta">
                   <span className="article__comment-author">{comment.author}</span>
                   <span className="article__comment-date">{comment.date}</span>
+                  {isCommentOwner(comment) && (
+                    <div className="article__comment-actions">
+                      <button
+                        type="button"
+                        className="article__comment-action-btn"
+                        onClick={() => handleEditComment(comment)}
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        className="article__comment-action-btn article__comment-action-btn--danger"
+                        onClick={() => handleDeleteComment(comment.id)}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <p className="article__comment-text">{comment.text}</p>
+                {editingCommentId === comment.id ? (
+                  <div className="article__comment-edit">
+                    <textarea
+                      className="article__comment-edit-textarea"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                    />
+                    <div className="article__comment-edit-actions">
+                      <button
+                        type="button"
+                        className="article__comment-edit-btn article__comment-edit-btn--cancel"
+                        onClick={handleCancelEdit}
+                      >
+                        <X size={14} />
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className="article__comment-edit-btn article__comment-edit-btn--save"
+                        onClick={handleSaveEdit}
+                      >
+                        <Check size={14} />
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="article__comment-text">{comment.text}</p>
+                )}
               </div>
             </div>
           ))}
@@ -130,6 +241,31 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
           </button>
         </div>
       </div>
+
+      {showDeleteConfirm && (
+        <div className="article__confirm-dialog">
+          <div className="article__confirm-content">
+            <h3>Delete Comment</h3>
+            <p>Are you sure you want to delete this comment? This action cannot be undone.</p>
+            <div className="article__confirm-actions">
+              <button
+                type="button"
+                className="article__confirm-cancel"
+                onClick={() => setShowDeleteConfirm(null)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="article__confirm-delete"
+                onClick={confirmDeleteComment}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 });

@@ -8,6 +8,8 @@ public class Comment
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    public DateTime? UpdatedAt { get; set; }
+
     // Foreign Keys
     public int UserId { get; set; }
 

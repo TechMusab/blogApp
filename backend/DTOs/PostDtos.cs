@@ -37,6 +37,7 @@ public class CommentDto
     public string Avatar { get; set; } = string.Empty;
     public string Text { get; set; } = string.Empty;
     public string Date { get; set; } = string.Empty;
+    public string UserId { get; set; } = string.Empty;
 }
 
 public class CreatePostRequest
@@ -111,6 +112,14 @@ public class UpdatePostRequest
 }
 
 public class AddCommentRequest
+{
+    [Required]
+    [MaxLength(2000)]
+    [RegularExpression(@"^[a-zA-Z0-9\s.,!?@:()""'-]*$", ErrorMessage = "Comment contains invalid characters.")]
+    public string Text { get; set; } = string.Empty;
+}
+
+public class UpdateCommentRequest
 {
     [Required]
     [MaxLength(2000)]

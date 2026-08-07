@@ -30,6 +30,16 @@ public class CommentRepository : ICommentRepository
         await _context.Comments.AddAsync(comment);
     }
 
+    public async Task UpdateAsync(Comment comment)
+    {
+        _context.Comments.Update(comment);
+    }
+
+    public async Task DeleteAsync(Comment comment)
+    {
+        _context.Comments.Remove(comment);
+    }
+
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();

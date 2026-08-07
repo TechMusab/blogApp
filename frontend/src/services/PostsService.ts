@@ -17,6 +17,23 @@ type AddCommentRequest = {
   text: string;
 };
 
+type UpdateCommentRequest = {
+  text: string;
+};
+
+type UpdatePostRequest = {
+  title: string;
+  excerpt?: string;
+  content: string;
+  coverImage?: string;
+  category: string;
+  tags?: string[];
+  featured?: boolean;
+  quote?: string;
+  paragraphs?: string[];
+  visibility?: number;
+};
+
 type ToggleResponse = {
   active: boolean;
 };
@@ -31,6 +48,10 @@ export const PostsService = {
     request<Post[]>(`/posts/search?q=${encodeURIComponent(query)}`, {}, token),
   createPost: (body: CreatePostRequest, token: string) =>
     request<Post>('/posts', { method: 'POST', body: JSON.stringify(body) }, token),
+  updatePost: (postId: string, body: UpdatePostRequest, token: string) =>
+    request<Post>(`/posts/${postId}`, { method: 'PATCH', body: JSON.stringify(body) }, token),
+  deletePost: (postId: string, token: string) =>
+    request<void>(`/posts/${postId}`, { method: 'DELETE' }, token),
   toggleLike: (postId: string, token: string) =>
     request<ToggleResponse>(`/posts/${postId}/like`, { method: 'POST' }, token),
   addComment: (postId: string, body: AddCommentRequest, token: string) =>
@@ -39,6 +60,14 @@ export const PostsService = {
       { method: 'POST', body: JSON.stringify(body) },
       token
     ),
+  updateComment: (postId: string, commentId: string, body: UpdateCommentRequest, token: string) =>
+    request<Comment>(
+      `/posts/${postId}/comments/${commentId}`,
+      { method: 'PATCH', body: JSON.stringify(body) },
+      token
+    ),
+  deleteComment: (postId: string, commentId: string, token: string) =>
+    request<void>(`/posts/${postId}/comments/${commentId}`, { method: 'DELETE' }, token),
   getSavedPostIds: (token: string) => request<string[]>('/posts/saved', {}, token),
   toggleSaved: (postId: string, token: string) =>
     request<ToggleResponse>(`/posts/${postId}/save`, { method: 'POST' }, token),

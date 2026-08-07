@@ -42,7 +42,8 @@ public static class PostMapper
             Author = comment.User.Name,
             Avatar = comment.User.Avatar ?? BuildAvatar(comment.User.Name),
             Text = comment.Content,
-            Date = comment.CreatedAt.ToString("MMM d, yyyy")
+            Date = comment.CreatedAt.ToString("MMM d, yyyy"),
+            UserId = comment.UserId.ToString()
         };
     }
 

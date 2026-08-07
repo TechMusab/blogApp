@@ -7,11 +7,14 @@ import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { ArticleHeader } from './components/ArticleHeader';
 import { ArticleContent } from './components/ArticleContent';
 import { ArticleDiscussion } from './components/ArticleDiscussion';
+import { EditPostModal } from '../../shared/components/EditPostModal/EditPostModal';
 import type { RootState } from '../../redux/store';
-import { toggleLike, addComment, updatePost } from '../../redux/slices/posts/postsSlice';
+import { toggleLike, addComment, updatePost, removePost } from '../../redux/slices/posts/postsSlice';
 import { toggleSaved } from '../../redux/slices/savedPosts/savedPostsSlice';
+import { addToast } from '../../redux/slices/toasts/toastsSlice';
 import { PostsService } from '../../services/PostsService';
 import { FriendsService } from '../../services/FriendsService';
+import type { Comment as CommentType } from '../../types';
 
 export const SinglePostPage = memo(function SinglePostPage() {
   const { id } = useParams();
@@ -27,6 +30,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
   const isSaved = !!post && savedPostIds.includes(post.id);
   const [commentText, setCommentText] = useState('');
   const hasFetchedPost = useRef(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   // Reset fetch flag when post ID changes
   useEffect(() => {
@@ -158,8 +162,37 @@ export const SinglePostPage = memo(function SinglePostPage() {
     dispatch(toggleSaved(post.id));
   };
 
+  const handleCommentUpdate = (commentId: string, updatedComment: CommentType) => {
+    // Update the comment in the post
+    const updatedCommentsList = commentsList.map((c) =>
+      c.id === commentId ? updatedComment : c
+    );
+    // Update the post with the new comment list
+    const updatedPost = {
+      ...post,
+      commentsList: updatedCommentsList,
+    };
+    dispatch(updatePost(updatedPost));
+  };
+
+  const handleCommentDelete = (commentId: string) => {
+    // Remove the comment from the post
+    const updatedCommentsList = commentsList.filter((c) => c.id !== commentId);
+    const updatedPost = {
+      ...post,
+      commentsList: updatedCommentsList,
+      comments: updatedCommentsList.length,
+    };
+    dispatch(updatePost(updatedPost));
+  };
+
+  const handleEditPost = () => {
+    setEditModalOpen(true);
+  };
+
   // Don't show friend button if viewing own post
   const showFriendButton = user && post.authorId !== user.id;
+  const isOwner = user && post.authorId === user.id;
 
   return (
     <div className="article-page">
@@ -174,6 +207,20 @@ export const SinglePostPage = memo(function SinglePostPage() {
             onShare={handleShare}
             onSave={handleSave}
             isSaved={isSaved}
+            onDelete={isOwner ? () => {
+              if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+                if (token) {
+                  PostsService.deletePost(post.id, token).then(() => {
+                    dispatch(removePost(post.id));
+                    dispatch(addToast({ message: 'Post deleted successfully', type: 'success' }));
+                    navigate('/dashboard');
+                  }).catch(() => {
+                    dispatch(addToast({ message: 'Failed to delete post', type: 'error' }));
+                  });
+                }
+              }
+            } : undefined}
+            onEdit={isOwner ? handleEditPost : undefined}
           />
 
           <ArticleContent post={post} paragraphs={paragraphs} />
@@ -189,9 +236,12 @@ export const SinglePostPage = memo(function SinglePostPage() {
             onCommentChange={setCommentText}
             onSendComment={handleSendComment}
             postId={post.id}
+            onCommentUpdate={handleCommentUpdate}
+            onCommentDelete={handleCommentDelete}
           />
         </div>
       </article>
+      <EditPostModal isOpen={editModalOpen} onClose={() => setEditModalOpen(false)} post={post} />
     </div>
   );
 });

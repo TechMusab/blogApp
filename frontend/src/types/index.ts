@@ -88,6 +88,7 @@ export type Comment = {
   avatar: string;
   text: string;
   date: string;
+  userId?: string;
 };
 
 export type PagedResult<T> = {
