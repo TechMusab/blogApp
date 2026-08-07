@@ -7,6 +7,7 @@ import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { CreatePostEditor } from './components/CreatePostEditor';
 import type { RootState } from '../../redux/store';
 import { addPost } from '../../redux/slices/posts/postsSlice';
+import { addToast } from '../../redux/slices/toasts/toastsSlice';
 import { PostsService } from '../../services/PostsService';
 import { ImageService } from '../../services/ImageService';
 
@@ -155,8 +156,10 @@ export const CreatePostPage = memo(function CreatePostPage() {
     try {
       const post = await PostsService.createPost(requestData, token);
       dispatch(addPost(post));
+      dispatch(addToast({ message: 'Post published successfully', type: 'success' }));
       navigate('/dashboard');
     } catch (error) {
+      dispatch(addToast({ message: 'Failed to publish post. Please try again.', type: 'error' }));
       throw error;
     } finally {
       setIsSubmitting(false);

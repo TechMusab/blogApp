@@ -7,6 +7,7 @@ import { AuthMarketingPanel } from '../../shared/components/AuthMarketingPanel';
 import { ThemeToggle } from '../../shared/components/ThemeToggle';
 import { LoginForm } from './components/LoginForm';
 import { login } from '../../redux/slices/auth/authSlice';
+import { addToast } from '../../redux/slices/toasts/toastsSlice';
 import { AuthService } from '../../services/AuthService';
 
 export const LoginPage = memo(function LoginPage() {
@@ -26,9 +27,11 @@ export const LoginPage = memo(function LoginPage() {
     try {
       const session = await AuthService.login({ email, password });
       dispatch(login(session));
+      dispatch(addToast({ message: 'Logged in successfully', type: 'success' }));
       navigate('/dashboard');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unable to sign in.');
+      dispatch(addToast({ message: 'Login failed. Please check your credentials.', type: 'error' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -41,9 +44,11 @@ export const LoginPage = memo(function LoginPage() {
     try {
       const session = await AuthService.googleAuth({ idToken: credential });
       dispatch(login(session));
+      dispatch(addToast({ message: 'Logged in successfully', type: 'success' }));
       navigate('/dashboard');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unable to sign in with Google.');
+      dispatch(addToast({ message: 'Login failed. Please try again.', type: 'error' }));
     } finally {
       setIsSubmitting(false);
     }

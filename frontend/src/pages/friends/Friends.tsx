@@ -4,6 +4,7 @@ import { memo, useState, useEffect } from 'react';
 import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { FriendsService } from '../../services/FriendsService';
 import { Avatar } from '../../shared/components/Avatar';
+import { ConfirmDialog } from '../../shared/components/ConfirmDialog/ConfirmDialog';
 import type { RootState } from '../../redux/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToast } from '../../redux/slices/toasts/toastsSlice';
@@ -15,6 +16,8 @@ export const FriendsPage = memo(function FriendsPage() {
   const [friends, setFriends] = useState<UserProfile[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<number | null>(null);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const fetchFriends = async () => {
     if (!token) return;
@@ -34,14 +37,18 @@ export const FriendsPage = memo(function FriendsPage() {
   }, [token]);
 
   const handleRemoveFriend = async (friendId: number) => {
-    if (!confirm('Are you sure you want to remove this friend?')) return;
+    if (!token) return;
+    setIsRemoving(true);
     try {
       await FriendsService.removeFriend(friendId, token);
-      dispatch(addToast({ message: 'Friend removed successfully.', type: 'info' }));
+      dispatch(addToast({ message: 'Friend removed successfully', type: 'success' }));
+      setShowDeleteConfirm(null);
       fetchFriends();
     } catch (error) {
       console.error('Failed to remove friend:', error);
-      dispatch(addToast({ message: 'Failed to remove friend.', type: 'error' }));
+      dispatch(addToast({ message: 'Failed to remove friend', type: 'error' }));
+    } finally {
+      setIsRemoving(false);
     }
   };
 
@@ -110,7 +117,7 @@ export const FriendsPage = memo(function FriendsPage() {
                   </button>
                   <button
                     className="friends__card-button friends__card-button--remove"
-                    onClick={() => handleRemoveFriend(friend.id)}
+                    onClick={() => setShowDeleteConfirm(friend.id)}
                   >
                     Remove Friend
                   </button>
@@ -120,6 +127,18 @@ export const FriendsPage = memo(function FriendsPage() {
           </div>
         )}
       </main>
+      
+      <ConfirmDialog
+        isOpen={showDeleteConfirm !== null}
+        onClose={() => setShowDeleteConfirm(null)}
+        onConfirm={() => showDeleteConfirm && handleRemoveFriend(showDeleteConfirm)}
+        title="Remove Friend"
+        message="Are you sure you want to remove this friend? This action cannot be undone."
+        confirmText="Remove"
+        cancelText="Cancel"
+        isDestructive={true}
+        isLoading={isRemoving}
+      />
     </div>
   );
 });

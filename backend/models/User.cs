@@ -74,4 +74,8 @@ public class User
     public ICollection<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();
 
     public ICollection<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
+
+    public ICollection<Notification> ReceivedNotifications { get; set; } = new List<Notification>();
+
+    public ICollection<Notification> SentNotifications { get; set; } = new List<Notification>();
 }

@@ -6,6 +6,7 @@ using BlogApi.Interfaces.Auth;
 using BlogApi.Interfaces.Core;
 using BlogApi.Interfaces.Email;
 using BlogApi.Interfaces.Friends;
+using BlogApi.Interfaces.Notifications;
 using BlogApi.Interfaces.PostInteractions;
 using BlogApi.Interfaces.Posts;
 using BlogApi.Interfaces.Storage;
@@ -16,6 +17,7 @@ using BlogApi.Services.Auth;
 using BlogApi.Services.Core;
 using BlogApi.Services.Email;
 using BlogApi.Services.Friends;
+using BlogApi.Services.Notifications;
 using BlogApi.Services.PostInteractions;
 using BlogApi.Services.Posts;
 using BlogApi.Services.Sanitization;
@@ -111,12 +113,14 @@ builder.Services.AddScoped<IRemoveFriendService, RemoveFriendService>();
 builder.Services.AddScoped<IGetFriendsService, GetFriendsService>();
 builder.Services.AddScoped<IGetIncomingRequestsService, GetIncomingRequestsService>();
 builder.Services.AddScoped<IGetOutgoingRequestsService, GetOutgoingRequestsService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ISavedPostRepository, SavedPostRepository>();
 builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 builder.Services.AddScoped<IPostLikeRepository, PostLikeRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactApp", policy =>

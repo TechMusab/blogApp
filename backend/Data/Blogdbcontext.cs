@@ -16,6 +16,7 @@ public class BlogDbContext : DbContext
     public DbSet<PostLike> PostLikes => Set<PostLike>();
     public DbSet<SavedPost> SavedPosts => Set<SavedPost>();
     public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,6 +99,42 @@ public class BlogDbContext : DbContext
 
             entity.HasIndex(fr => new { fr.SenderId, fr.ReceiverId }).IsUnique();
             entity.HasIndex(fr => fr.Status);
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(n => n.Id);
+
+            entity.Property(n => n.CreatedAt)
+                .HasDefaultValueSql("NOW()");
+
+            entity.Property(n => n.IsRead)
+                .HasDefaultValue(false);
+
+            entity.HasOne(n => n.RecipientUser)
+                .WithMany(u => u.ReceivedNotifications)
+                .HasForeignKey(n => n.RecipientUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(n => n.ActorUser)
+                .WithMany(u => u.SentNotifications)
+                .HasForeignKey(n => n.ActorUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(n => n.Post)
+                .WithMany(p => p.Notifications)
+                .HasForeignKey(n => n.PostId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(n => n.Comment)
+                .WithMany(c => c.Notifications)
+                .HasForeignKey(n => n.CommentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasIndex(n => n.RecipientUserId);
+            entity.HasIndex(n => n.IsRead);
+            entity.HasIndex(n => n.CreatedAt);
+            entity.HasIndex(n => new { n.RecipientUserId, n.IsRead, n.CreatedAt });
         });
     }
 }

@@ -100,3 +100,20 @@ export type PagedResult<T> = {
   hasPrevious: boolean;
   hasNext: boolean;
 };
+
+export type NotificationType = 'FriendRequest' | 'FriendRequestAccepted' | 'Comment' | 'Like' | 'PostSaved';
+
+export type Notification = {
+  id: number;
+  recipientUserId: number;
+  actorUserId: number;
+  type: NotificationType;
+  message: string;
+  postId?: number | null;
+  commentId?: number | null;
+  isRead: boolean;
+  createdAt: string;
+  actorName?: string;
+  actorAvatar?: string;
+  postTitle?: string | null;
+};

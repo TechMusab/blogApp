@@ -43,4 +43,6 @@ public class Post
     public ICollection<PostLike> Likes { get; set; } = new List<PostLike>();
 
     public ICollection<SavedPost> SavedByUsers { get; set; } = new List<SavedPost>();
+
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

@@ -6,7 +6,9 @@ import type { Post } from '../../../../types';
 import { Avatar } from '../../../../shared/components/Avatar';
 import { FriendRequestStatusValues, BlogVisibilityValues } from '../../../../types';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import type { RootState } from '../../../../redux/store';
+import { addToast } from '../../../../redux/slices/toasts/toastsSlice';
 
 type ArticleHeaderProps = {
   post: Post;
@@ -20,8 +22,23 @@ type ArticleHeaderProps = {
 };
 
 export const ArticleHeader = memo(function ArticleHeader({ post, onBack, onFriendAction, onShare, onSave, isSaved, onDelete, onEdit }: ArticleHeaderProps) {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const isOwner = user && post.authorId === user.id;
+  const dispatch = useDispatch();
+  const isOwner = useSelector((state: RootState) => state.auth.user && post.authorId === state.auth.user.id);
+
+  const handleShare = () => {
+    if (onShare) {
+      onShare();
+      dispatch(addToast({ message: 'Link copied to clipboard', type: 'success' }));
+    }
+  };
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave();
+      const message = isSaved ? 'Post removed from saved posts' : 'Post saved successfully';
+      dispatch(addToast({ message, type: 'success' }));
+    }
+  };
 
   const getVisibilityBadge = () => {
     const visibilityConfig = {
@@ -103,11 +120,11 @@ export const ArticleHeader = memo(function ArticleHeader({ post, onBack, onFrien
           ← Back to feed
         </button>
         <div className="article__actions">
-          <button type="button" className="article__action-btn" onClick={onShare}>
+          <button type="button" className="article__action-btn" onClick={handleShare}>
             <Share size={16} />
             Share
           </button>
-          <button type="button" className="article__action-btn" onClick={onSave}>
+          <button type="button" className="article__action-btn" onClick={handleSave}>
             <Bookmark size={16} fill={isSaved ? 'currentColor' : 'none'} />
             Save
           </button>

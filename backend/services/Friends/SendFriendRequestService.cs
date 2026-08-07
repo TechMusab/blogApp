@@ -1,5 +1,6 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Friends;
+using BlogApi.Interfaces.Notifications;
 using BlogApi.Models;
 using BlogApi.Repositories;
 using Npgsql;
@@ -10,13 +11,16 @@ public class SendFriendRequestService : ISendFriendRequestService
 {
     private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IUserRepository _userRepository;
+    private readonly INotificationService _notificationService;
 
     public SendFriendRequestService(
         IFriendRequestRepository friendRequestRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        INotificationService notificationService)
     {
         _friendRequestRepository = friendRequestRepository;
         _userRepository = userRepository;
+        _notificationService = notificationService;
     }
 
     public async Task<FriendRequestResponse> SendFriendRequestAsync(int senderId, int receiverId)
@@ -77,6 +81,15 @@ public class SendFriendRequestService : ISendFriendRequestService
         {
             return new FriendRequestResponse { Message = "Friend request already exists." };
         }
+
+        // Create notification for the receiver
+        var message = $"{sender.Name} sent you a friend request.";
+        await _notificationService.CreateNotificationAsync(
+            recipientUserId: receiverId,
+            actorUserId: senderId,
+            type: NotificationType.FriendRequest,
+            message: message
+        );
 
         return new FriendRequestResponse
         {

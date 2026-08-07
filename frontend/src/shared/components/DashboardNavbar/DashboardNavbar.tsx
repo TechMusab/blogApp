@@ -8,8 +8,10 @@ import { Dropdown } from '../Dropdown';
 import { ThemeToggle } from '../ThemeToggle';
 import { Avatar } from '../Avatar';
 import { PeopleModal } from '../PeopleModal/PeopleModal';
+import { NotificationBell } from '../NotificationBell/NotificationBell';
 import type { RootState } from '../../../redux/store';
 import { logout } from '../../../redux/slices/auth/authSlice';
+import { addToast } from '../../../redux/slices/toasts/toastsSlice';
 
 export const DashboardNavbar = memo(function DashboardNavbar() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -38,6 +40,7 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
   }, [closeMenu, navigate]);
   const handleLogout = useCallback(() => {
     dispatch(logout());
+    dispatch(addToast({ message: 'Logged out successfully', type: 'success' }));
     navigate('/login');
   }, [dispatch, navigate]);
 
@@ -63,6 +66,7 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
         <button type="button" className="dashboard__write-btn" onClick={goToCreate}>
           <Pen size={16} aria-hidden="true" />Write
         </button>
+        <NotificationBell />
         <ThemeToggle />
         <div className="dashboard__profile-menu">
           <button

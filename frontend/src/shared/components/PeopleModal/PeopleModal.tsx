@@ -125,19 +125,19 @@ export const PeopleModal = memo(function PeopleModal({ isOpen, onClose }: People
       
       if (action === 'send') {
         await FriendsService.sendFriendRequest(userId, token);
-        dispatch(addToast({ message: 'Friend request sent!', type: 'success' }));
+        dispatch(addToast({ message: 'Friend request sent', type: 'success' }));
       } else if (action === 'accept' && requestId) {
         await FriendsService.acceptFriendRequest(requestId, token);
-        dispatch(addToast({ message: 'Friend request accepted!', type: 'success' }));
+        dispatch(addToast({ message: 'Friend request accepted', type: 'success' }));
       } else if (action === 'reject' && requestId) {
         await FriendsService.rejectFriendRequest(requestId, token);
-        dispatch(addToast({ message: 'Friend request rejected.', type: 'info' }));
+        dispatch(addToast({ message: 'Friend request rejected', type: 'success' }));
       } else if (action === 'cancel' && requestId) {
         await FriendsService.cancelFriendRequest(requestId, token);
-        dispatch(addToast({ message: 'Friend request cancelled.', type: 'info' }));
+        dispatch(addToast({ message: 'Friend request cancelled', type: 'success' }));
       } else if (action === 'remove') {
         await FriendsService.removeFriend(userId, token);
-        dispatch(addToast({ message: 'Friend removed.', type: 'info' }));
+        dispatch(addToast({ message: 'Friend removed successfully', type: 'success' }));
       }
       
       // Refresh current tab data

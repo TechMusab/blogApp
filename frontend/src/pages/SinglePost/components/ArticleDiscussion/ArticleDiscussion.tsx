@@ -5,6 +5,7 @@ import { Edit, Trash2, X, Check } from 'lucide-react';
 import type { Comment } from '../../../../types';
 import { BookmarkButton } from '../../../../shared/components/BookmarkButton';
 import { Avatar } from '../../../../shared/components/Avatar';
+import { ConfirmDialog } from '../../../../shared/components/ConfirmDialog/ConfirmDialog';
 import { useSelector, useDispatch } from 'react-redux';
 import { PostsService } from '../../../../services/PostsService';
 import { addToast } from '../../../../redux/slices/toasts/toastsSlice';
@@ -45,6 +46,8 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleEditComment = (comment: Comment) => {
     setEditingCommentId(comment.id);
@@ -58,6 +61,7 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
 
   const handleSaveEdit = async () => {
     if (!token || !editingCommentId) return;
+    setIsUpdating(true);
     try {
       const updatedComment = await PostsService.updateComment(postId, editingCommentId, { text: editText }, token);
       if (onCommentUpdate) {
@@ -69,6 +73,8 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
     } catch (error) {
       console.error('Failed to update comment:', error);
       dispatch(addToast({ message: 'Failed to update comment', type: 'error' }));
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -78,6 +84,7 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
 
   const confirmDeleteComment = async () => {
     if (!token || !showDeleteConfirm) return;
+    setIsDeleting(true);
     try {
       await PostsService.deleteComment(postId, showDeleteConfirm, token);
       if (onCommentDelete) {
@@ -88,6 +95,8 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
     } catch (error) {
       console.error('Failed to delete comment:', error);
       dispatch(addToast({ message: 'Failed to delete comment', type: 'error' }));
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -173,12 +182,14 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
                       className="article__comment-edit-textarea"
                       value={editText}
                       onChange={(e) => setEditText(e.target.value)}
+                      disabled={isUpdating}
                     />
                     <div className="article__comment-edit-actions">
                       <button
                         type="button"
                         className="article__comment-edit-btn article__comment-edit-btn--cancel"
                         onClick={handleCancelEdit}
+                        disabled={isUpdating}
                       >
                         <X size={14} />
                         Cancel
@@ -187,9 +198,10 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
                         type="button"
                         className="article__comment-edit-btn article__comment-edit-btn--save"
                         onClick={handleSaveEdit}
+                        disabled={isUpdating}
                       >
                         <Check size={14} />
-                        Save
+                        {isUpdating ? 'Saving...' : 'Save'}
                       </button>
                     </div>
                   </div>
@@ -243,28 +255,17 @@ export const ArticleDiscussion = memo(function ArticleDiscussion({
       </div>
 
       {showDeleteConfirm && (
-        <div className="article__confirm-dialog">
-          <div className="article__confirm-content">
-            <h3>Delete Comment</h3>
-            <p>Are you sure you want to delete this comment? This action cannot be undone.</p>
-            <div className="article__confirm-actions">
-              <button
-                type="button"
-                className="article__confirm-cancel"
-                onClick={() => setShowDeleteConfirm(null)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="article__confirm-delete"
-                onClick={confirmDeleteComment}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDialog
+          isOpen={!!showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(null)}
+          onConfirm={confirmDeleteComment}
+          title="Delete Comment"
+          message="Are you sure you want to delete this comment? This action cannot be undone."
+          confirmText="Delete"
+          cancelText="Cancel"
+          isDestructive={true}
+          isLoading={isDeleting}
+        />
       )}
     </div>
   );

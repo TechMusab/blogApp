@@ -24,8 +24,8 @@
     width: 90%;
     max-width: 900px;
     max-height: 90vh;
-    background: #1d1d23;
-    border: 1px solid #2c2b31;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     box-shadow: 0 22px 46px rgba(0, 0, 0, 0.42);
     overflow: hidden;
@@ -38,14 +38,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    border-bottom: 1px solid #2c2b31;
+    border-bottom: 1px solid var(--border-color);
 
     h2 {
       margin: 0;
       font-family: 'Inter', sans-serif;
       font-size: 18px;
       font-weight: 600;
-      color: #f5f3ef;
+      color: var(--text-primary);
     }
   }
 
@@ -58,13 +58,13 @@
     border: none;
     border-radius: 6px;
     background: transparent;
-    color: #8f8b88;
+    color: var(--text-secondary);
     cursor: pointer;
     transition: all 200ms ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #f5f3ef;
+      background: var(--surface-hover);
+      color: var(--text-primary);
     }
   }
 

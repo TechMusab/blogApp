@@ -1,5 +1,6 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Friends;
+using BlogApi.Interfaces.Notifications;
 using BlogApi.Models;
 using BlogApi.Repositories;
 
@@ -8,10 +9,14 @@ namespace BlogApi.Services.Friends;
 public class AcceptFriendRequestService : IAcceptFriendRequestService
 {
     private readonly IFriendRequestRepository _friendRequestRepository;
+    private readonly INotificationService _notificationService;
 
-    public AcceptFriendRequestService(IFriendRequestRepository friendRequestRepository)
+    public AcceptFriendRequestService(
+        IFriendRequestRepository friendRequestRepository,
+        INotificationService notificationService)
     {
         _friendRequestRepository = friendRequestRepository;
+        _notificationService = notificationService;
     }
 
     public async Task<FriendRequestResponse> AcceptFriendRequestAsync(int requestId, int userId)
@@ -44,6 +49,15 @@ public class AcceptFriendRequestService : IAcceptFriendRequestService
 
         await _friendRequestRepository.UpdateAsync(request);
         await _friendRequestRepository.SaveChangesAsync();
+
+        // Create notification for the sender (original requester)
+        var message = $"{request.Receiver?.Name ?? "Someone"} accepted your friend request.";
+        await _notificationService.CreateNotificationAsync(
+            recipientUserId: request.SenderId,
+            actorUserId: request.ReceiverId,
+            type: NotificationType.FriendRequestAccepted,
+            message: message
+        );
 
         var updatedRequest = await _friendRequestRepository.GetByIdAsync(requestId);
         return new FriendRequestResponse

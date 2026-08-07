@@ -179,6 +179,32 @@
     }
   }
 
+  &__notification-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #8C8C92;
+    cursor: pointer;
+    transition: color 200ms ease;
+    padding: 6px;
+
+    svg {
+      color: #8C8C92;
+      transition: color 200ms ease;
+    }
+
+    &:hover {
+      color: #C2C2C7;
+
+      svg {
+        color: #C2C2C7;
+      }
+    }
+  }
+
   &__write-icon {
     font-size: 14px;
   }
@@ -258,6 +284,9 @@
       display: none;
     }
     &__saved-btn {
+      display: none;
+    }
+    &__notification-btn {
       display: none;
     }
   }

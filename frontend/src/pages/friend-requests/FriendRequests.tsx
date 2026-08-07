@@ -39,33 +39,33 @@ export const FriendRequestsPage = memo(function FriendRequestsPage() {
   const handleAccept = async (requestId: number) => {
     try {
       await FriendsService.acceptFriendRequest(requestId, token);
-      dispatch(addToast({ message: 'Friend request accepted!', type: 'success' }));
+      dispatch(addToast({ message: 'Friend request accepted', type: 'success' }));
       fetchRequests();
     } catch (error) {
       console.error('Failed to accept request:', error);
-      dispatch(addToast({ message: 'Failed to accept request.', type: 'error' }));
+      dispatch(addToast({ message: 'Failed to accept request', type: 'error' }));
     }
   };
 
   const handleReject = async (requestId: number) => {
     try {
       await FriendsService.rejectFriendRequest(requestId, token);
-      dispatch(addToast({ message: 'Friend request rejected.', type: 'info' }));
+      dispatch(addToast({ message: 'Friend request rejected', type: 'success' }));
       fetchRequests();
     } catch (error) {
       console.error('Failed to reject request:', error);
-      dispatch(addToast({ message: 'Failed to reject request.', type: 'error' }));
+      dispatch(addToast({ message: 'Failed to reject request', type: 'error' }));
     }
   };
 
   const handleCancel = async (requestId: number) => {
     try {
       await FriendsService.cancelFriendRequest(requestId, token);
-      dispatch(addToast({ message: 'Friend request cancelled.', type: 'info' }));
+      dispatch(addToast({ message: 'Friend request cancelled', type: 'success' }));
       fetchRequests();
     } catch (error) {
       console.error('Failed to cancel request:', error);
-      dispatch(addToast({ message: 'Failed to cancel request.', type: 'error' }));
+      dispatch(addToast({ message: 'Failed to cancel request', type: 'error' }));
     }
   };
 

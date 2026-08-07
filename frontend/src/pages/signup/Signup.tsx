@@ -8,6 +8,7 @@ import { ThemeToggle } from '../../shared/components/ThemeToggle';
 import { SignupForm } from './components/SignupForm';
 import { AuthService } from '../../services/AuthService';
 import { login } from '../../redux/slices/auth/authSlice';
+import { addToast } from '../../redux/slices/toasts/toastsSlice';
 
 export const SignupPage = memo(function SignupPage() {
   const navigate = useNavigate();
@@ -39,9 +40,11 @@ export const SignupPage = memo(function SignupPage() {
 
     try {
       const challenge = await AuthService.requestRegistrationOtp({ name, email, password });
+      dispatch(addToast({ message: 'Account created successfully', type: 'success' }));
       navigate('/verify-otp', { state: { ...challenge, avatarFile } });
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unable to create account.');
+      dispatch(addToast({ message: 'Registration failed. Please try again.', type: 'error' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -54,9 +57,11 @@ export const SignupPage = memo(function SignupPage() {
     try {
       const session = await AuthService.googleAuth({ idToken: credential });
       dispatch(login(session));
+      dispatch(addToast({ message: 'Account created successfully', type: 'success' }));
       navigate('/dashboard');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unable to sign up with Google.');
+      dispatch(addToast({ message: 'Registration failed. Please try again.', type: 'error' }));
     } finally {
       setIsSubmitting(false);
     }

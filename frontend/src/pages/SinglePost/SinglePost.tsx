@@ -8,6 +8,7 @@ import { ArticleHeader } from './components/ArticleHeader';
 import { ArticleContent } from './components/ArticleContent';
 import { ArticleDiscussion } from './components/ArticleDiscussion';
 import { EditPostModal } from '../../shared/components/EditPostModal/EditPostModal';
+import { ConfirmDialog } from '../../shared/components/ConfirmDialog/ConfirmDialog';
 import type { RootState } from '../../redux/store';
 import { toggleLike, addComment, updatePost, removePost } from '../../redux/slices/posts/postsSlice';
 import { toggleSaved } from '../../redux/slices/savedPosts/savedPostsSlice';
@@ -31,6 +32,8 @@ export const SinglePostPage = memo(function SinglePostPage() {
   const [commentText, setCommentText] = useState('');
   const hasFetchedPost = useRef(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Reset fetch flag when post ID changes
   useEffect(() => {
@@ -88,9 +91,11 @@ export const SinglePostPage = memo(function SinglePostPage() {
         token
       );
       dispatch(addComment({ postId: post.id, comment: newComment }));
+      dispatch(addToast({ message: 'Comment added successfully', type: 'success' }));
       setCommentText('');
-    } catch {
-      // Keep the typed comment so the user can retry.
+    } catch (error) {
+      console.error('Failed to add comment:', error);
+      dispatch(addToast({ message: 'Failed to add comment', type: 'error' }));
     }
   };
 
@@ -103,6 +108,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
       switch (action) {
         case 'send':
           await FriendsService.sendFriendRequest(authorId, token);
+          dispatch(addToast({ message: 'Friend request sent', type: 'success' }));
           break;
         case 'accept':
           // Need to get the request ID first
@@ -110,6 +116,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
           const request = incomingRequests.find(r => r.senderId === authorId);
           if (request) {
             await FriendsService.acceptFriendRequest(request.id, token);
+            dispatch(addToast({ message: 'Friend request accepted', type: 'success' }));
           }
           break;
         case 'reject':
@@ -117,6 +124,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
           const rejectReq = incomingReqs.find(r => r.senderId === authorId);
           if (rejectReq) {
             await FriendsService.rejectFriendRequest(rejectReq.id, token);
+            dispatch(addToast({ message: 'Friend request rejected', type: 'success' }));
           }
           break;
         case 'cancel':
@@ -124,10 +132,12 @@ export const SinglePostPage = memo(function SinglePostPage() {
           const cancelReq = outgoingRequests.find(r => r.receiverId === authorId);
           if (cancelReq) {
             await FriendsService.cancelFriendRequest(cancelReq.id, token);
+            dispatch(addToast({ message: 'Friend request cancelled', type: 'success' }));
           }
           break;
         case 'remove':
           await FriendsService.removeFriend(authorId, token);
+          dispatch(addToast({ message: 'Friend removed successfully', type: 'success' }));
           break;
       }
       
@@ -135,8 +145,9 @@ export const SinglePostPage = memo(function SinglePostPage() {
       const updatedPost = await PostsService.getPost(post.id, token);
       dispatch(updatePost(updatedPost));
       
-    } catch {
-      // Friend action failed
+    } catch (error) {
+      console.error('Friend action failed:', error);
+      dispatch(addToast({ message: 'Action failed. Please try again.', type: 'error' }));
     }
   };
 
@@ -190,6 +201,23 @@ export const SinglePostPage = memo(function SinglePostPage() {
     setEditModalOpen(true);
   };
 
+  const handleDeletePost = async () => {
+    if (!token) return;
+    setIsDeleting(true);
+    try {
+      await PostsService.deletePost(post.id, token);
+      dispatch(removePost(post.id));
+      dispatch(addToast({ message: 'Post deleted successfully', type: 'success' }));
+      setShowDeleteConfirm(false);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+      dispatch(addToast({ message: 'Failed to delete post', type: 'error' }));
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   // Don't show friend button if viewing own post
   const showFriendButton = user && post.authorId !== user.id;
   const isOwner = user && post.authorId === user.id;
@@ -207,19 +235,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
             onShare={handleShare}
             onSave={handleSave}
             isSaved={isSaved}
-            onDelete={isOwner ? () => {
-              if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
-                if (token) {
-                  PostsService.deletePost(post.id, token).then(() => {
-                    dispatch(removePost(post.id));
-                    dispatch(addToast({ message: 'Post deleted successfully', type: 'success' }));
-                    navigate('/dashboard');
-                  }).catch(() => {
-                    dispatch(addToast({ message: 'Failed to delete post', type: 'error' }));
-                  });
-                }
-              }
-            } : undefined}
+            onDelete={isOwner ? () => setShowDeleteConfirm(true) : undefined}
             onEdit={isOwner ? handleEditPost : undefined}
           />
 
@@ -241,7 +257,18 @@ export const SinglePostPage = memo(function SinglePostPage() {
           />
         </div>
       </article>
-      <EditPostModal isOpen={editModalOpen} onClose={() => setEditModalOpen(false)} post={post} />
+      <EditPostModal isOpen={editModalOpen} onClose={() => setEditModalOpen(false)} post={post}/>
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDeletePost}
+        title="Delete Post"
+        message="Are you sure you want to delete this post? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDestructive={true}
+        isLoading={isDeleting}
+      />
     </div>
   );
 });
