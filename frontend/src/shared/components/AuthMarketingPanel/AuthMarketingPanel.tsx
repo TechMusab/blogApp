@@ -15,7 +15,7 @@ export const AuthMarketingPanel = memo(function AuthMarketingPanel({
     <section className={`${prefix}__left`}>
       <div className={`${prefix}__grid`} aria-hidden="true" />
       <div className={`${prefix}__logo`}>
-        <span className={`${prefix}__icon`}>✦</span>
+        <span className={`${prefix}__icon`}>⌁</span>
         <span className={`${prefix}__brand`}>Folio</span>
       </div>
 

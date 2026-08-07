@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import { CreatePostEditor } from '../../../pages/CreatePost/components/CreatePostEditor';
 import type { Post } from '../../../types';
 import { PostsService } from '../../../services/PostsService';
+import { ImageService } from '../../../services/ImageService';
 import { useDispatch, useSelector } from 'react-redux';
 import { updatePost } from '../../../redux/slices/posts/postsSlice';
 import { addToast } from '../../../redux/slices/toasts/toastsSlice';
@@ -29,6 +30,8 @@ export const EditPostModal = memo(function EditPostModal({ isOpen, onClose, post
   const [coverImage, setCoverImage] = useState('');
   const [visibility, setVisibility] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageError, setImageError] = useState('');
 
   const categories = [
     'Science',
@@ -53,6 +56,26 @@ export const EditPostModal = memo(function EditPostModal({ isOpen, onClose, post
       setVisibility(post.visibility || 0);
     }
   }, [post]);
+
+  const handleImageUpload = async (file: File) => {
+    setImageError('');
+
+    const validation = ImageService.validateImageFile(file);
+    if (!validation.valid) {
+      setImageError(validation.error || 'Invalid image file');
+      return;
+    }
+
+    setIsUploadingImage(true);
+    try {
+      const result = await ImageService.uploadImage(file, token || '', 'posts');
+      setCoverImage(result.url);
+    } catch (error) {
+      setImageError(error instanceof Error ? error.message : 'Failed to upload image');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!token) return;
@@ -113,8 +136,8 @@ export const EditPostModal = memo(function EditPostModal({ isOpen, onClose, post
             tagInput={tagInput}
             wordCount={content.trim() === '' ? 0 : content.trim().split(/\s+/).filter(Boolean).length}
             coverImage={coverImage}
-            isUploadingImage={false}
-            imageError=""
+            isUploadingImage={isUploadingImage}
+            imageError={imageError}
             visibility={visibility}
             onTitleChange={setTitle}
             onExcerptChange={setExcerpt}
@@ -140,8 +163,11 @@ export const EditPostModal = memo(function EditPostModal({ isOpen, onClose, post
                 }
               }
             }}
-            onImageUpload={() => {}}
-            onRemoveImage={() => setCoverImage('')}
+            onImageUpload={handleImageUpload}
+            onRemoveImage={() => {
+              setCoverImage('');
+              setImageError('');
+            }}
             onVisibilityChange={setVisibility}
             onSubmit={isSubmitting ? (e) => e.preventDefault() : handleSubmit}
             onClose={handleClose}

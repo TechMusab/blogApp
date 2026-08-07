@@ -51,15 +51,15 @@
   &__navbar-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
     margin-left: 30px;
   }
   &__navbar-icon {
     color: $color-accent;
-    font-size: 18px;
+    font-size: 28px;
   }
   &__navbar-brand {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 16px;
     font-weight: 500;
     color: var(--text-primary);
@@ -272,7 +272,7 @@
       margin-left: 0;
     }
     &__navbar-brand {
-      font-size: 24px;
+      font-size: 14px;
     }
     &__navbar-right {
       gap: 12px;

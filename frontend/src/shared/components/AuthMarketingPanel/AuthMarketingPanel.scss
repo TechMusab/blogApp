@@ -35,16 +35,18 @@ $color-accent: $color-auth-accent;
   &__logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 500;
     color: $color-auth-text;
   }
 
   &__icon {
     color: $color-auth-accent;
-    font-size: 18px;
+    font-size: 28px;
+    font-family: 'Inter', sans-serif;
+    line-height: 1;
   }
 
   &__hero {

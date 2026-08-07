@@ -33,9 +33,9 @@
   &__brand {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
     font:
-      500 18px 'Playfair Display',
+      500 16px 'Playfair Display',
       Georgia,
       serif;
     letter-spacing: 0.03em;
@@ -43,7 +43,7 @@
   &__mark {
     color: var(--accent-color);
     font:
-      20px/1 Inter,
+      28px/1 Inter,
       sans-serif;
   }
   &__actions {

@@ -12,7 +12,7 @@ export const IntroPage = memo(function IntroPage() {
       <header className="intro-page__header">
         <Link className="intro-page__brand" to="/">
           <span className="intro-page__mark" aria-hidden="true">
-            ✦
+            ⌁
           </span>
           Folio
         </Link>
