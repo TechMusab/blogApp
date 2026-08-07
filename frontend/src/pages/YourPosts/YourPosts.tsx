@@ -15,10 +15,10 @@ const EmptyYourPostsState = memo(function EmptyYourPostsState() {
         <path d="M5 4.75A1.75 1.75 0 0 1 6.75 3h10.5A1.75 1.75 0 0 1 19 4.75v14.5A1.75 1.75 0 0 1 17.25 21H6.75A1.75 1.75 0 0 1 5 19.25V4.75Z" />
         <path d="M8 8h8M8 12h8M8 16h5" />
       </svg>
-      <h2>No posts yet</h2>
-      <p>Start writing and your published posts will appear here.</p>
+      <h2>No blogs yet</h2>
+      <p>Start writing and your published blogs will appear here.</p>
       <button type="button" onClick={() => navigate('/create')}>
-        Write a Post
+        Write a Blog
       </button>
     </section>
   );
@@ -39,8 +39,8 @@ export const YourPostsPage = memo(function YourPostsPage() {
           <button type="button" className="article__back" onClick={() => navigate('/dashboard')}>
             ← Back to feed
           </button>
-          <h1>Your Posts</h1>
-          <p>Posts you've published from this account.</p>
+          <h1>Your Blogs</h1>
+          <p>Blogs you've published from this account.</p>
         </header>
         <div className="dashboard__divider" />
         {posts.length ? (

@@ -14,10 +14,10 @@ const EmptySavedState = memo(function EmptySavedState() {
       <svg className="saved-posts__empty-icon" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M6 3.75A1.75 1.75 0 0 1 7.75 2h8.5A1.75 1.75 0 0 1 18 3.75v17.12a.75.75 0 0 1-1.2.6L12 17.88l-4.8 3.59a.75.75 0 0 1-1.2-.6V3.75Z" />
       </svg>
-      <h2>No saved posts yet</h2>
-      <p>Bookmark posts to read them later.</p>
+      <h2>No saved blogs yet</h2>
+      <p>Bookmark blogs to read them later.</p>
       <button type="button" onClick={() => navigate('/dashboard')}>
-        Browse Posts
+        Browse Blogs
       </button>
     </section>
   );
@@ -34,8 +34,8 @@ export const SavedPostsPage = memo(function SavedPostsPage() {
           <button type="button" className="article__back" onClick={() => navigate('/dashboard')}>
             ← Back to feed
           </button>
-          <h1>Saved Posts</h1>
-          <p>Posts you've bookmarked for later.</p>
+          <h1>Saved Blogs</h1>
+          <p>Blogs you've bookmarked for later.</p>
         </header>
         <div className="dashboard__divider" />
         {posts.length ? (

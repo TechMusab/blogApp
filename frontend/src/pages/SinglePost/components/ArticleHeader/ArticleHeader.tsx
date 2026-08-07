@@ -35,7 +35,7 @@ export const ArticleHeader = memo(function ArticleHeader({ post, onBack, onFrien
   const handleSave = () => {
     if (onSave) {
       onSave();
-      const message = isSaved ? 'Post removed from saved posts' : 'Post saved successfully';
+      const message = isSaved ? 'Blog removed from saved blogs' : 'Blog saved successfully';
       dispatch(addToast({ message, type: 'success' }));
     }
   };

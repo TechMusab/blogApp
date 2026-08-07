@@ -228,7 +228,7 @@ export const CreatePostEditor = memo(function CreatePostEditor({
             className="editor__content-textarea"
             value={content}
             onChange={(e) => onContentChange(e.target.value)}
-            placeholder="Write your post here. Use double line breaks for paragraphs."
+            placeholder="Write your blog here. Use double line breaks for paragraphs."
             required
           />
         </form>

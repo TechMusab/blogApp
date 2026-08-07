@@ -99,9 +99,9 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
             }
             items={[
               { label: 'People', icon: <Users size={18} />, onClick: () => { closeMenu(); openPeopleModal(); }, className: 'dropdown-item--mobile-only' },
-              { label: 'Write a post', icon: <Pen size={18} />, onClick: goToCreate, className: 'dropdown-item--mobile-only' },
+              { label: 'Write a blog', icon: <Pen size={18} />, onClick: goToCreate, className: 'dropdown-item--mobile-only' },
               { label: 'Saved posts', icon: <Bookmark size={18} />, onClick: goToSaved, className: 'dropdown-item--mobile-only' },
-              { label: 'Your posts', icon: <Menu size={18} />, onClick: goToYourPosts },
+              { label: 'Your blogs', icon: <Menu size={18} />, onClick: goToYourPosts },
               { label: 'Account settings', icon: <Settings size={18} />, onClick: goToSettings },
             ]}
             footerItem={{ label: 'Sign out', icon: <LogOut size={18} />, danger: true, onClick: handleLogout }}

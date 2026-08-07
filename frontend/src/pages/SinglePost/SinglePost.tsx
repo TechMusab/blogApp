@@ -48,7 +48,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
       PostsService.getPost(id, token).then((updatedPost) => {
         dispatch(updatePost(updatedPost));
       }).catch((error) => {
-        console.error('Error fetching post:', error);
+        console.error('Error fetching blog:', error);
       });
     }
   }, [id, token, dispatch]);
@@ -58,7 +58,7 @@ export const SinglePostPage = memo(function SinglePostPage() {
       <div className="article-page">
         <DashboardNavbar />
         <div className="article__container">
-          <p className="article__not-found">Post not found.</p>
+          <p className="article__not-found">Blog not found.</p>
         </div>
       </div>
     );
@@ -207,12 +207,12 @@ export const SinglePostPage = memo(function SinglePostPage() {
     try {
       await PostsService.deletePost(post.id, token);
       dispatch(removePost(post.id));
-      dispatch(addToast({ message: 'Post deleted successfully', type: 'success' }));
+      dispatch(addToast({ message: 'Blog deleted successfully', type: 'success' }));
       setShowDeleteConfirm(false);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Failed to delete post:', error);
-      dispatch(addToast({ message: 'Failed to delete post', type: 'error' }));
+      console.error('Failed to delete blog:', error);
+      dispatch(addToast({ message: 'Failed to delete blog', type: 'error' }));
     } finally {
       setIsDeleting(false);
     }
@@ -262,8 +262,8 @@ export const SinglePostPage = memo(function SinglePostPage() {
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
         onConfirm={handleDeletePost}
-        title="Delete Post"
-        message="Are you sure you want to delete this post? This action cannot be undone."
+        title="Delete Blog"
+        message="Are you sure you want to delete this blog? This action cannot be undone."
         confirmText="Delete"
         cancelText="Cancel"
         isDestructive={true}

@@ -98,7 +98,7 @@ export const EditPostModal = memo(function EditPostModal({ isOpen, onClose, post
 
       const updatedPost = await PostsService.updatePost(post.id, requestData, token);
       dispatch(updatePost(updatedPost));
-      dispatch(addToast({ message: 'Post updated successfully', type: 'success' }));
+      dispatch(addToast({ message: 'Blog updated successfully', type: 'success' }));
       onClose();
     } catch (error) {
       console.error('Failed to update post:', error);
@@ -119,7 +119,7 @@ export const EditPostModal = memo(function EditPostModal({ isOpen, onClose, post
       <div className="edit-post-modal__backdrop" onClick={handleClose} />
       <div className="edit-post-modal__content">
         <div className="edit-post-modal__header">
-          <h2>Edit Post</h2>
+          <h2>Edit Blog</h2>
           <button type="button" className="edit-post-modal__close" onClick={handleClose}>
             <X size={20} />
           </button>

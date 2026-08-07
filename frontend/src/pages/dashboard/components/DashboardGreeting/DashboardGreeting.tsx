@@ -27,7 +27,7 @@ export const DashboardGreeting = memo(function DashboardGreeting({
       </div>
       <button className="dashboard__new-post-btn" onClick={onNewPost}>
         <span className="dashboard__new-post-icon"><Pen size={18} /></span>
-        New post
+        New blog
       </button>
     </section>
   );

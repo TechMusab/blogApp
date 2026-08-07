@@ -156,7 +156,7 @@ export const CreatePostPage = memo(function CreatePostPage() {
     try {
       const post = await PostsService.createPost(requestData, token);
       dispatch(addPost(post));
-      dispatch(addToast({ message: 'Post published successfully', type: 'success' }));
+      dispatch(addToast({ message: 'Blog published successfully', type: 'success' }));
       navigate('/dashboard');
     } catch (error) {
       dispatch(addToast({ message: 'Failed to publish post. Please try again.', type: 'error' }));
