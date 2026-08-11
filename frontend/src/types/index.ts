@@ -117,3 +117,25 @@ export type Notification = {
   actorAvatar?: string;
   postTitle?: string | null;
 };
+
+export type ConversationDto = {
+  conversationId: number;
+  otherUser: {
+    id: number;
+    name: string;
+    avatar?: string;
+  };
+  lastMessage?: string;
+  lastMessageAt?: string;
+  unreadMessageCount: number;
+};
+
+export type MessageDto = {
+  id: number;
+  senderId: number;
+  content: string;
+  createdAt: string;
+  updatedAt?: string;
+  isDeleted: boolean;
+  readAt?: string;
+};

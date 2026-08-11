@@ -47,6 +47,9 @@ const FriendRequestsPage = lazy(() =>
 const FriendsPage = lazy(() =>
   import('./pages/friends').then((module) => ({ default: module.FriendsPage }))
 );
+const ChatPage = lazy(() =>
+  import('./pages/chat').then((module) => ({ default: module.ChatPage }))
+);
 const SettingsPage = lazy(() =>
   import('./pages/Settings/Settings').then((module) => ({ default: module.SettingsPage }))
 );
@@ -108,6 +111,8 @@ const App = () => {
                 <Route path="/people" element={<PeoplePage />} />
                 <Route path="/friend-requests" element={<FriendRequestsPage />} />
                 <Route path="/friends" element={<FriendsPage />} />
+                <Route path="/chat" element={<ChatPage />} />
+                <Route path="/chat/:userId" element={<ChatPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>

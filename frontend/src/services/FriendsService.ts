@@ -54,26 +54,37 @@ export const FriendsService = {
   },
 
   async acceptFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
-    return request<FriendRequestResponse>(`/friends/request/accept/${requestId}`, {
+    const response = await request<FriendRequestResponse>(`/friends/request/accept/${requestId}`, {
       method: 'POST',
     }, token ?? undefined);
+    return response;
   },
 
   async rejectFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
-    return request<FriendRequestResponse>(`/friends/request/reject/${requestId}`, {
+    const response = await request<FriendRequestResponse>(`/friends/request/reject/${requestId}`, {
       method: 'POST',
     }, token ?? undefined);
+    return response;
   },
 
   async cancelFriendRequest(requestId: number, token?: string | null): Promise<FriendRequestResponse> {
-    return request<FriendRequestResponse>(`/friends/request/cancel/${requestId}`, {
+    const response = await request<FriendRequestResponse>(`/friends/request/cancel/${requestId}`, {
       method: 'POST',
     }, token ?? undefined);
+    return response;
   },
 
   async removeFriend(friendId: number, token?: string | null): Promise<FriendRequestResponse> {
     return request<FriendRequestResponse>(`/friends/remove/${friendId}`, {
       method: 'DELETE',
     }, token ?? undefined);
+  },
+
+  async getFriendRequestBetweenUsers(targetUserId: number, token?: string | null): Promise<FriendRequest | null> {
+    try {
+      return request<FriendRequest>(`/friends/request/between/${targetUserId}`, undefined, token ?? undefined);
+    } catch (error) {
+      return null;
+    }
   },
 };

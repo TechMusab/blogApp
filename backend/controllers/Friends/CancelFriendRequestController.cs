@@ -1,14 +1,12 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Friends;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Friends;
 
 [ApiController]
 [Route("api/friends/request/cancel")]
-[EnableCors("ReactApp")]
 public class CancelFriendRequestController : BaseController
 {
     private readonly ICancelFriendRequestService _cancelFriendRequestService;

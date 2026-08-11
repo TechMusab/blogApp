@@ -1,14 +1,12 @@
 using BlogApi.DTOs;
 using BlogApi.Interfaces.Friends;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers.Friends;
 
 [ApiController]
 [Route("api/friends/request")]
-[EnableCors("ReactApp")]
 public class SendFriendRequestController : BaseController
 {
     private readonly ISendFriendRequestService _sendFriendRequestService;

@@ -2,7 +2,9 @@ using BlogApi.Configuration;
 using BlogApi.Data;
 using BlogApi.DB;
 using BlogApi.Factories;
+using BlogApi.Hubs;
 using BlogApi.Interfaces.Auth;
+using BlogApi.Interfaces.Chat;
 using BlogApi.Interfaces.Core;
 using BlogApi.Interfaces.Email;
 using BlogApi.Interfaces.Friends;
@@ -14,6 +16,7 @@ using BlogApi.Interfaces.Users;
 using BlogApi.Middleware;
 using BlogApi.Repositories;
 using BlogApi.Services.Auth;
+using BlogApi.Services.Chat;
 using BlogApi.Services.Core;
 using BlogApi.Services.Email;
 using BlogApi.Services.Friends;
@@ -114,6 +117,7 @@ builder.Services.AddScoped<IGetFriendsService, GetFriendsService>();
 builder.Services.AddScoped<IGetIncomingRequestsService, GetIncomingRequestsService>();
 builder.Services.AddScoped<IGetOutgoingRequestsService, GetOutgoingRequestsService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ISavedPostRepository, SavedPostRepository>();
@@ -121,6 +125,7 @@ builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 builder.Services.AddScoped<IPostLikeRepository, PostLikeRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactApp", policy =>
@@ -211,6 +216,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
 
         // Allow anonymous OPTIONS requests for CORS preflight
+        // Handle SignalR JWT token from query string
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -219,10 +225,32 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 {
                     context.NoResult();
                 }
+                
+                // SignalR sends the token in the query string
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                
                 return Task.CompletedTask;
             }
         };
     });
+
+// Configure JWT for SignalR
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+    options.HandshakeTimeout = TimeSpan.FromSeconds(15);
+});
+
+// Add SignalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -250,6 +278,9 @@ app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
+
+// Map SignalR hub
+app.MapHub<ChatHub>("/hubs/chat");
 
 // Add a simple health check endpoint
 app.MapGet("/health", () => "OK");

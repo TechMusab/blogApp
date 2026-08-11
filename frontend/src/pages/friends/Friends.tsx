@@ -1,6 +1,7 @@
 import './Friends.scss';
 
 import { memo, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DashboardNavbar } from '../../shared/components/DashboardNavbar';
 import { FriendsService } from '../../services/FriendsService';
 import { Avatar } from '../../shared/components/Avatar';
@@ -11,6 +12,7 @@ import { addToast } from '../../redux/slices/toasts/toastsSlice';
 import type { UserProfile } from '../../types';
 
 export const FriendsPage = memo(function FriendsPage() {
+  const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch();
   const [friends, setFriends] = useState<UserProfile[]>([]);
@@ -111,7 +113,7 @@ export const FriendsPage = memo(function FriendsPage() {
                 <div className="friends__card-actions">
                   <button
                     className="friends__card-button friends__card-button--message"
-                    disabled
+                    onClick={() => navigate(`/chat/${friend.id}`)}
                   >
                     Message
                   </button>

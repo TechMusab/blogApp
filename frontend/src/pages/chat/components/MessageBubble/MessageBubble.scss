@@ -1,0 +1,85 @@
+@use '../../../../styles/abstracts/variables' as *;
+
+.message-bubble {
+  display: flex;
+  max-width: 70%;
+
+  &--own {
+    margin-left: auto;
+  }
+
+  &--other {
+    margin-right: auto;
+  }
+
+  &__content {
+    padding: 12px 16px;
+    border-radius: 12px;
+    position: relative;
+  }
+
+  &--own &__content {
+    background: $color-auth-accent;
+    color: #111;
+  }
+
+  &--other &__content {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+
+  &__deleted {
+    padding: 12px 16px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-style: italic;
+  }
+
+  &--own &__deleted {
+    background: var(--surface-hover);
+  }
+
+  &__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 4px 0;
+    word-wrap: break-word;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  &__time {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  &--own &__time {
+    color: #111;
+  }
+
+  &--other &__time {
+    color: var(--text-secondary);
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+  }
+
+  &__status-icon {
+    opacity: 0.7;
+  }
+
+  &__status-icon--read {
+    color: #4ade80;
+  }
+}

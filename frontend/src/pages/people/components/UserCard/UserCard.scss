@@ -85,6 +85,10 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 250ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 
     &--primary {
       background: $color-auth-accent;

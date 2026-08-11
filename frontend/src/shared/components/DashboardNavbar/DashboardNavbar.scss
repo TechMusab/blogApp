@@ -179,6 +179,36 @@
     }
   }
 
+  &__chat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: #8C8C92;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 200ms ease;
+    padding: 6px 0;
+
+    svg {
+      color: #8C8C92;
+      transition: color 200ms ease;
+    }
+
+    &:hover {
+      color: #C2C2C7;
+
+      svg {
+        color: #C2C2C7;
+      }
+    }
+  }
+
   &__notification-btn {
     position: relative;
     display: flex;
@@ -284,6 +314,9 @@
       display: none;
     }
     &__saved-btn {
+      display: none;
+    }
+    &__chat-btn {
       display: none;
     }
     &__notification-btn {

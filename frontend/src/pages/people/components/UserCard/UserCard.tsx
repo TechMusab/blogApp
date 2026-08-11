@@ -1,6 +1,7 @@
 import './UserCard.scss';
 
 import { memo } from 'react';
+import { MessageSquare } from 'lucide-react';
 import { Avatar } from '../../../../shared/components/Avatar';
 import type { UserProfile } from '../../../../types';
 import { FriendRequestStatusValues } from '../../../../types';
@@ -8,19 +9,33 @@ import { FriendRequestStatusValues } from '../../../../types';
 type UserCardProps = {
   user: UserProfile;
   onFriendAction: (userId: number, action: string) => void;
+  onMessage?: (userId: number) => void;
   onRequestId?: (userId: number) => number | null;
 };
 
-export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCardProps) {
+export const UserCard = memo(function UserCard({ user, onFriendAction, onMessage }: UserCardProps) {
   const getFriendButton = () => {
     if (user.friendStatus === FriendRequestStatusValues.Accepted) {
       return (
-        <button
-          className="user-card__button user-card__button--danger"
-          onClick={() => onFriendAction(user.id, 'remove')}
-        >
-          Remove Friend
-        </button>
+        <div className="user-card__button-group">
+          <button
+            className="user-card__button user-card__button--secondary"
+            onClick={() => {
+              onMessage?.(user.id);
+            }}
+          >
+            <MessageSquare size={16} />
+            Message
+          </button>
+          <button
+            className="user-card__button user-card__button--danger"
+            onClick={() => {
+              onFriendAction(user.id, 'remove');
+            }}
+          >
+            Remove Friend
+          </button>
+        </div>
       );
     }
 
@@ -31,13 +46,17 @@ export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCar
           <div className="user-card__button-group">
             <button
               className="user-card__button user-card__button--primary"
-              onClick={() => onFriendAction(user.id, 'accept')}
+              onClick={() => {
+                onFriendAction(user.id, 'accept');
+              }}
             >
               Accept
             </button>
             <button
               className="user-card__button user-card__button--secondary"
-              onClick={() => onFriendAction(user.id, 'reject')}
+              onClick={() => {
+                onFriendAction(user.id, 'reject');
+              }}
             >
               Reject
             </button>
@@ -48,7 +67,9 @@ export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCar
       return (
         <button
           className="user-card__button user-card__button--secondary"
-          onClick={() => onFriendAction(user.id, 'cancel')}
+          onClick={() => {
+            onFriendAction(user.id, 'cancel');
+          }}
         >
           Cancel Request
         </button>
@@ -58,7 +79,9 @@ export const UserCard = memo(function UserCard({ user, onFriendAction }: UserCar
     return (
       <button
         className="user-card__button user-card__button--primary"
-        onClick={() => onFriendAction(user.id, 'send')}
+        onClick={() => {
+          onFriendAction(user.id, 'send');
+        }}
       >
         Add Friend
       </button>

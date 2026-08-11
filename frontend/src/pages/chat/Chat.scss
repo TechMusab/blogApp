@@ -1,0 +1,234 @@
+@use '../../styles/abstracts/variables' as *;
+
+.chat {
+  min-height: 100vh;
+  background: var(--bg-color);
+
+  &__content {
+    height: calc(100vh - 60px);
+    overflow: hidden;
+  }
+
+  &__container {
+    display: flex;
+    height: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--surface-color);
+  }
+
+  &__sidebar {
+    width: 320px;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    transition: transform 250ms ease;
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  &__sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  &__sidebar-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: transform 250ms ease;
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
+  }
+
+  &__back-button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-hover);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 250ms ease;
+
+    &:hover {
+      background: var(--border-color);
+    }
+  }
+
+  &__header-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+
+  &__header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__connection-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-secondary);
+
+    &--connected {
+      color: #4ade80;
+    }
+
+    &--disconnected {
+      color: #ef4444;
+    }
+
+    &--reconnecting {
+      color: #f59e0b;
+    }
+  }
+
+  &__connection-text {
+    font-size: 10px;
+  }
+
+  &__header-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  &__header-status {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: $color-auth-accent;
+    font-style: italic;
+  }
+
+  &__header-menu {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 250ms ease;
+
+    &:hover {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+    }
+  }
+
+  &__messages {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg-color);
+  }
+
+  &__input-area {
+    border-top: 1px solid var(--border-color);
+  }
+
+  &__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-color);
+  }
+
+  &__empty-content {
+    text-align: center;
+    padding: 40px;
+  }
+
+  &__empty-icon {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  &__empty-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+  }
+
+  &__empty-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .chat {
+    &__sidebar {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      z-index: 10;
+      background: var(--surface-color);
+
+      &--hidden {
+        transform: translateX(-100%);
+      }
+    }
+
+    &__main {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      z-index: 10;
+      background: var(--surface-color);
+
+      &--hidden {
+        transform: translateX(100%);
+      }
+    }
+  }
+}

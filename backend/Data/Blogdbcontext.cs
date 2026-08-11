@@ -17,6 +17,9 @@ public class BlogDbContext : DbContext
     public DbSet<SavedPost> SavedPosts => Set<SavedPost>();
     public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<Conversation> Conversations => Set<Conversation>();
+    public DbSet<ConversationParticipant> ConversationParticipants => Set<ConversationParticipant>();
+    public DbSet<Message> Messages => Set<Message>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -135,6 +138,65 @@ public class BlogDbContext : DbContext
             entity.HasIndex(n => n.IsRead);
             entity.HasIndex(n => n.CreatedAt);
             entity.HasIndex(n => new { n.RecipientUserId, n.IsRead, n.CreatedAt });
+        });
+
+        modelBuilder.Entity<ConversationParticipant>(entity =>
+        {
+            entity.HasKey(cp => new { cp.ConversationId, cp.UserId });
+
+            entity.Property(cp => cp.JoinedAt)
+                .HasDefaultValueSql("NOW()");
+
+            entity.HasOne(cp => cp.Conversation)
+                .WithMany(c => c.Participants)
+                .HasForeignKey(cp => cp.ConversationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(cp => cp.User)
+                .WithMany(u => u.ConversationParticipants)
+                .HasForeignKey(cp => cp.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasIndex(cp => cp.UserId);
+        });
+
+        modelBuilder.Entity<Conversation>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+
+            entity.Property(c => c.CreatedAt)
+                .HasDefaultValueSql("NOW()");
+
+            entity.Property(c => c.UpdatedAt)
+                .HasDefaultValueSql("NOW()");
+        });
+
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.HasKey(m => m.Id);
+
+            entity.Property(m => m.CreatedAt)
+                .HasDefaultValueSql("NOW()");
+
+            entity.Property(m => m.UpdatedAt)
+                .HasDefaultValueSql("NOW()");
+
+            entity.Property(m => m.IsDeleted)
+                .HasDefaultValue(false);
+
+            entity.HasOne(m => m.Conversation)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(m => m.ConversationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasIndex(m => m.ConversationId);
+            entity.HasIndex(m => m.SenderId);
+            entity.HasIndex(m => m.CreatedAt);
         });
     }
 }

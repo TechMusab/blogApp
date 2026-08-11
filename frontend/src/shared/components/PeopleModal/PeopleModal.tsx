@@ -2,6 +2,7 @@ import './PeopleModal.scss';
 
 import { memo, useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Users, X } from 'lucide-react';
 import { UserCard } from '../../../pages/people/components/UserCard';
 import { FriendsService, type FriendRequest } from '../../../services/FriendsService';
@@ -18,6 +19,7 @@ type TabType = 'discover' | 'friends' | 'requests';
 
 export const PeopleModal = memo(function PeopleModal({ isOpen, onClose }: PeopleModalProps) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.token);
   const modalRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<TabType>('discover');
@@ -121,7 +123,15 @@ export const PeopleModal = memo(function PeopleModal({ isOpen, onClose }: People
 
   const handleFriendAction = async (userId: number, action: string) => {
     try {
-      const requestId = getRequestId(userId);
+      let requestId = getRequestId(userId);
+      
+      // If requestId is null, fetch it from the API
+      if (!requestId && (action === 'accept' || action === 'reject' || action === 'cancel')) {
+        const friendRequest = await FriendsService.getFriendRequestBetweenUsers(userId, token);
+        if (friendRequest) {
+          requestId = friendRequest.id;
+        }
+      }
       
       if (action === 'send') {
         await FriendsService.sendFriendRequest(userId, token);
@@ -161,6 +171,11 @@ export const PeopleModal = memo(function PeopleModal({ isOpen, onClose }: People
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
     setSearch('');
+  };
+
+  const handleMessage = (userId: number) => {
+    onClose();
+    navigate(`/chat/${userId}`);
   };
 
   const getCurrentUsers = (): UserProfile[] => {
@@ -242,6 +257,7 @@ export const PeopleModal = memo(function PeopleModal({ isOpen, onClose }: People
                   key={user.id}
                   user={user}
                   onFriendAction={handleFriendAction}
+                  onMessage={handleMessage}
                 />
               ))}
             </div>

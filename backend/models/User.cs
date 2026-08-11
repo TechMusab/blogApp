@@ -78,4 +78,8 @@ public class User
     public ICollection<Notification> ReceivedNotifications { get; set; } = new List<Notification>();
 
     public ICollection<Notification> SentNotifications { get; set; } = new List<Notification>();
+
+    public ICollection<ConversationParticipant> ConversationParticipants { get; set; } = new List<ConversationParticipant>();
+
+    public ICollection<Message> SentMessages { get; set; } = new List<Message>();
 }

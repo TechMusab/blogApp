@@ -3,7 +3,7 @@ import './DashboardNavbar.scss';
 import { memo, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Users, Bookmark, Menu, Pen, Settings, LogOut } from 'lucide-react';
+import { Users, Bookmark, Menu, Pen, Settings, LogOut, MessageSquare } from 'lucide-react';
 import { Dropdown } from '../Dropdown';
 import { ThemeToggle } from '../ThemeToggle';
 import { Avatar } from '../Avatar';
@@ -38,6 +38,9 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
     closeMenu();
     navigate('/settings');
   }, [closeMenu, navigate]);
+  const goToChat = useCallback(() => {
+    navigate('/chat');
+  }, [navigate]);
   const handleLogout = useCallback(() => {
     dispatch(logout());
     dispatch(addToast({ message: 'Logged out successfully', type: 'success' }));
@@ -62,6 +65,9 @@ export const DashboardNavbar = memo(function DashboardNavbar() {
         </button>
         <button type="button" className="dashboard__saved-btn" onClick={goToSaved}>
           <Bookmark size={16} aria-hidden="true" />Saved
+        </button>
+        <button type="button" className="dashboard__chat-btn" onClick={goToChat}>
+          <MessageSquare size={16} aria-hidden="true" />Messages
         </button>
         <button type="button" className="dashboard__write-btn" onClick={goToCreate}>
           <Pen size={16} aria-hidden="true" />Write
