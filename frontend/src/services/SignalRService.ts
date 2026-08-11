@@ -70,7 +70,6 @@ class SignalRService {
         await this.joinConversation(this.currentConversationId);
       }
     } catch (err) {
-      console.error('SignalR Connection Error:', err);
       this.isInitialized = false;
       throw err;
     }
@@ -86,7 +85,7 @@ class SignalRService {
         
         await this.connection.stop();
       } catch (err) {
-        console.error('SignalR Disconnect Error:', err);
+        // Ignore disconnect errors
       } finally {
         this.connection = null;
         this.isInitialized = false;
@@ -98,22 +97,22 @@ class SignalRService {
   private setupConnectionLifecycle(): void {
     if (!this.connection) return;
 
-    this.connection.onreconnecting((error) => {
+    this.connection.onreconnecting((_error) => {
       this.eventHandlers.onReconnecting();
     });
 
-    this.connection.onreconnected((connectionId) => {
+    this.connection.onreconnected((_connectionId) => {
       this.eventHandlers.onReconnected();
       
       // Re-join current conversation after reconnection
       if (this.currentConversationId) {
-        this.joinConversation(this.currentConversationId).catch(err => {
-          console.error('Failed to re-join conversation after reconnection:', err);
+        this.joinConversation(this.currentConversationId).catch(() => {
+          // Ignore re-join errors
         });
       }
     });
 
-    this.connection.onclose((error) => {
+    this.connection.onclose((_error) => {
       this.eventHandlers.onClose();
       this.isInitialized = false;
     });
@@ -216,7 +215,6 @@ class SignalRService {
 
   async joinConversation(conversationId: number): Promise<void> {
     if (!this.isInitialized || this.connection?.state !== signalR.HubConnectionState.Connected) {
-      console.warn('Cannot join conversation: SignalR not connected');
       return;
     }
 
@@ -229,14 +227,12 @@ class SignalRService {
       await this.connection.invoke('JoinConversation', conversationId);
       this.currentConversationId = conversationId;
     } catch (err) {
-      console.error('Error joining conversation:', err);
       throw err;
     }
   }
 
   async leaveConversation(conversationId: number): Promise<void> {
     if (!this.isInitialized || this.connection?.state !== signalR.HubConnectionState.Connected) {
-      console.warn('Cannot leave conversation: SignalR not connected');
       return;
     }
 
@@ -246,47 +242,43 @@ class SignalRService {
         this.currentConversationId = null;
       }
     } catch (err) {
-      console.error('Error leaving conversation:', err);
+      // Ignore leave errors
     }
   }
 
   async sendMessage(conversationId: number, content: string): Promise<void> {
     if (!this.isInitialized || this.connection?.state !== signalR.HubConnectionState.Connected) {
-      console.warn('Cannot send message: SignalR not connected');
       throw new Error('SignalR not connected');
     }
 
     try {
       await this.connection.invoke('SendMessage', conversationId, content);
     } catch (err) {
-      console.error('[SignalRService] Error sending message via SignalR:', err);
       throw err;
     }
   }
 
   async markAsRead(conversationId: number): Promise<void> {
     if (!this.isInitialized || this.connection?.state !== signalR.HubConnectionState.Connected) {
-      console.warn('Cannot mark as read: SignalR not connected');
       return;
     }
 
     try {
       await this.connection.invoke('MarkAsRead', conversationId);
     } catch (err) {
-      console.error('Error marking as read via SignalR:', err);
+      // Ignore mark as read errors
     }
   }
 
   async deleteMessage(messageId: number): Promise<void> {
     if (!this.isInitialized || this.connection?.state !== signalR.HubConnectionState.Connected) {
-      console.warn('Cannot delete message: SignalR not connected');
       return;
     }
 
     try {
       await this.connection.invoke('DeleteMessage', messageId);
     } catch (err) {
-      console.error('Error deleting message via SignalR:', err);
+      // Ignore delete errors
     }
   }
 
@@ -298,7 +290,7 @@ class SignalRService {
     try {
       await this.connection.invoke('TypingStart', conversationId);
     } catch (err) {
-      console.error('Error sending typing start:', err);
+      // Ignore typing start errors
     }
   }
 
@@ -310,7 +302,7 @@ class SignalRService {
     try {
       await this.connection.invoke('TypingStop', conversationId);
     } catch (err) {
-      console.error('Error sending typing stop:', err);
+      // Ignore typing stop errors
     }
   }
 
