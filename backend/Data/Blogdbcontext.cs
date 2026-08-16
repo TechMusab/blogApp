@@ -40,6 +40,12 @@ public class BlogDbContext : DbContext
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Post)
+            .WithMany(p => p.Comments)
+            .HasForeignKey(c => c.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<Post>(entity =>
         {
             entity.Property(p => p.Title).HasMaxLength(220);
@@ -127,12 +133,12 @@ public class BlogDbContext : DbContext
             entity.HasOne(n => n.Post)
                 .WithMany(p => p.Notifications)
                 .HasForeignKey(n => n.PostId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(n => n.Comment)
                 .WithMany(c => c.Notifications)
                 .HasForeignKey(n => n.CommentId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(n => n.RecipientUserId);
             entity.HasIndex(n => n.IsRead);
